@@ -1,16 +1,19 @@
-<style>
-    .radio-group-wrap .ivu-radio-group {
-        height: 32px;
-    }
-    
-    .radio-group-wrap.radio-pd .ivu-radio-group {
-        padding-top: 6px;
+<style lang="sass">
+    .sunset-field-wrap {
+        .radio-group-wrap.radio-pd {
+            .ivu-radio-group {
+                padding-top: 6px;
+            }
+        }
+        .ivu-radio-group {
+            height: 32px;
+        }
     }
 </style>
 <template>
-    <div :class="['sunset-field-wrap',invalid?'field-invalid':'',options.type=='button'?'':'radio-pd']">
+    <div :class="['sunset-field-wrap',invalid?'field-invalid':'']">
         <label v-if="options.label" class="sunset-field-label">{{options.label}}</label>
-        <div class="sunset-field radio-group-wrap">
+        <div :class="['sunset-field radio-group-wrap',options.type=='button'?'':'radio-pd']">
             <Radio-group v-if="items.length" :type="options.type" :size="options.size" :model.sync="value">
                 <Radio v-for="item in items" :value="item.value" :disabled="item.disabled">
                     <span>{{item.text}}</span>

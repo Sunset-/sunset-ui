@@ -27,9 +27,8 @@
 <template>
 	<div class="sunset-search-form-container">
 		<form :class="['sunset-search-form form-inline form-horizontal',right?'pull-right':'']" onsubmit="return false">
-			<filter-field v-for="field in fields" :options="field" :value.sync="filter[field.name]"></filter-field>
-			<i-button v-if="searchButton" :type="searchButton.color||'primary'" :icon="searchButton.icon" @click="searchClick">{{searchButton.label}}</i-button>
-			<sunset-toolbar v-if="options.toolbar" :options="options.toolbar"></sunset-toolbar>
+			<filter-field v-for="field in fields" :options="field" :value.sync="filter[field.name]" @change-search="search"></filter-field>
+			<i-button v-if="searchButton" :type="searchButton.color||'primary'" :icon="searchButton.icon" @click="search">{{searchButton.label}}</i-button>
 		</form>
 		<div class="sunset-search-form-tip" v-if="options.tip">
 			<Alert :type="options.tip.color" show-icon>{{options.tip.text}}</Alert>
@@ -59,14 +58,58 @@
 		},
 		data() {
 			return {
+				inited: false,
 				lock: false,
 				filter: {}
 			};
 		},
 		methods: {
+			init() {
+				var filter = this.filter,
+					fields = this.fields,
+					defaultValueFields = [],
+					prall = [];
+				this.lock = true;
+				fields.forEach(field => {
+					this.$set(`filter.${field.name}`, void 0);
+					var defaulValue = field.default || field.defaultValue;
+					if (defaulValue) {
+						defaultValueFields.push(field);
+						prall.push(Promise.resolve().then(() => {
+							return Sunset.isFunction(defaulValue) ? defaulValue() : defaulValue;
+						}));
+					}
+				});
+				Promise.all(prall).then((res) => {
+					if (filter === this.filter) {
+						res.forEach((dv, index) => {
+							filter[defaultValueFields[index].name] = dv;
+						});
+						this.lock = false;
+						this.search();
+					}
+				});
+			},
+			reset(filter) {
+				this.lock = true;
+				this.filter = Sunset.clone(filter) || {};
+				this.$nextTick(() => {
+					this.lock = false;
+					this.search();
+				});
+			},
+			search() {
+				if (!this.lock) {
+					var filter = Object.assign({}, this.filter);
+					if (Sunset.isFunction(this.options.format)) {
+						filter = this.options.format(filter) || filter;
+					}
+					this.$emit('filter', filter, this.generateLocalFilter());
+				}
+			},
 			generateLocalFilter() {
 				var localFilterFields = this.fields.filter(item => Sunset.isFunction(item.localFilter)) || [],
-					data = Object.assign({}, this.filter);
+					data = Sunset.clone(this.filter) || {};
 				return function (record) {
 					for (var i = 0, field; field = localFilterFields[i++];) {
 						if (!field.localFilter.call(field, record, data[field.name])) {
@@ -75,44 +118,10 @@
 					}
 					return true;
 				}
-			},
-			searchClick() {
-				this.search();
-			},
-			reset(filter) {
-				this.lock = true;
-				//this.filter = filter ? JSON.parse(JSON.stringify(filter)) : {};
-				this.filter = filter ? Object.assign({}, filter) : {};
-				this.search();
-				this.$nextTick(() => {
-					this.lock = false;
-				})
-			},
-			search() {
-				var filter = Object.assign({}, this.filter);
-				if (Sunset.isFunction(this.options.format)) {
-					filter = this.options.format(filter) || filter;
-				}
-				this.$emit('filter', filter, this.generateLocalFilter());
 			}
 		},
 		ready() {
-			if (this.default) {
-				Promise.resolve().then(() => {
-					return Sunset.isFunction(this.default) ? this.default() : this.default;
-				}).then(defaultModal => {
-					this.reset(defaultModal);
-				});
-			}
-		},
-		events: {
-			FIELD_SEARCH() {
-				this.lock || this.search()
-			},
-			CRUD_TABLE_FILTER_RESET() {
-				this.filter = {};
-				this.search()
-			}
+			this.init();
 		}
 	}
 </script>

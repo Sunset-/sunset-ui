@@ -1,4 +1,5 @@
 <style lang="sass">
+
 </style>
 <template>
     <h2>Filter</h2>
@@ -9,13 +10,16 @@
 <script>
     export default {
         ready() {
-            // this.$refs.filter.reset({
-            //     keyword: '123',
-            //     type: '2'
-            // })
+            // setTimeout(()=>{
+            //     this.$refs.filter.reset({
+            //         keyword : 'aaa'
+            //     })
+            // },1000)
         },
         methods: {
-            filter(a, b) {}
+            filter(a, b) {
+                console.log(JSON.stringify(a));
+            }
         },
         data() {
             return {
@@ -24,15 +28,33 @@
                         label: '',
                         name: 'keyword',
                         placeholder: '关键字',
-                        widget: 'input'
+                        widget: 'input',
+                        default () {
+                            return new Promise(resolve => {
+                                setTimeout(() => {
+                                    resolve('ccccc');
+                                }, 3000)
+                            })
+                        }
                     }, {
                         label: '',
-                        name: 'type',
-                        placeholder: '枚举',
+                        name: 'sex',
+                        placeholder: '性别',
                         widget: 'select',
                         style: {
                             width: '100px'
                         },
+                        data: {
+                            '1': '男',
+                            '2': '女'
+                        }
+                    }, {
+                        label: '',
+                        name: 'job',
+                        placeholder: '职业',
+                        widget: 'radio',
+                        type: 'button',
+                        changeFilter: true,
                         data: {
                             '1': '男',
                             '2': '女'
@@ -45,37 +67,12 @@
                         type: 'daterange'
                     }],
                     format: (model) => {
-                        model.type = '2';
-                    },
-                    default () {
-                        return {
-                            keyword: '123',
-                            type: '2'
-                        };
+                        model.attach = 'abcd';
                     },
                     searchButton: {
                         label: '搜索',
                         icon: 'ios-search',
                         color: 'info'
-                    },
-                    toolbar: {
-                        tools: [{
-                            label: '普通按钮',
-                            color: 'primary',
-                            operate() {
-                                alert(123)
-                            }
-                        }, {
-                            label: '图标按钮',
-                            icon: 'refresh',
-                            color: 'success',
-                            premise(ctx) {
-                                return true;
-                            },
-                            operate() {
-                                alert(123)
-                            }
-                        }]
                     }
                 }
             }

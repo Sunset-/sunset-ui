@@ -18,11 +18,12 @@ module.exports = {
                 });
             } else if (enumType) {
                 //字典型
-                var enums = Base && Base.ENUMS && Base.ENUMS[enumType];
-                return enums && enums.map(item => ({
-                    value: item.key,
-                    text: item.value
-                })) || [];
+                return Sunset.Service.Dictionary.getEnums(enumType).then(enums => {
+                    return enums.map(item => ({
+                        value: item.key,
+                        text: item.value
+                    })) || [];
+                });
             } else {
                 return [];
             }

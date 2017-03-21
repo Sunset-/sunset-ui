@@ -16,13 +16,13 @@
 		<template v-for="tool in showTools">
 			<div v-permission="tool.permission" class="sunset-toolbar-item">
 				<template v-if="!tool.type">
-					<i-button :size="size||'normal'" :type="tool.color||'primary'" :icon="tool.icon" @click="operate(tool)">{{tool.label}}</i-button>
+					<i-button :size="size" :type="tool.color||'primary'" :icon="tool.icon" @click="operate(tool)">{{tool.label}}</i-button>
 				</template>
 				<template v-if="tool.type=='file'">
 					<sunset-file :options="tool" :ctx="ctx"></sunset-file>
 				</template>
 				<template v-if="tool.type=='dropdown'">
-					<sunset-dropdown :size="size||'normal'" :options="tool" :ctx="ctx"></sunset-dropdown>
+					<sunset-dropdown :size="size" :options="tool" :ctx="ctx"></sunset-dropdown>
 				</template>
 			</div>
 		</template>
@@ -48,7 +48,7 @@
 				});
 			},
 			size() {
-				return this.options.size || 'normal';
+				return this.options.size;
 			}
 		},
 		methods: {

@@ -52,10 +52,27 @@
 				record: null,
 				model: {},
 				hasModel: false,
-				fields: []
+				fieldsRefresher: 0
 			}
 		},
 		computed: {
+			fields() {
+				var model = this.model,
+					fields = this.options && this.options.fields || [],
+					record = this.record,
+					fieldsRefresher = this.fieldsRefresher;
+				fields = fields.filter(field => !!field.name && (field.premise ? field.premise(model) : true));
+				//初始化
+				if (record) {
+					fields = fields.map(f => {
+						if (Sunset.isFunction(f.init)) {
+							f = f.init(this.hasModel ? record : null) || f;
+						}
+						return f;
+					});
+				}
+				return fields;
+			},
 			cols() {
 				return this.options.cols || DEFAULT_COLS;
 			},
@@ -86,6 +103,30 @@
 			}
 		},
 		methods: {
+			init() {
+				var model = this.model,
+					fields = this.options.fields || [],
+					defaultValueFields = [],
+					prall = [];
+				this.lock = true;
+				fields.forEach(field => {
+					this.$set(`model.${field.name}`, void 0);
+					var defaulValue = field.default || field.defaultValue;
+					if (defaulValue) {
+						defaultValueFields.push(field);
+						prall.push(Promise.resolve().then(() => {
+							return Sunset.isFunction(defaulValue) ? defaulValue() : defaulValue;
+						}));
+					}
+				});
+				Promise.all(prall).then((res) => {
+					if (model === this.model) {
+						res.forEach((dv, index) => {
+							model[defaultValueFields[index].name] = dv;
+						});
+					}
+				});
+			},
 			computedFieldClass(field) {
 				if (field.monopolize) {
 					return FULL_COLS;
@@ -94,21 +135,6 @@
 				} else {
 					return FULL_COLS / this.cols;
 				}
-			},
-			initFields(model) {
-				var fields = this.options && this.options.fields || [],
-					record = this.record;
-				fields = fields.filter(field => !!field.name && (field.premise ? field.premise(model) : true));
-				//初始化
-				if (record) {
-					fields = fields.map(f => {
-						if (Sunset.isFunction(f.init)) {
-							f = f.init(this.hasModel ? record : null) || f;
-						}
-						return f;
-					});
-				}
-				this.fields = fields;
 			},
 			generateModel() {
 				if (!this.formValid) {
@@ -179,7 +205,7 @@
 				if (Sunset.isFunction(this.options.cast)) {
 					model = this.options.cast(model) || model;
 				}
-				this.initFields(model);
+				this.fieldsRefresher++;
 				this.$broadcast('REFRESH_WIDGET_VALUE');
 				this.$nextTick(() => {
 					this.model = model;
@@ -198,7 +224,7 @@
 			}
 		},
 		ready() {
-			this.initFields({});
+			this.init();
 		}
 	}
 </script>

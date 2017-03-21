@@ -1,5 +1,6 @@
 import Toolbar from './demo/bootstrap/Toolbar.vue';
 import Filter from './demo/bootstrap/Filter.vue';
+import Form from './demo/bootstrap/Form.vue';
 // import Crud from './demo/bootstrap/Crud.vue';
 // import Modal from './demo/bootstrap/Modal.vue';
 // import Tree from './demo/bootstrap/Tree.vue';
@@ -14,6 +15,10 @@ let modules = [{
         name: 'Filter',
         title: '搜索过滤',
         component: Filter
+    }, {
+        name: 'Form',
+        title: '表单组件',
+        component: Form
     }
     // , {
     //     name: 'Crud',

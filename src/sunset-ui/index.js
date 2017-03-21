@@ -6,39 +6,18 @@ const prefix = 'Sunset';
 import FormWidgets from './components/widgets/widgets';
 
 import Sunset from './common/sunset';
+window.Sunset = Sunset;
+
+//基础
 import Filters from './common/filters';
 import Directives from './common/directives';
 import Validators from './common/validators';
 
-// 工具啦
-import Dropdown from './components/toolbar/Dropdown';
-import File from './components/file/File.vue';
-import Toolbar from './components/toolbar/Toolbar.vue';
+//服务
+Sunset.Service = require('./services/index');
 
-//过滤器
-import Filter from './components/filter/Filter.vue';
-
-// 表单
-// import Form from './components/form/Form.vue';
-
-// import Crud from './components/crud/Crud.vue';
-// import Filter from './components/crud/SearchForm.vue';
-// import Table from './components/crud/Table.vue';
-// import Datapage from './components/crud/Datapage.vue';
-// import Editor from './components/editor/Editor';
-
-// import Tree from './components/tree/Tree.vue';
-// import Page from './components/pager/Page.vue';
-
-// import FormModal from './components/modal/FormModal.vue';
-// import TableModal from './components/modal/TableModal.vue';
-// import TreeModal from './components/modal/TreeModal.vue';
-// import ViewModal from './components/modal/ViewModal.vue';
-
-// import Breadcrumb from './components/breadcrumb/Breadcrumb';
-
-// import ImageViewer from './components/commonImageViewer/ImageViewer';
-// import Loading from './components/loading/Loading';
+//组件
+Sunset.Components = require('./components/index');
 
 import {
     Container,
@@ -47,28 +26,6 @@ import {
     Major,
     Layout
 } from './layout';
-
-import Store from './components/crud/Store';
-
-const components = {
-    Dropdown: Dropdown,
-    File: File,
-    Toolbar: Toolbar,
-    Filter: Filter,
-    // Crud: Crud,
-    // Table: Table,
-    // Form: Form,
-    // Datapage: Datapage,
-    // Tree: Tree,
-    // FormModal: FormModal,
-    // TableModal: TableModal,
-    // TreeModal: TreeModal,
-    // ViewModal: ViewModal,
-    // Breadcrumb: Breadcrumb,
-    // Page: Page,
-    // Editor: Editor,
-    // Loading: Loading
-}
 const Layouts = {
     Container: Container,
     Header: Header,
@@ -76,11 +33,8 @@ const Layouts = {
     Major: Major,
     Layout: Layout
 }
-const Services = {
-    Store: Store
-}
 
-window.Sunset = Sunset;
+
 
 //请求组件
 window.Base = {};
@@ -108,15 +62,10 @@ window.$http = function (...args) {
 }
 
 
-//服务
-Sunset.Service = Sunset.service || {};
-Object.keys(Services).forEach(s => {
-    Sunset.Service[s] = Services[s];
-});
-
 var OuterVue = null,
     waitRegistList = [];
 
+//安装VUE
 exports.install = function install(Vue, options) {
     Vue.use(iView);
     //布局
@@ -124,6 +73,7 @@ exports.install = function install(Vue, options) {
         Vue.component(`${prefix}${c}`, Layouts[c]);
     });
     //组件
+    var components = Sunset.Components;
     Object.keys(components).forEach(c => {
         Vue.component(`${prefix}${c}`, components[c]);
     });
@@ -157,17 +107,14 @@ exports.install = function install(Vue, options) {
             Vue.prototype.$Modal.remove();
         }
     };
-    //(config)
-    // Vue.prototype.$Loading = LoadingBar;
-    // Vue.prototype.$Message = Message;
-    // Vue.prototype.$Modal = Modal;
-    // Vue.prototype.$Notice = Notice;
 }
 
+//注册外部表单组件
 exports.registFormWidget = function (name, widget) {
     FormWidgets[`Widget${name}`] = widget;
 }
 
+//注册组件
 exports.registComponent = function (name, widget) {
     if (OuterVue) {
         OuterVue.component(name, widget);
@@ -177,4 +124,13 @@ exports.registComponent = function (name, widget) {
             widget: widget
         })
     }
+}
+
+//安装字典(type,key,value)
+exports.installDictionary = function (dictionary) {
+    // Promise.resolve().then(() => {
+    //     return dictionary;
+    // }).then(res => {
+        Sunset.Service.Dictionary.install(dictionary || []);
+    // });
 }
