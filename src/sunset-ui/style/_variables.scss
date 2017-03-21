@@ -1,0 +1,30 @@
+
+//颜色定义
+$white:                           #fff !default;
+$background:                      #f5f7f9 !default;
+$divider:                         #e3e8ee !default;
+$border:                          #d7dde4 !default;
+$disabled:                        #c3cbd6 !default;
+$light:                           #9ea7b4 !default;
+$stable:                          #657180 !default;
+$dark:                            #464c5b !default;
+
+$primary:                         #3399ff !default;
+$lightPrimary:                    #5cadff !default;
+$darkPrimary:                     #3091f2 !default;
+$success:                         #00cc66 !default;
+$info:                            #3399ff !default;
+$warning:                         #ff9900 !default;
+$danger:                          #d9534f !default;
+
+$colors : (
+	white:$white,
+	light:$light,
+	stable:$stable,
+	dark:$dark,
+	primary:$primary,
+	info:$info,
+	success : $success,
+	danger:$danger,
+	warning:$warning
+);
