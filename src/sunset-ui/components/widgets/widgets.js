@@ -8,7 +8,7 @@ const widgets = {
 	'Number': 'Number',
 	'Cascader': 'Cascader',
 	'Textarea': 'Textarea',
-	'Image': 'Image',
+	'File': ['File', 'Image'],
 	'Editor': 'Editor',
 	'Tableselect': 'Tableselect',
 	'Table': 'Table',

@@ -1,12 +1,12 @@
 <template>
-    <sunset-layout title="Sunset组件库 - Modal">
+    <div>
         <i-button type="info" @click="test">表单Modal</i-button>
         <i-button type="success" @click="test2">表格Modal</i-button>
         <i-button type="warning" @click="test3">树Modal</i-button>
         <sunset-form-modal v-ref:formmodal :options="{title : '表单modal',formOptions : options.formOptions}"></sunset-form-modal>
         <sunset-table-modal @submit="tableSelected" v-ref:tablemodal :options="{title : '表格modal',validate:tableValidate,checked:{multi:true,max:3,label : 'nickname'},tableOptions : options.tableOptions}"></sunset-table-modal>
         <sunset-tree-modal v-ref:treemodal :options="options.treeModalOptions"></sunset-tree-modal>
-    </sunset-layout>
+    </div>
 </template>
 <script>
     import BootstrapStore from './BootstrapStore';
@@ -220,7 +220,7 @@
                             label: '类型',
                             name: 'type',
                             widget: 'select',
-                            enum: 'ManagerType',
+                            enum: 'ACCOUNT_TYPE',
                             dataType: String,
                             validate: {
                                 required: true

@@ -11,24 +11,24 @@ class BootstrapStore extends Sunset.Service.Store {
 	}
 
 	callbacks = {
-		afterList(data){
-			data&&data.rows&&data.rows.forEach(item=>{
+		afterList(data) {
+			data && data.rows && data.rows.forEach(item => {
 				delete item.password;
 			})
 			return data;
 		}
 	}
 
-	treeNodes(){
-		return Promise.resolve().then(()=>{
-			var map = Base.ENUMS,
+	treeNodes() {
+		return Promise.resolve().then(() => {
+			var map = Sunset.Service.Dictionary.getAllEnums(),
 				nodes = [];
-			Object.keys(map).forEach(type=>{
+			Object.keys(map).forEach(type => {
 				nodes.push({
-					key : type,
-					value : type
+					key: type,
+					value: type
 				});
-				map[type].forEach(item=>{
+				map[type].forEach(item => {
 					item.parent = type;
 					nodes.push(item);
 				})

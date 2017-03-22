@@ -34,11 +34,11 @@
 
 <template>
 
-	<div :style="imageStyle" class="sunset-upload-item-wrap" :style="size">
+	<div class="sunset-upload-item-wrap" :style="style">
 		<Icon class="sunset-upload-item-remove" type="close-round" @click="remove"></Icon>
-		<img class="viewer-image" v-if="data.src" :src="data.src | upload-image" />
+		<img class="viewer-image" v-if="data.src" :src="data.src" />
 		<img class="viewer-image" v-if="!data.src" :src="data.thumbnail" />
-		<div class="sunset-upload-item-shim" :style="{height:((100-(data.progress||0)*100)+'%')}"></div>
+		<div v-show="!data.src" class="sunset-upload-item-shim" :style="{height:((100-(data.progress||0)*100)+'%')}"></div>
 	</div>
 
 </template>
@@ -46,36 +46,23 @@
 <script>
 	export default {
 		props: {
-			imageStyle: {
-
-			},
-			size: {
-				coerce(value) {
-					if (!value) {
-						value = '100';
-					}
-					var spliter = value.split(','),
-						w, h;
-					if (spliter.length >= 2) {
-						w = spliter[0];
-						h = spliter[1];
-					} else {
-						w = h = value;
-					}
-					return {
-						width: w + 'px',
-						height: h + 'px'
-					};
-				}
-			},
+			size: {},
 			data: {
 				type: Object,
 				required: true
 			}
 		},
+		computed: {
+			style() {
+				return {
+					width: `${this.size&&this.size.width||100}px`,
+					height: `${this.size&&this.size.height||100}px`
+				}
+			}
+		},
 		methods: {
 			remove() {
-				this.$dispatch('SUNSET_IMAGE_REMOVE', this.data);
+				this.$emit('remove', this.data);
 			}
 		}
 	};

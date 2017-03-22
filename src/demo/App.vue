@@ -55,6 +55,14 @@
 						border: 1px solid $info;
 						margin-bottom: 10px;
 					}
+					.component-alert {
+						border: 1px solid lighten($warning, 5%);
+						font-size: 14px;
+						color: darken($warning, 15%);
+						background: lighten($warning, 40%);
+						padding: 10px;
+						border-radius: 4px;
+					}
 				}
 			}
 		}

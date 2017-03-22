@@ -18,6 +18,9 @@
             height: 400px;
             overflow-y: auto;
         }
+        .ivu-modal-footer {
+            display: none;
+        }
     }
 </style>
 <template>

@@ -53,7 +53,7 @@
 		},
 		methods: {
 			operate(tool) {
-				Helper.operate(tool, this.ctx);
+				Helper.operate.call(this, tool, this.ctx);
 			}
 		}
 

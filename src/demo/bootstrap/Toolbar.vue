@@ -13,9 +13,9 @@
     <div class="component-wrap">
         <sunset-toolbar :options="options" :ctx="{name : '小明'}"></sunset-toolbar>
     </div>
-    <Alert type="error">
+    <div class="component-alert" type="error">
         1.文件上传：上传自定义Picker样式未解决
-    </Alert>
+    </div>
 </template>
 <script>
     export default {

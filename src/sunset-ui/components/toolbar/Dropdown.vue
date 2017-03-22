@@ -23,7 +23,7 @@
         },
         methods: {
             operate(item) {
-                Helper.operate(item, this.ctx);
+                Helper.operate.call(this, item, this.ctx);
             }
         }
     }

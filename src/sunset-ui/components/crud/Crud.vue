@@ -86,6 +86,9 @@
 							title: '编辑'
 						});
 						break;
+					case 'DELETE':
+						this.deleteRecord(record);
+						break;
 					case 'VIEW':
 						this.PAGE = 'CRUD_VIEW';
 						this.PAGE_DETAIL = '查看';
@@ -116,6 +119,24 @@
 			},
 			getTableCheckeds() {
 				return this.$refs.table.getCheckeds();
+			},
+			deleteRecord(record) {
+				var store = this.options.store;
+				var clear = store && Sunset.confirm({
+					content: '确定删除此条目',
+					loading: true,
+					onOk: () => {
+						store[this.options.deleteMethod || 'removeById'](record[this.idKey || 'id']).then(res => {
+							clear();
+							Sunset.tip('删除成功', 'success');
+							if (this.pageNumber > 1 && (this.count - 1 == (this.pageNumber - 1) * this.pageSize)) {
+								this.refresh(this.pageNumber - 1, true);
+							} else {
+								this.refresh(void 0, true);
+							}
+						});
+					}
+				});
 			}
 		},
 		ready() {

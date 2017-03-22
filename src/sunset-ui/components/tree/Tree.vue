@@ -4,9 +4,6 @@
 <script>
 	var treeCounter = 0;
 
-	import treeStyle from '../../vendor/ztree/zTreeStyle/zTreeStyle.css';
-	import treeScript from '../../vendor/ztree/jquery.ztree.all-3.5.min.js';
-
 	var extractAttrs = ['id', 'name', 'title', 'type'];
 
 	export default {
@@ -79,6 +76,9 @@
 		},
 		methods: {
 			init() {
+				if (!$.fn.zTree) {
+					throw new Error('未引入ztree库');
+				}
 				this.$el.id = 'sunset-tree-' + (++treeCounter);
 				Promise.resolve().then(() => {
 					if (this.cacheInitNodes) {

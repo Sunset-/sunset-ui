@@ -55,17 +55,14 @@
     <div :class="['sunset-field-wrap']">
         <label class="sunset-field-label">{{options.label}}</label>
         <div class="sunset-field">
-            <upload-image v-for="item in queue" :data.sync="item" :image-style="options.imageStyle"></upload-image>
-            <div :id="id" class="widget-upload-btn"></div>
-            <span class="inline wrapper-x-sm" v-if="options.sizeTip">建议尺寸：{{options.sizeTip}}</span>
-            <sunset-file v-ref:uploader :id="id" :url="options.url" :queue.sync="queue" :max="max"></sunset-file>
+            <upload-image v-for="item in queue" :data.sync="item" :size="options.thumbnailSize" @remove="remove"></upload-image>
+            <sunset-file v-ref:file :options="options" @queue="refreshQueue" @success="success"></sunset-file>
         </div>
     </div>
 </template>
 <script>
     import UploadImage from './tablet/UploadImage.vue';
 
-    var uid = 0;
 
     export default {
         components: {
@@ -81,47 +78,31 @@
         },
         data() {
             return {
-                id: `sunset-widget-uploader-${++uid}`,
                 pending: false,
                 queue: []
             };
         },
-        computed: {
-            max() {
-                return this.options.max || 1;
-            }
-        },
         methods: {
-            refreshValue() {
-                var srcs = [];
-                this.queue.forEach(item => {
-                    item.src && (srcs.push(item.src));
+            refreshQueue(queue) {
+                this.queue = queue;
+            },
+            success(queue) {
+                var format = this.options.format;
+                queue.forEach(item => {
+                    item.value = format && format(item.result) || item.result;
                 });
+                this.refreshValue();
+            },
+            remove(data) {
+                this.queue.splice(this.queue.indexOf(data), 1);
+                this.refreshValue();
+            },
+            refreshValue() {
                 this.pending = true;
-                this.value = srcs.join(',');
+                this.value = this.queue.map(item => item.value).join(this.options.spliter || ',');
                 this.$nextTick(() => {
                     this.pending = false;
                 });
-            }
-        },
-        events: {
-            REFRESH_WIDGET_VALUE() {
-                this.$nextTick(() => {
-                    this.$refs.uploader.init();
-                });
-            },
-            SUNSET_UPLOAD_SUCCESS() {
-                this.refreshValue();
-            },
-            SUNSET_IMAGE_REMOVE(data) {
-                var queue = this.queue;
-                for (var i = 0, item; item = queue[i]; i++) {
-                    if (item == data) {
-                        this.queue.splice(i, 1);
-                        break;
-                    }
-                }
-                this.refreshValue();
             }
         },
         watch: {
@@ -130,9 +111,12 @@
                     var queue = this.queue;
                     queue.splice(0, queue.length);
                     if (value && value.length) {
-                        value.split(',').forEach(src => {
+                        var thumbnail = this.options.thumbnail;
+                        value.split(this.options.spliter || ',').forEach(v => {
                             queue.push({
-                                src: src
+                                src: Sunset.isFunction(thumbnail) ? (thumbnail(v) || v) : (
+                                    thumbnail || v),
+                                value: v
                             });
                         });
                         this.pending = false;

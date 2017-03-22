@@ -53,7 +53,7 @@
     </div>
 </template>
 <script>
-    import widgets from './tableWidgets';
+    import widgets from './widgets.js';
 
     export default {
         components: widgets,
@@ -69,8 +69,7 @@
             invalid: {}
         },
         data() {
-            return {
-            };
+            return {};
         },
         computed: {
             tableOptions() {

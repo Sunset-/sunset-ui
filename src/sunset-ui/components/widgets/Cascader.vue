@@ -7,8 +7,8 @@
     </div>
 </template>
 <script>
-    import regionJSON from '../data/regionJSON.js';
-    var RegionJSON = null
+    // import regionJSON from '../data/regionJSON.js';
+    var RegionJSON = null;
 
     function generateCascaderData(list) {
         return RegionJSON || list.map(item => {
@@ -36,8 +36,7 @@
                 data: []
             };
         },
-        computed: {
-        },
+        computed: {},
         methods: {
             init() {
                 Promise.resolve().then(res => {

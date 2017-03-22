@@ -8,6 +8,13 @@ import Vue from 'vue';
 // });
 
 /**
+ * 取值
+ */
+Vue.filter('sunset_namespace', function (obj, namespace) {
+	return Sunset.getAttribute(obj, namespace, '');
+});
+
+/**
  * 时间格式化
  */
 Vue.filter('time', function (value, format) {
@@ -19,5 +26,28 @@ Vue.filter('time', function (value, format) {
  * 枚举转码
  */
 Vue.filter('enum', function (value, enumType) {
-	return Base.ENUM_MAP[enumType] && Base.ENUM_MAP[enumType][value] || value;
+	return Sunset.Service.Dictionary.transcode(enumType, value);
+});
+
+/**
+ * 转码
+ */
+Vue.filter('sunset_transcode', function (value, col, record) {
+	if (col.enum) {
+		return Sunset.Service.Dictionary.transcode(col.enum, value);
+	} else if (col.format) {
+		if (Sunset.isFunction(col.format)) {
+			return col.format(value, record);
+		} else {
+			switch (col.format) {
+				case 'DATETIME':
+					return Sunset.Dates.format(new Date(value));
+					break;
+				case 'DATE':
+					return Sunset.Dates.format(new Date(value), 'yyyy-MM-dd');
+					break;
+			}
+		}
+	}
+	return value;
 });

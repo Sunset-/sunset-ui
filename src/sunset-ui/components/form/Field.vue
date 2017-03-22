@@ -100,20 +100,23 @@
 						.field.errors[0].message;
 				}
 				return null;
-			}
+			},
 		},
 		methods: {
-			onChange(v) {
-				this.value = v;
-			},
 			generateWatchDependent(watchs) {
-				var watchs = this.options.watch,
-					dep = {},
+				var dep = {},
 					model = this.model;
 				watchs.split(',').forEach(w => {
 					dep[w] = model[w];
 				});
 				return dep;
+			},
+			rebuild(watchs, rebuild) {
+				Promise.resolve().then(() => {
+					return rebuild.call(this.options, this.generateWatchDependent(watchs), this.options, this.model);
+				}).then(res => {
+					this.$children[0].init && this.$children[0].init();
+				});
 			}
 		},
 		ready() {
@@ -124,19 +127,25 @@
 				});
 			}
 			if (this.options.watch) {
+				var watchs,
+					rebuild;
+				if (Sunset.isString(this.options.watch) && Sunset.isFunction(this.options.rebuild)) {
+					watchs = this.options.watch;
+					rebuild = this.options.rebuild;
+				} else if (Sunset.isArray(this.options.watch)) {
+					if (Sunset.isString(this.options.watch[0]) && Sunset.isFunction(this.options.watch[1])) {
+						watchs = this.options.watch[0];
+						rebuild = this.options.watch[1];
+					}
+				}
 				//监听重建
-				if (Sunset.isString(this.options.watch)) {
-					this.options.watch.split(',').forEach(w => {
+				if (watchs && rebuild) {
+					watchs.split(',').forEach(w => {
 						this.$watch(`model.${w}`, (v) => {
-							Promise.resolve().then(() => {
-								return this.options.rebuild(this.generateWatchDependent(), this.options);
-							}).then(res => {
-								this.$children[0].init && this.$children[0].init();
-							});
+							this.rebuild(watchs, rebuild);
 						});
 					});
-				} else {
-					console.error('watch must be a string');
+					this.rebuild(watchs, rebuild);
 				}
 			}
 		}

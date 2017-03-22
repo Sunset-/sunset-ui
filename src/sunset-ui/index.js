@@ -1,5 +1,6 @@
 import iView from 'iview';
 import 'iview-style';
+import 'font-awesome/css/font-awesome.min.css';
 
 const prefix = 'Sunset';
 
@@ -131,6 +132,6 @@ exports.installDictionary = function (dictionary) {
     // Promise.resolve().then(() => {
     //     return dictionary;
     // }).then(res => {
-        Sunset.Service.Dictionary.install(dictionary || []);
+    Sunset.Service.Dictionary.install(dictionary || []);
     // });
 }

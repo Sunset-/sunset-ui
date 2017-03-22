@@ -108,7 +108,6 @@
 					fields = this.options.fields || [],
 					defaultValueFields = [],
 					prall = [];
-				this.lock = true;
 				fields.forEach(field => {
 					this.$set(`model.${field.name}`, void 0);
 					var defaulValue = field.default || field.defaultValue;
@@ -137,20 +136,18 @@
 				}
 			},
 			generateModel() {
-				if (!this.formValid) {
-					throw new Error('校验不通过');
-					return;
-				}
-				//var model = Object.assign({}, this.model);
-				var model = JSON.parse(JSON.stringify(this.model));
-				//表单项格式化
-				//var fields = this.fields;
-				//格式化
-				if (Sunset.isFunction(this.options.format)) {
-					model = this.options.format && this.options.format(model, this.record) || model;
-				}
-				//校验
 				return Promise.resolve().then(() => {
+					//校验
+					if (!this.formValid) {
+						throw new Error('校验不通过');
+						return;
+					}
+					var model = Sunset.clone(this.model);
+					//格式化
+					if (Sunset.isFunction(this.options.format)) {
+						model = this.options.format && this.options.format(model, this.record) || model;
+					}
+					//外部校验
 					if (Sunset.isFunction(this.options.validate)) {
 						return Promise.resolve().then(() => {
 							return this.options.validate(model);
@@ -174,29 +171,26 @@
 				}
 			},
 			submit() {
-				try {
-					Promise.resolve().then(() => {
-						return this.generateModel();
-					}).then(model => {
-						if (Sunset.isFunction(this.options.submit)) {
-							this.options.submit(model);
-						} else if (this.options.store) {
-							this.options.store[this.options.method || 'save'](model).then(res => {
-								Sunset.tip(this.options.successTip || '保存成功', 'success');
-								this.$emit('signal', 'SAVED', res, model);
-							}).catch(e => {
-								console.error(e);
-								this.$emit('signal', 'SAVE-ERROR', e);
-							});
-						}
-					}).catch(e => {
-						console.error(e);
-						this.$emit('signal', 'SAVE-ERROR', e);
-					});
-				} catch (e) {
-					console.error(e);
+				this.generateModel().then(model => {
+					if (Sunset.isFunction(this.options.submit)) {
+						this.options.submit(model);
+						this.$emit('submit', model);
+					} else if (this.options.store) {
+						this.options.store[this.options.method || 'save'](model).then(res => {
+							Sunset.tip(this.options.successTip || '保存成功', 'success');
+							this.$emit('signal', 'SAVED', res, model);
+						}).catch(e => {
+							console.error(e);
+							this.$emit('signal', 'SAVE-ERROR', e);
+						});
+					}
+				}).catch(e => {
+					debugger;
 					this.$emit('signal', 'SAVE-ERROR', e);
-				}
+					if (e && e.message) {
+						Sunset.tip(e.message, 'warning');
+					}
+				});
 			},
 			reset(record) {
 				this.hasModel = !!record;

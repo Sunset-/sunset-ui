@@ -24,9 +24,6 @@ options : {
 }
 store : 存储
 
-事件:
-CRUD_TABLE_REFRESH() 刷新当前分页
-CRUD_OPERATE_SEARCH(filter) 查询
 -->
 <style lang="sass">
 	.sunset-crud-table-container {
@@ -130,19 +127,14 @@ CRUD_OPERATE_SEARCH(filter) 查询
 </style>
 <template>
 	<div class="sunset-crud-table-container">
-		<!--过滤器-->
-		<div v-if="options.filter||options.toolbar" class="sunset-crud-table-toolbar-wrap">
-			<sunset-toolbar v-if="options.toolbar" :options="options.toolbar" @signal="operateRecord"></sunset-toolbar>
-			<search-form v-if="options.filter" v-ref:filter :options="options.filter" @filter="search"></search-form>
-		</div>
 		<!--表格主体-->
-		<div class="table-wrap sunset-crud-table-wrap" :style="{maxHeight:domTableHeight}">
+		<div class="table-wrap sunset-crud-table-wrap">
 			<sunset-loading :loading.sync="loading" top="40">
 				<table :class="['table table-bordered table-striped',options.condensed?'table-condensed':'']">
 					<thead>
 						<tr>
 							<th v-if="options.multiCheck" class="text-center" style="width:60px;">
-								<input type="checkbox" :checked="isAllCheck" @change="checkAll" />
+								<input type="checkbox" :checked="isAllCheck" @change="checkAll($event.currentTarget.checked)" />
 							</th>
 							<th v-if="options.showIndex" class="text-center" style="width:60px;">序号</th>
 							<th v-for="col in columns" :style="col.style||{}">
@@ -151,17 +143,18 @@ CRUD_OPERATE_SEARCH(filter) 查询
 									<i v-if="sortable" :class="['fa',sortCol!=col.name?'fa-sort text-stable':(sortOrder=='ASC'?'fa-sort-asc':'fa-sort-desc')]"></i>
 								</div>
 							</th>
-							<th v-if="recordTools.length" class="text-center" :style="{width:(recordToolsWidth+'px')}">操作</th>
+							<th v-if="recordTools" class="text-center" :style="{width:(recordToolsWidth+'px')}">操作</th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr v-for="item in list">
 							<th v-if="options.multiCheck" class="text-center">
-								<input type="checkbox" :value="item[idKey]" v-model="checkedIds" @change="checkItem(item,$event)" />
+								<input type="checkbox" :value="item[idKey]" v-model="checkedIds" @change="checkRecord(item,$event.currentTarget.checked)"
+								/>
 							</th>
 							<td v-if="options.showIndex" class="text-center">{{(pageNumber-1)*pageSize+ $index+1}}</td>
-							<td v-for="col in columns" :style="col.style||{}">{{{getColValue(item,col.name) | sunset_transcode col item}}}</td>
-							<td class="sunset-table-record-tools" v-if="recordTools.length" class="text-center">
+							<td v-for="col in columns" :style="col.style||{}">{{{ item | sunset_namespace col.name | sunset_transcode col item}}}</td>
+							<td v-if="recordTools" class="sunset-table-record-tools" class="text-center">
 								<div>
 									<div>
 										<sunset-toolbar :options="recordTools" :ctx="item" @signal="operateRecord"></sunset-toolbar>
@@ -175,42 +168,13 @@ CRUD_OPERATE_SEARCH(filter) 查询
 			</sunset-loading>
 		</div>
 		<!--分页-->
-		<div v-show="totalPage" class="sunset-crud-table-footer">
+		<div v-show="showPager" class="sunset-crud-table-footer">
 			<sunset-page @change="refresh" right="true" :page-number.sync="pageNumber" :show-total="true" :page-size="pageSize" :total.sync="count"></sunset-page>
 		</div>
 	</div>
 </template>
 <script>
-	import SunsetPage from '../pager/Page.vue';
-	import SearchForm from './SearchForm';
-
-	import Vue from 'vue';
-
-	Vue.filter('sunset_transcode', function (value, col, record) {
-		if (col.enum) {
-			return Base && Base.ENUM_MAP[col.enum] && Base.ENUM_MAP[col.enum][value] || value;
-		} else if (col.format) {
-			if (Sunset.isFunction(col.format)) {
-				return col.format(value, record);
-			} else {
-				switch (col.format) {
-					case 'DATETIME':
-						return Sunset.Dates.format(new Date(value));
-						break;
-					case 'DATE':
-						return Sunset.Dates.format(new Date(value), 'yyyy-MM-dd');
-						break;
-				}
-			}
-		}
-		return value;
-	});
-
 	export default {
-		components: {
-			SearchForm,
-			SunsetPage
-		},
 		props: {
 			options: {
 				type: Object
@@ -230,32 +194,42 @@ CRUD_OPERATE_SEARCH(filter) 查询
 				data: null,
 				localCount: 0,
 				isAllCheck: false,
-				domTableHeight: 'auto',
 				sortCol: null,
 				sortOrder: 'DESC',
-				loading: false,
-				recordTools: []
+				loading: false
 			}
 		},
 		computed: {
-			store() {
-				return this.options.store;
-			},
+			//是否本地分页
 			isLocalPage() {
 				return !!this.options.localPage;
 			},
+			//列
 			columns() {
 				return this.options.columns || [];
+			},
+			//行操作栏
+			recordTools() {
+				var recordTools = this.options.recordTools;
+				if (recordTools && (Sunset.isArray(recordTools) || Sunset.isArray(recordTools.tools))) {
+					return recordTools;
+				} else {
+					return false;
+				}
 			},
 			recordToolsWidth() {
 				if (this.options.recordToolsWidth) {
 					return this.options.recordToolsWidth;
 				} else {
-					var w = 0;
-					this.recordTools.forEach(t => {
-						w += t.label.length * 14 + (t.icon ? 20 : 0) + 25;
-					});
-					w += 30;
+					var w = 0,
+						recordTools = this.recordTools;
+					if (recordTools) {
+						var tools = Sunset.isArray(recordTools) ? recordTools : recordTools.tools,
+							space = recordTools.size == 'small' ? 20 : 34;
+						tools.forEach(t => {
+							w += t.label.length * 14 + (t.icon ? 20 : 0) + space;
+						});
+					}
 					return w;
 				}
 			},
@@ -274,11 +248,15 @@ CRUD_OPERATE_SEARCH(filter) 查询
 			pageSize() {
 				return this.options.pageSize || 10;
 			},
-			multiCheck() {
-				return !!this.options.multiCheck;
+			//数据
+			formatFilter() {
+				return this.options.formatFilter;
 			},
-			idKey() {
-				return this.options.idKey || 'id';
+			store() {
+				return this.options.store;
+			},
+			datasource() {
+				return this.options.datasource;
 			},
 			list() {
 				this.sortData();
@@ -307,36 +285,25 @@ CRUD_OPERATE_SEARCH(filter) 查询
 					return this.localCount;
 				}
 			},
-			totalPage() {
+			showPager() {
 				return this.count > this.pageSize;
 			},
-			datasource() {
-				return this.options.datasource;
+			//勾选
+			idKey() {
+				return this.options.idKey || 'id';
+			},
+			multiCheck() {
+				return !!this.options.multiCheck;
 			},
 			checkedIds() {
 				return this.checkeds.map(item => item[this.idKey]);
 			},
-			formatFilter() {
-				return this.options.formatFilter;
-			},
+			//排序
 			sortable() {
 				return !!this.options.sortable;
 			}
 		},
 		methods: {
-			getColValue(item, name) {
-				return Sunset.getAttribute(item, name, '');
-			},
-			setRecordTools(tools) {
-				return this.recordTools = tools || [];
-			},
-			resetFilter(filter) {
-				if (this.$refs.filter) {
-					this.$refs.filter.reset(filter);
-				} else {
-					this.refresh(1, true);
-				}
-			},
 			search(filter, localFilter, force) {
 				this.filter = Object.assign(this.filter, filter || {});
 				this.localFilter = localFilter;
@@ -394,11 +361,12 @@ CRUD_OPERATE_SEARCH(filter) 查询
 			setData(data) {
 				this.data = data;
 			},
-			checkItem(item, ev) {
-				this.checkRecord(item, ev.currentTarget.checked);
+			//设置行操作栏
+			setRecordTools(tools) {
+				return this.recordTools = tools || [];
 			},
-			checkAll(ev) {
-				var isToCheck = ev.currentTarget.checked;
+			//勾选
+			checkAll(isToCheck) {
 				this.list.forEach(item => {
 					this.checkRecord(item, isToCheck);
 				});
@@ -423,10 +391,10 @@ CRUD_OPERATE_SEARCH(filter) 查询
 					this.isAllCheck = false;
 				}
 			},
-			initStyle() {
-				var contentHeight = $('.sunset-layout-content', this.el).height();
-				this.domTableHeight = contentHeight - 170 + 'px';
+			getCheckeds() {
+				return this.checkeds;
 			},
+			//排序
 			sort(col) {
 				var sortCol = this.sortCol,
 					sortOrder = this.sortOrder;
@@ -463,59 +431,13 @@ CRUD_OPERATE_SEARCH(filter) 查询
 				}
 			},
 			operateRecord(signal, record) {
-				switch (signal) {
-					case 'DELETE':
-						this.deleteRecord(record);
-						break;
-					default:
-						this.$emit.apply(this, ['signal'].concat([].slice.call(arguments)));
-				}
-			},
-			deleteRecord(record) {
-				var store = this.options.store;
-				var clear = store && Sunset.confirm({
-					content: '确定删除此条目',
-					loading: true,
-					onOk: () => {
-						store[this.options.deleteMethod || 'removeById'](record[this.idKey || 'id']).then(res => {
-							clear();
-							Sunset.tip('删除成功', 'success');
-							if (this.pageNumber > 1 && (this.count - 1 == (this.pageNumber - 1) * this.pageSize)) {
-								this.refresh(this.pageNumber - 1, true);
-							} else {
-								this.refresh(void 0, true);
-							}
-						});
-					}
-				});
-			},
-			getCheckeds() {
-				return this.checkeds;
-			}
-		},
-		events: {
-			CRUD_TABLE_REFRESH(force) {
-				this.refresh(this.pageNumber, force);
-			},
-			CRUD_TABLE_CLEAR() {
-				this.data = null;
-				this.localCount = 0;
-			},
-			CRUD_TABLE_SETDATA(data, table) {
-				if (!table || table == this.options.name) {
-					this.data = data;
-				}
-			},
-			CRUD_OPERATE_SEARCH(filter, localFilter, force) {
-				this.search(filter, localFilter, force);
+				this.$emit.apply(this, ['signal'].concat([].slice.call(arguments)));
 			}
 		},
 		ready() {
 			if (!this.options.lazy) {
 				this.refresh(1);
 			}
-			this.initStyle();
-			this.setRecordTools(this.options.recordTools);
 		}
 	}
 </script>

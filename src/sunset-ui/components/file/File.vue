@@ -83,10 +83,10 @@
 							id: file.id,
 							name: file.name,
 							thumbnail: null,
+							file: file,
 							progress: 0,
 							result: null,
-							status: 0,
-							file: file
+							status: 'READY'
 						});
 					} else {
 						//多图
@@ -96,10 +96,10 @@
 									id: file.id,
 									name: file.name,
 									thumbnail: null,
+									file: file,
 									progress: 0,
 									result: null,
-									status: 'READY',
-									file: file
+									status: 'READY'
 								});
 							} else {
 								uploader.removeFile(file);
@@ -107,16 +107,24 @@
 							}
 						});
 					}
-					//缩略图
 					queue.forEach(item => {
 						if (item.id) {
 							map[item.id] = item;
-							item.thumbnail || uploader.makeThumb(item.file, (error, src) => {
-								if (error) {
-									return;
-								}
-								item.thumbnail = src;
-							}, 100, 100);
+							//缩略图
+							if (this.options.thumbnail) {
+								item.thumbnail = Sunset.isFunction(this.options.thumbnail) ? this.options.thumbnail(item.value, item.file) :
+									this.options
+									.thumbnail;
+							}
+							if (!item.thumbnail) {
+								var thumbnailSize = this.options.thumbnailSize || {};
+								item.thumbnail || uploader.makeThumb(item.file, (error, src) => {
+									if (error) {
+										return;
+									}
+									item.thumbnail = src;
+								}, thumbnailSize.width || 100, thumbnailSize.height || 100);
+							}
 						}
 					});
 					this.map = map;
@@ -166,6 +174,9 @@
 						item.result = response._raw;
 					}
 					$(`#${this.id} input`).val('');
+				});
+				//上传完成
+				uploader.on('uploadFinished', () => {
 					this.options.success && this.options.success(this.queue);
 					this.$emit('success', this.queue);
 				});

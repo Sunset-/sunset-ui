@@ -1,3 +1,5 @@
+import './commonImageViewer/ImageViewer.vue';
+
 // 工具啦
 import Dropdown from './toolbar/Dropdown';
 import File from './file/File.vue';
@@ -9,29 +11,41 @@ import Filter from './filter/Filter.vue';
 // 表单
 import Form from './form/Form.vue';
 
-// import Crud from './components/crud/Crud.vue';
-// import Filter from './components/crud/SearchForm.vue';
-// import Table from './components/crud/Table.vue';
-// import Datapage from './components/crud/Datapage.vue';
-// import Editor from './components/editor/Editor';
+//数据分页
+import Page from './pager/Page.vue';
+import Datapage from './datapage/Datapage.vue';
+import Table from './table/Table.vue';
 
-// import Tree from './components/tree/Tree.vue';
-// import Page from './components/pager/Page.vue';
+//树
+import Tree from './tree/Tree.vue';
 
-// import FormModal from './components/modal/FormModal.vue';
-// import TableModal from './components/modal/TableModal.vue';
-// import TreeModal from './components/modal/TreeModal.vue';
-// import ViewModal from './components/modal/ViewModal.vue';
+//加载中
+import Loading from './loading/Loading';
+
+//模态窗
+import FormModal from './modal/FormModal.vue';
+import TableModal from './modal/TableModal.vue';
+import TreeModal from './modal/TreeModal.vue';
+import ViewModal from './modal/ViewModal.vue';
 
 // import Breadcrumb from './components/breadcrumb/Breadcrumb';
+// import Crud from './components/crud/Crud.vue';
+// import Editor from './components/editor/Editor';
 
-// import ImageViewer from './components/commonImageViewer/ImageViewer';
-// import Loading from './components/loading/Loading';
 
 module.exports = {
     Dropdown: Dropdown,
     File: File,
     Toolbar: Toolbar,
     Filter: Filter,
-    Form: Form
+    Form: Form,
+    Page: Page,
+    Datapage: Datapage,
+    Table: Table,
+    Tree: Tree,
+    Loading: Loading,
+    FormModal: FormModal,
+    TableModal: TableModal,
+    TreeModal: TreeModal,
+    ViewModal: ViewModal
 };

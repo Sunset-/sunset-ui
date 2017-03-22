@@ -1,22 +1,22 @@
 <template>
-    <sunset-layout title="Sunset组件库 - Tree">
+    <div>
         <i-button type="info" @click="test">测试</i-button>
-        <h4 class="wrapper-y-md">选择</h4>
+        <h1 class="wrapper-y-md">选择</h1>
         <div>
             <p>当前节点:{{selectedNode&&selectedNode.value}}</p>
             <p>父节点:{{selectedParentNode&&selectedParentNode.value}}</p>
         </div>
-        <h4 class="wrapper-y-md">勾选</h4>
+        <h1 class="wrapper-y-md">勾选</h1>
         <div>
             <p>
                 <span v-for="c in checkeds">{{c.value}} | </span>
             </p>
         </div>
-        <h4 class="wrapper-y-md">树</h4>
-        <div style="border:1px solid #09c;">
+        <h2>Tree</h2>
+        <div class="component-wrap">
             <sunset-tree v-ref:tree :options="options.treeOptions" :nodes="options.treeNodes" @inited="inited" @selected="selected" @checked="checked"></sunset-tree>
         </div>
-    </sunset-layout>
+    </div>
 </template>
 <script>
     import BootstrapStore from './BootstrapStore';
@@ -35,7 +35,6 @@
                         key: '1',
                         value: '新节点'
                     });
-
                 }
             },
             inited() {

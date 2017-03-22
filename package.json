@@ -59,6 +59,7 @@
     "firebase": "^2.3.1"
   },
   "dependencies": {
+    "font-awesome": "^4.7.0",
     "iview": "^1.0.1"
   }
 }
