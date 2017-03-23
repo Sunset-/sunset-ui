@@ -4,8 +4,8 @@
         <i-button type="success" @click="test2">表格Modal</i-button>
         <i-button type="warning" @click="test3">树Modal</i-button>
         <sunset-form-modal v-ref:formmodal :options="{title : '表单modal',formOptions : options.formOptions}"></sunset-form-modal>
-        <sunset-table-modal @submit="tableSelected" v-ref:tablemodal :options="{title : '表格modal',validate:tableValidate,checked:{multi:true,max:3,label : 'nickname'},tableOptions : options.tableOptions}"></sunset-table-modal>
-        <sunset-tree-modal v-ref:treemodal :options="options.treeModalOptions"></sunset-tree-modal>
+        <sunset-table-modal @submit="tableSelected" v-ref:tablemodal :options="{title : '表格modal',width:1000,validate:tableValidate,checked:{multi:true,max:3,label : 'nickname'},tableOptions : options.tableOptions}"></sunset-table-modal>
+        <sunset-tree-modal @submit="treeSelected" v-ref:treemodal :options="options.treeModalOptions"></sunset-tree-modal>
     </div>
 </template>
 <script>
@@ -17,7 +17,9 @@
         methods: {
             tableValidate(items) {
                 return Promise.resolve().then(res => {
-                    return 'wakaka'
+                    if (items.length == 0) {
+                        throw new Error('不能为空')
+                    }
                 });
             },
             test() {
@@ -27,12 +29,12 @@
                 this.$refs.tablemodal.open();
             },
             test3() {
-                this.$refs.treemodal.open();
+                this.$refs.treemodal.open('1,2');
             },
             tableSelected(items) {
-                debugger;
+                this.$refs.tablemodal.loading(false);
             },
-            filter(a, b) {
+            treeSelected(items) {
                 debugger;
             },
             save(model) {
@@ -136,7 +138,6 @@
                         filter: {
                             align: 'right',
                             fields: [{
-                                label: '下拉',
                                 name: 'select',
                                 widget: 'select',
                                 placeholder: '下拉',
@@ -144,14 +145,14 @@
                                     '1': '男',
                                     '2': '女'
                                 },
+                                changeFilter: true,
                                 style: 'width:120px;'
                             }, {
-                                label: '时间',
                                 name: 'date',
                                 widget: 'date',
                                 type: 'daterange',
-                                placeholder: '开始时间',
-                                style: 'width:240px;'
+                                placeholder: '时间',
+                                style: 'width:200px;'
                             }, {
                                 label: '搜索',
                                 name: 'keyword',
@@ -179,7 +180,7 @@
                         }, {
                             label: '删除',
                             icon: 'glyphicon glyphicon-remove',
-                            color: 'danger',
+                            color: 'error',
                             permission: 'SYSTEM_MANAGER_DICTIONARY_DELETE',
                             signal: 'DELETE'
                         }],

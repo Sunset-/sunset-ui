@@ -37,11 +37,11 @@
 		},
 		methods: {
 			search() {
-				this.$dispatch('FIELD_SEARCH');
+				this.$emit('search');
 			},
 			keydown(ev) {
 				if (ev.keyCode == 13) {
-					this.$dispatch('FIELD_SEARCH');
+					this.$emit('FIELD_SEARCH');
 				}
 			}
 		}

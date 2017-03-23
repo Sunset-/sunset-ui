@@ -6,10 +6,13 @@
         <sunset-form v-ref:form :options="options"></sunset-form>
     </div>
     <div class="component-alert" type="error">
-       1.富文本编辑器样式调试<br />2.表格选择和树选择
+        1.富文本编辑器样式调试<br />2.表格选择和树选择
     </div>
 </template>
 <script>
+    import BootstrapStore from './BootstrapStore.js';
+    import simpleTableOptions from './simpleTableOptions.js';
+
     export default {
         ready() {},
         methods: {
@@ -47,16 +50,20 @@
                             label: '单选',
                             name: 'sex',
                             widget: 'radio',
+                            defaultFirst: true,
                             enum: 'SEX'
                         }, {
                             label: '多选',
                             name: 'sex1',
                             widget: 'checkbox',
+                            defaultFirst: true,
                             enum: 'SEX'
                         }, {
                             label: '下拉框',
                             name: 'select1',
                             widget: 'select',
+                            default: '2',
+                            defaultFirst: true,
                             enum: 'ACCOUNT_TYPE'
                         }, {
                             label: '下拉框2',
@@ -161,14 +168,36 @@
                             name: 'icon',
                             widget: 'icon'
                         },
-                        // {
-                        //     label: '表格选择',
-                        //     name: 'tableselect',
-                        //     widget: 'tableselect',
-                        //     tableOptions: {
-
-                        //     }
-                        // },
+                        {
+                            label: '表格选择',
+                            name: 'tableselect',
+                            widget: 'tableselect',
+                            nameKey: 'nickname',
+                            default: '1,2,7',
+                            getText(v) {
+                                if (v) {
+                                    return BootstrapStore.list().then(res => {
+                                        var map = {};
+                                        res.rows.forEach(item => {
+                                            map[item.id] = item.nickname;
+                                        });
+                                        var texts = [];
+                                        v.forEach(item => {
+                                            texts.push(map[item]);
+                                        });
+                                        return texts;
+                                    });
+                                }
+                            },
+                            modalOptions: {
+                                title: '选择一个栗子',
+                                checked: {
+                                    multi: true,
+                                    label: 'nickname',
+                                },
+                                tableOptions: simpleTableOptions
+                            }
+                        },
                         //{
                         //     label: '树选择',
                         //     name: 'treeselect',
@@ -187,9 +216,7 @@
                                 width: 120,
                                 height: 60
                             },
-                            format: (result) => {
-                                return 'aa'
-                            },
+                            format: (result) => {},
                             spliter: ';',
                             monopolize: true,
                             disabled: false

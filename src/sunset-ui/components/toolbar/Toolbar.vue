@@ -16,7 +16,7 @@
 		<template v-for="tool in showTools">
 			<div v-permission="tool.permission" class="sunset-toolbar-item">
 				<template v-if="!tool.type">
-					<i-button :size="size" :type="tool.color||'primary'" :icon="tool.icon" @click="operate(tool)">{{tool.label}}</i-button>
+					<i-button :loading="tool.loading" :size="size" :type="tool.color||'primary'" :icon="tool.icon" @click="operate(tool)">{{tool.label}}</i-button>
 				</template>
 				<template v-if="tool.type=='file'">
 					<sunset-file :options="tool" :ctx="ctx"></sunset-file>

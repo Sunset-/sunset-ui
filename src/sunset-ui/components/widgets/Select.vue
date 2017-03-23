@@ -24,11 +24,7 @@
 			options: {
 				type: Object
 			},
-			value: {
-				// default () {
-				// 	return [];
-				// }
-			},
+			value: {},
 			invalid: {}
 		},
 		data() {
@@ -75,6 +71,9 @@
 						this.items = groupItems;
 					} else {
 						this.items = items;
+					}
+					if (this.options.defaultFirst && this.value === void 0) {
+						this.value = this.items[0].group ? this.items[0].items[0].value : this.items[0].value;
 					}
 				});
 			}

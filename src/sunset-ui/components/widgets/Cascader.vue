@@ -40,14 +40,10 @@
         methods: {
             init() {
                 Promise.resolve().then(res => {
-                    if (this.options.type == 'region') {
-                        return generateCascaderData(regionJSON);
+                    if (Sunset.isFunction(this.options.data)) {
+                        return this.options.data.apply(this.options);
                     } else {
-                        if (Sunset.isFunction(this.options.data)) {
-                            return this.options.data.apply(this.options);
-                        } else {
-                            return this.options.data;
-                        }
+                        return this.options.data;
                     }
                 }).then(data => {
                     this.data = data;

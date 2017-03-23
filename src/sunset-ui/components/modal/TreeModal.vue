@@ -1,16 +1,23 @@
 <style lang="sass">
-	.modal-body.crud-tree-selector-content {
-		min-height: 300px;
+	.sunset-tree-modal {
+		&.nofoot {
+			.ivu-modal-footer {
+				display: none;
+			}
+		}
+		.crud-tree-selector-content {
+			min-height: 300px;
+		}
 	}
 </style>
 <template>
-	<Modal class-name="sunset-form-modal" :visible.sync="visible" :title="options.title" @on-ok="ok" @on-cancel="cancel" :width="options.width||700">
+	<Modal :class-name="'sunset-tree-modal '+(options.toolbar===false?'nofoot':'')" :visible.sync="visible" :title="options.title"
+	    :width="width">
 		<div :style="options.style">
-			<sunset-tree v-ref:tree :options="options.treeOptions" :nodes="options.treeNodes"></sunset-tree>
+			<sunset-tree v-ref:tree :options="options.treeOptions" :nodes="options.treeNodes" @inited="treeInited" @checked="treeChecked"></sunset-tree>
 		</div>
 		<div slot="footer">
-			<i-button type="ghost" @click="cancel">{{options.cancelText||'取消'}}</i-button>
-			<i-button type="success" :loading="modal_loading" @click="ok">{{options.okText||'确定'}}</i-button>
+			<sunset-toolbar v-if="toolbar" :options="toolbar"></sunset-toolbar>
 		</div>
 	</Modal>
 </template>
@@ -23,36 +30,55 @@
 		},
 		data() {
 			return {
-				modal_loading: false
+				modal_loading: false,
+				checkeds: [],
+				checkedIds: ''
 			}
 		},
-		computed: {},
+		computed: {
+			width() {
+				return this.options.width || 700;
+			},
+			toolbar() {
+				return this.options.toolbar || [{
+					label: this.options.cancelText || '取消',
+					color: 'ghost',
+					operate: () => {
+						this.cancel();
+					}
+				}, {
+					label: this.options.okText || '确定',
+					color: 'success',
+					loading: this.modal_loading,
+					operate: () => {
+						this.ok();
+					}
+				}]
+			}
+		},
 		methods: {
-			open() {
+			open(checkedIds) {
+				this.checkedIds = (Sunset.isArray(checkedIds) ? checkedIds.join(',') : checkedIds) || ''
 				this.$refs.tree.init();
 				this.visible = true;
 			},
+			treeInited() {
+				this.$refs.tree.refreshChecked(this.checkedIds);
+			},
+			treeChecked(checkeds) {
+				this.checkeds = checkeds;
+			},
 			ok() {
-				this.modal_loading = true;
-				this.$refs.tree.submit();
+				this.loading(true);
+				this.$emit('submit', this.checkeds);
+			},
+			loading(flag) {
+				this.modal_loading = !!flag;
 			},
 			cancel() {
 				this.visible = false;
 				this.modal_loading = false;
-				this.options.cancel && this.options.cancel();
-			},
-			operateSignal(signal) {
-				switch (signal) {
-					case 'SAVED':
-						this.cancel();
-						break;
-					case 'SAVE-ERROR':
-						this.modal_loading = false;
-						break;
-					case 'CANCEL':
-						this.cancel();
-						break;
-				}
+				this.$emit('cancel');
 			}
 		}
 	};

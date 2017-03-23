@@ -149,7 +149,7 @@ store : 存储
 					<tbody>
 						<tr v-for="item in list">
 							<th v-if="options.multiCheck" class="text-center">
-								<input type="checkbox" :value="item[idKey]" v-model="checkedIds" @change="checkRecord(item,$event.currentTarget.checked)"
+								<input type="checkbox" :value="item[idKey]" :checked="computedCheck(item)" @change="checkRecord(item,$event.currentTarget.checked)"
 								/>
 							</th>
 							<td v-if="options.showIndex" class="text-center">{{(pageNumber-1)*pageSize+ $index+1}}</td>
@@ -230,7 +230,7 @@ store : 存储
 							w += t.label.length * 14 + (t.icon ? 20 : 0) + space;
 						});
 					}
-					return w;
+					return Math.max(w, 60);
 				}
 			},
 			format() {
@@ -384,7 +384,15 @@ store : 存储
 					if ((index = this.checkeds.findIndex(temp => temp[idKey] == id)) >= 0) {
 						this.checkeds.splice(index, 1);
 					}
+					if (this.checkeds.length == 0) {
+						this.isAllCheck = false;
+					}
 				}
+			},
+			computedCheck(item) {
+				var idKey = this.idKey,
+					id = item[idKey];
+				return (this.checkeds.findIndex(temp => temp[idKey] == id)) >= 0;
 			},
 			refrechCheckAll() {
 				if (this.options.multiCheck) {

@@ -27,6 +27,11 @@
 			options: {
 
 			},
+			queue: {
+				default () {
+					return [];
+				}
+			},
 			ctx: {}
 		},
 		attached() {
@@ -35,7 +40,6 @@
 		data() {
 			return {
 				id: `sunset-widget-uploader-${++uid}`,
-				queue: [],
 				map: {}
 			};
 		},

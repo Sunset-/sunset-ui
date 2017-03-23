@@ -14,7 +14,8 @@
 			},
 			nodes: {},
 			checked: {
-				type: Array
+				type: Array,
+				default: []
 			}
 		},
 		data() {

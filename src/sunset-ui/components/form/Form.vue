@@ -151,7 +151,7 @@
 					if (Sunset.isFunction(this.options.validate)) {
 						return Promise.resolve().then(() => {
 							return this.options.validate(model);
-						}).then(res => {
+						}).then(() => {
 							return model;
 						});
 					} else {
@@ -185,7 +185,6 @@
 						});
 					}
 				}).catch(e => {
-					debugger;
 					this.$emit('signal', 'SAVE-ERROR', e);
 					if (e && e.message) {
 						Sunset.tip(e.message, 'warning');
@@ -194,13 +193,12 @@
 			},
 			reset(record) {
 				this.hasModel = !!record;
-				this.record = JSON.parse(JSON.stringify(record || {}));
+				this.record = Sunset.clone(record);
 				var model = this.cast(record || {});
 				if (Sunset.isFunction(this.options.cast)) {
 					model = this.options.cast(model) || model;
 				}
 				this.fieldsRefresher++;
-				this.$broadcast('REFRESH_WIDGET_VALUE');
 				this.$nextTick(() => {
 					this.model = model;
 				});

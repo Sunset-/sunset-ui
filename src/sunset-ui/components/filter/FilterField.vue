@@ -37,7 +37,7 @@
 </style>
 <template>
 	<div v-show="!options.hide" :style="options.style" class="sunset-filter-field">
-		<div :is="widget" :options="options" :value.sync="value"></div>
+		<div :is="widget" :options="options" :value.sync="value" @search="fieldSearch"></div>
 	</div>
 </template>
 <script>
@@ -61,12 +61,16 @@
 				return 'widget-' + this.options.widget;
 			}
 		},
-		methods: {},
+		methods: {
+			fieldSearch() {
+				this.$emit('search');
+			}
+		},
 		ready() {
 			if (this.options.onChange || this.options.changeFilter) {
 				this.$watch('value', (v) => {
 					this.options.onChange && this.options.onChange(v);
-					this.options.changeFilter && this.$emit('change-search');
+					this.options.changeFilter && this.$emit('search');
 				});
 			}
 		}
