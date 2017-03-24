@@ -1,5 +1,11 @@
 <style lang="sass">
 	.sunset-tree-modal {
+		.ivu-modal-body {
+			padding: 0px;
+			&>div {
+				padding: 10px;
+			}
+		}
 		&.nofoot {
 			.ivu-modal-footer {
 				display: none;

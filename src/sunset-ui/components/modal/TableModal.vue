@@ -1,7 +1,10 @@
 <style lang="sass">
     .sunset-table-modal {
         .ivu-modal-body {
-            padding-top: 10px;
+            padding: 0px;
+            &>div {
+                padding: 10px;
+            }
         }
         .sunset-search-form-container {
             margin-bottom: 10px;
@@ -49,18 +52,20 @@
 <template>
     <Modal :class-name="'sunset-table-modal '+(!this.multi&&!options.toolbar?'nofoot':'')" :visible.sync="visible" :title="options.title"
         :width="width">
-        <!-- 多选标签 -->
-        <div v-show="checked.multi&&checkeds.length" class="table-modal-selected-wrap">
-            <div class="table-modal-selected-item" v-for="item in checkeds">
-                <span>{{item[label]}}</span>
-                <Icon type="ios-close-empty" size="14" @click="removeItem(item)"></Icon>
+        <div :style="options.style">
+            <!-- 多选标签 -->
+            <div v-show="checked.multi&&checkeds.length" class="table-modal-selected-wrap">
+                <div class="table-modal-selected-item" v-for="item in checkeds">
+                    <span>{{item[label]}}</span>
+                    <Icon type="ios-close-empty" size="14" @click="removeItem(item)"></Icon>
+                </div>
+                <div v-if="checkeds.length" class="table-modal-selected-item clear" @click="removeAll">
+                    <span>清空</span>
+                </div>
             </div>
-            <div v-if="checkeds.length" class="table-modal-selected-item clear" @click="removeAll">
-                <span>清空</span>
-            </div>
+            <sunset-filter v-ref:filter v-if="filterOptions" :options="filterOptions" @filter="filterData"></sunset-filter>
+            <sunset-table v-ref:table :options="tableOptions" :checkeds.sync="checkeds" :store="options.store"></sunset-table>
         </div>
-        <sunset-filter v-ref:filter v-if="filterOptions" :options="filterOptions" @filter="filterData"></sunset-filter>
-        <sunset-table v-ref:table :options="tableOptions" :checkeds.sync="checkeds" :store="options.store"></sunset-table>
         <div slot="footer">
             <sunset-toolbar v-if="toolbar" :options="toolbar"></sunset-toolbar>
         </div>

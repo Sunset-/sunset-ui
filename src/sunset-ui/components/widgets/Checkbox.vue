@@ -59,6 +59,7 @@
                     if (this.options.defaultFirst && this.value === void 0) {
                         this.value = this.items[0].value;
                     }
+					this.$emit('ready', this.options.name);
                 });
             }
         },

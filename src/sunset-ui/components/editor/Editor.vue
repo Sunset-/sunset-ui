@@ -22,8 +22,6 @@
 	</div>
 </template>
 <script>
-	import UEditorConfig from '../../vendor/ueditor/ueditor.config.js';
-	import UEditor from '../../vendor/ueditor/ueditor.sunset.js';
 
 	var uid = 0;
 
@@ -54,6 +52,9 @@
 		},
 		methods: {
 			init() {
+				if (!window.UE) {
+					throw new Error('未引入UEditor库');
+				}
 				this.ready = false;
 				this.id = `sunset-editor-${++uid}`;
 				this.$nextTick(() => {

@@ -27,7 +27,7 @@
 <template>
 	<div class="sunset-search-form-container">
 		<form :class="['sunset-search-form form-inline form-horizontal',right?'pull-right':'']" onsubmit="return false">
-			<filter-field v-for="field in fields" :options="field" :value.sync="filter[field.name]" @search="search"></filter-field>
+			<filter-field v-for="field in fields" :options="field" :value.sync="filter[field.name]" @search="search" @ready="fieldReady"></filter-field>
 			<i-button v-if="searchButton" :type="searchButton.color||'primary'" :icon="searchButton.icon" @click="search">{{searchButton.label}}</i-button>
 		</form>
 		<div class="sunset-search-form-tip" v-if="options.tip">
@@ -60,7 +60,8 @@
 			return {
 				inited: false,
 				lock: false,
-				filter: {}
+				filter: {},
+				waitReadyWidgetCounter: 0
 			};
 		},
 		methods: {
@@ -79,14 +80,21 @@
 							return Sunset.isFunction(defaulValue) ? defaulValue() : defaulValue;
 						}));
 					}
+					if (field.defaultFirst) {
+						this.waitReadyWidgetCounter++;
+					}
 				});
 				Promise.all(prall).then((res) => {
 					if (filter === this.filter) {
 						res.forEach((dv, index) => {
 							filter[defaultValueFields[index].name] = dv;
 						});
-						this.lock = false;
-						this.search();
+						if (this.waitReadyWidgetCounter <= 0) {
+							this.$nextTick(() => {
+								this.lock = false;
+								this.search();
+							});
+						}
 					}
 				});
 			},
@@ -98,7 +106,21 @@
 					this.search();
 				});
 			},
+			fieldReady() {
+				if (this.waitReadyWidgetCounter > 0) {
+					this.waitReadyWidgetCounter--;
+					if (this.waitReadyWidgetCounter == 0) {
+						this.$nextTick(() => {
+							this.lock = false;
+							this.search();
+						});
+					}
+				}
+			},
 			search() {
+				if (!this.fields) {
+					return;
+				}
 				if (!this.lock) {
 					var filter = Object.assign({}, this.filter);
 					if (Sunset.isFunction(this.options.format)) {

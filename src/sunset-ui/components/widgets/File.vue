@@ -89,7 +89,12 @@
             success(queue) {
                 var format = this.options.format;
                 queue.forEach(item => {
-                    item.value = format && format(item.result) || item.result;
+                    if (!item.value) {
+                        item.value = (format && format(item.result) || item.result);
+                        if (Sunset.isFunction(this.options.thumbnail)) {
+                            item.src = this.options.thumbnail(item.value);
+                        }
+                    }
                 });
                 this.refreshValue();
             },
@@ -98,11 +103,7 @@
                 this.refreshValue();
             },
             refreshValue() {
-                this.pending = true;
                 this.value = this.queue.map(item => item.value).join(this.options.spliter || ',');
-                this.$nextTick(() => {
-                    this.pending = false;
-                });
             }
         },
         watch: {

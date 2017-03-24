@@ -132,7 +132,7 @@ store : 存储
 			<sunset-loading :loading.sync="loading" top="40">
 				<table :class="['table table-bordered table-striped',options.condensed?'table-condensed':'']">
 					<thead>
-						<tr>
+						<tr class="noselect">
 							<th v-if="options.multiCheck" class="text-center" style="width:60px;">
 								<input type="checkbox" :checked="isAllCheck" @change="checkAll($event.currentTarget.checked)" />
 							</th>
@@ -140,7 +140,7 @@ store : 存储
 							<th v-for="col in columns" :style="col.style||{}">
 								<div @click="sort(col)" style="cursor:pointer;">
 									{{col.title}}
-									<i v-if="sortable" :class="['fa',sortCol!=col.name?'fa-sort text-stable':(sortOrder=='ASC'?'fa-sort-asc':'fa-sort-desc')]"></i>
+									<i v-if="sortable&&col.sortable!==false" :class="['fa',sortCol!=col.name?'fa-sort text-stable':(sortOrder=='ASC'?'fa-sort-asc':'fa-sort-desc')]"></i>
 								</div>
 							</th>
 							<th v-if="recordTools" class="text-center" :style="{width:(recordToolsWidth+'px')}">操作</th>
@@ -211,7 +211,15 @@ store : 存储
 			//行操作栏
 			recordTools() {
 				var recordTools = this.options.recordTools;
-				if (recordTools && (Sunset.isArray(recordTools) || Sunset.isArray(recordTools.tools))) {
+				if (recordTools) {
+					if (Sunset.isArray(recordTools)) {
+						recordTools = {
+							size: 'small',
+							tools: recordTools
+						};
+					} else if (Sunset.isArray(recordTools.tools) && recordTools.size == void 0) {
+						recordTools.size = 'small';
+					}
 					return recordTools;
 				} else {
 					return false;
@@ -358,6 +366,13 @@ store : 存储
 					}
 				}
 			},
+			refreshAfterRemove() {
+				if (this.pageNumber > 1 && (this.count - 1 == (this.pageNumber - 1) * this.pageSize)) {
+					this.refresh(this.pageNumber - 1, true);
+				} else {
+					this.refresh(void 0, true);
+				}
+			},
 			setData(data) {
 				this.data = data;
 			},
@@ -404,6 +419,9 @@ store : 存储
 			},
 			//排序
 			sort(col) {
+				if (col.sortable === false) {
+					return;
+				}
 				var sortCol = this.sortCol,
 					sortOrder = this.sortOrder;
 				if (col.name == sortCol) {

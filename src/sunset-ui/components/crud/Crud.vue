@@ -6,7 +6,10 @@
 		.sunset-crud-breadcrumb {
 			border-bottom: 1px solid $border;
 			padding-bottom: 5px;
-			margin-bottom: 20px;
+			margin-bottom: 15px;
+		}
+		.crud-toolbar-filter-wrap {
+			margin-bottom: 15px;
 		}
 	}
 </style>
@@ -18,6 +21,10 @@
 		</div>
 		<!-- 数据表格 -->
 		<div v-show="PAGE=='CRUD_TABLE'">
+			<div v-if="filterOptions||toolbarOptions" class="crud-toolbar-filter-wrap">
+				<sunset-toolbar :options="toolbarOptions" @signal="operateSignal"></sunset-toolbar>
+				<sunset-filter :options="filterOptions" @filter="filterData"></sunset-filter>
+			</div>
 			<sunset-table v-ref:table :options="options.tableOptions" @signal="operateSignal"></sunset-table>
 		</div>
 		<!-- 编辑表单 -->
@@ -35,17 +42,7 @@
 	</div>
 </template>
 <script>
-	import SunsetBreadcrumb from '../breadcrumb/Breadcrumb.vue';
-	import SunsetTable from './Table';
-	import SunsetForm from './Form';
-	import Store from './Store';
-
 	export default {
-		components: {
-			SunsetBreadcrumb,
-			SunsetTable,
-			SunsetForm
-		},
 		props: {
 			options: {
 				type: Object
@@ -57,12 +54,24 @@
 				pathOptions: {
 					paths: []
 				},
-				PAGE_DETAIL: '',
-				store: (this.options.store instanceof Store ? this.options.store : new Store(this.options.store))
+				PAGE_DETAIL: ''
 			}
 		},
-		computed: {},
+		computed: {
+			toolbarOptions() {
+				return this.options.toolbarOptions || this.options.tableOptions.toolbar;
+			},
+			filterOptions() {
+				return this.options.filterOptions || this.options.tableOptions.filter;
+			},
+			store() {
+				return this.options.store;
+			}
+		},
 		methods: {
+			filterData() {
+				this.$refs.table.search.apply(this.$refs.table, [].slice.call(arguments));
+			},
 			operateSignal(signal, record) {
 				switch (signal) {
 					case 'SAVED':
@@ -129,11 +138,7 @@
 						store[this.options.deleteMethod || 'removeById'](record[this.idKey || 'id']).then(res => {
 							clear();
 							Sunset.tip('删除成功', 'success');
-							if (this.pageNumber > 1 && (this.count - 1 == (this.pageNumber - 1) * this.pageSize)) {
-								this.refresh(this.pageNumber - 1, true);
-							} else {
-								this.refresh(void 0, true);
-							}
+							this.$refs.table.refreshAfterRemove();
 						});
 					}
 				});

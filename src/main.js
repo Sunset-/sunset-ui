@@ -1,12 +1,17 @@
+import iView from 'iview';
+import 'iview-style';
 import './jquery-vendor';
 import './vendor/ztree/jquery.ztree.all-3.5.min';
 import './vendor/ztree/zTreeStyle/zTreeStyle.css';
+import UEditorConfig from './vendor/ueditor/ueditor.config.js';
+import UEditor from './vendor/ueditor/ueditor.sunset.js';
 
 import Vue from 'vue';
 import Router from 'vue-router';
-import SunsetUI from './sunset-ui/index';
+import SunsetUI from './sunset-ui/index.js';
 
 Vue.use(Router);
+Vue.use(iView);
 Vue.use(SunsetUI);
 
 SunsetUI.installDictionary([{

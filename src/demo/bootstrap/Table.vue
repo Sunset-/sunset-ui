@@ -62,7 +62,6 @@
                         currentPage: 'pageNumber'
                     },
                     recordTools: {
-                        size: 'small',
                         tools: [{
                             label: '枚举',
                             icon: 'ios-pricetags',

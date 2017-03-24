@@ -1,0 +1,10 @@
+node_modules/
+plugins/
+src/
+build/
+config/
+.vscode/
+npm-debug.log
+.babelrc
+.gitignore
+.npmignore

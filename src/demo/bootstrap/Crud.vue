@@ -4,22 +4,6 @@
 		<div style="border:1px solid #09c;">
 			<sunset-crud :options="options"></sunset-crud>
 		</div>
-		<h4 class="wrapper-y-md">表格</h4>
-		<div style="border:1px solid #09c;">
-			<sunset-table :checkeds="tests" :options="options.tableOptions"></sunset-table>
-		</div>
-		<h4 class="wrapper-y-md">表单</h4>
-		<div style="border:1px solid #09c;">
-			<sunset-form :options="options.fullFormOptions" @save="save"></sunset-form>
-		</div>
-		<h4 class="wrapper-y-md">工具栏</h4>
-		<div style="border:1px solid #09c;">
-			<sunset-toolbar :options="options.toolsOptions"></sunset-toolbar>
-		</div>
-		<h4 class="wrapper-y-md">过滤器</h4>
-		<div style="border:1px solid #09c;">
-			<sunset-filter :options="options.filterOptions" @filter="filter"></sunset-filter>
-		</div>
 	</sunset-layout>
 </template>
 <script>
@@ -30,8 +14,6 @@
 	export default {
 		methods: {
 			test() {
-				//Sunset.tip('获取一个包裹','success');
-				//Sunset.notice('获取一个包裹',null,'success');
 				var clear = Sunset.confirm({
 					content: '确定删除此条目',
 					loading: true,
@@ -84,34 +66,33 @@
 					filterOptions: {
 						left: false,
 						fields: [{
-							label: '下拉',
 							name: 'select',
 							widget: 'select',
 							placeholder: '下拉',
+							defaultFirst : true,
+							// changeFilter :true,
 							data: {
 								'1': '男',
 								'2': '女'
 							},
 							style: 'width:120px;'
 						}, {
-							label: '时间',
 							name: 'date',
 							widget: 'date',
 							type: 'daterange',
 							placeholder: '开始时间',
 							style: 'width:240px;'
 						}, {
-							label: '搜索',
 							name: 'keyword',
 							widget: 'search',
 							placeholder: '管理账户类型'
 						}],
 						format: function (filter) {
-							return {
-								keyword: filter.keyword
-							};
+
 						},
-						searchButton: '查询'
+						searchButton: {
+							label : '查询'
+						}
 					},
 					//表格
 					tableOptions: {
@@ -120,17 +101,19 @@
 							name: 'account'
 						}, {
 							title: '昵称',
-							name: 'nickname'
+							name: 'nickname',
+							sortable : false
 						}, {
 							title: '类型',
 							name: 'type',
 							enum: 'ManagerType'
 						}],
 						showIndex: true,
-						pageSize: 10,
+						pageSize: 5,
 						localPage: false,
 						multiCheck: true,
 						sortable: true,
+						lazy : true,
 						format: {
 							list: 'rows',
 							count: 'count',
@@ -199,7 +182,7 @@
 						//数据条目操作
 						recordTools: [{
 							label: '修改',
-							icon: 'glyphicon glyphicon-edit',
+							icon: 'refresh',
 							color: 'warning',
 							permission: 'SYSTEM_MANAGER_DICTIONARY_UPDATE',
 							signal: 'MODIFY'
@@ -247,7 +230,7 @@
 							label: '类型',
 							name: 'type',
 							widget: 'select',
-							enum: 'ManagerType',
+							enum: 'ACCOUNT_TYPE',
 							dataType: String,
 							validate: {
 								required: true

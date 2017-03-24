@@ -11,6 +11,7 @@ const widgets = {
 	'File': ['File', 'Image'],
 	'Editor': 'Editor',
 	'Tableselect': 'Tableselect',
+	'Treeselect': 'Treeselect',
 	'Table': 'Table',
 	'Icon': 'Icon'
 }

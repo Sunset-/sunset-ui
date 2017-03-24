@@ -70,8 +70,8 @@
 			value(v) {
 				if (!this.lock) {
 					var text;
-					if (v && this.options.getText) {
-						Promise.resolve(this.options.getText(v.split(this.spliter))).then(text => {
+					if (v && this.options.transcode) {
+						Promise.resolve(this.options.transcode(v.split(this.spliter))).then(text => {
 							if (Sunset.isArray(text)) {
 								this.text = text.join(',');
 							} else {

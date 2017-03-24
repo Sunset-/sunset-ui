@@ -1,12 +1,56 @@
 <style lang="sass">
 	.sunset-file-wrap {
+		position: relative !important;
 		display: inline-block;
+		&>div {
+			height: 100%;
+			width: 100%;
+			z-index: 1;
+		}
+	}
+	
+	//trigger
+	.sunset-file-wrap.trigger {
+		width: 80px;
+		height: 80px;
+		line-height: 29px;
+		padding: 0;
+		border: 2px solid #d7dde4;
+		background: #fff;
+		color: #fff;
+		overflow: hidden;
+		&:after,
+		&:before {
+			content: "";
+			position: absolute;
+			z-index: 0;
+			background: #d7dde4;
+			cursor: pointer;
+		}
+		&:before {
+			left: 10%;
+			width: 80%;
+			top: 50%;
+			margin-top: -2px;
+			height: 4px;
+		}
+		&:after {
+			left: 50%;
+			margin-left: -2px;
+			top: 10%;
+			height: 80%;
+			width: 4px;
+		}
+	}
+	
+	//button
+	.sunset-file-wrap.button {
+		width: 80px;
+		height: 30px;
 		padding: 0px;
 		text-align: center;
 		color: #FFF;
 		box-sizing: border-box;
-		width: 80px;
-		height: 30px;
 		text-align: center;
 		line-height: 30px;
 		background-color: #39f;
@@ -16,7 +60,7 @@
 	}
 </style>
 <template>
-	<div :id="id" class="sunset-file-wrap">{{options.label}}</div>
+	<div :id="id" :class="['sunset-file-wrap',options.className?options.className:'button']">{{options.label}}</div>
 </template>
 <script>
 	import WebUploader from '../../vendor/webuploader/webuploader.min';

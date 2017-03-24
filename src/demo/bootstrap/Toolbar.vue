@@ -49,6 +49,7 @@
                         color: 'warning',
                         type: 'file',
                         url: '/service/system/file/upload',
+                        className: 'my-uploader-trigger',
                         formData(record) {
                             return {
                                 sunset: record.name

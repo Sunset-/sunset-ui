@@ -1,5 +1,11 @@
 <style lang="sass">
 	.sunset-form-modal {
+		.ivu-modal-body {
+			padding: 0px;
+			&>div {
+				padding: 10px;
+			}
+		}
 		.ivu-select-dropdown {
 			position: absolute !important;
 		}
@@ -13,7 +19,9 @@
 <template>
 	<Modal :class-name="'sunset-form-modal '+(options.toolbar===false?'nofoot':'')" :visible.sync="visible" :title="options.title"
 	    :width="width">
-		<sunset-form v-ref:form :options="options.formOptions" @signal="operateSignal"></sunset-form>
+		<div :style="options.style">
+			<sunset-form v-ref:form :options="options.formOptions" @signal="operateSignal"></sunset-form>
+		</div>
 		<div slot="footer">
 			<sunset-toolbar v-if="toolbar" :options="toolbar"></sunset-toolbar>
 		</div>

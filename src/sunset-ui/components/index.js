@@ -28,9 +28,14 @@ import TableModal from './modal/TableModal.vue';
 import TreeModal from './modal/TreeModal.vue';
 import ViewModal from './modal/ViewModal.vue';
 
-// import Breadcrumb from './components/breadcrumb/Breadcrumb';
-// import Crud from './components/crud/Crud.vue';
-// import Editor from './components/editor/Editor';
+//富文本
+import Editor from './editor/Editor';
+
+//CRUD
+import Crud from './crud/Crud.vue';
+
+//面包屑导航
+import Breadcrumb from './breadcrumb/Breadcrumb';
 
 
 module.exports = {
@@ -43,9 +48,12 @@ module.exports = {
     Datapage: Datapage,
     Table: Table,
     Tree: Tree,
+    Editor: Editor,
     Loading: Loading,
     FormModal: FormModal,
     TableModal: TableModal,
     TreeModal: TreeModal,
-    ViewModal: ViewModal
+    ViewModal: ViewModal,
+    Breadcrumb: Breadcrumb,
+    Crud : Crud
 };

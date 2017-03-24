@@ -174,7 +174,7 @@
                             widget: 'tableselect',
                             nameKey: 'nickname',
                             default: '1,2,7',
-                            getText(v) {
+                            transcode(v) {
                                 if (v) {
                                     return BootstrapStore.list().then(res => {
                                         var map = {};
@@ -198,11 +198,49 @@
                                 tableOptions: simpleTableOptions
                             }
                         },
-                        //{
-                        //     label: '树选择',
-                        //     name: 'treeselect',
-                        //     widget: 'treeselect'
-                        // },
+                        {
+                            label: '树选择',
+                            name: 'treeselect',
+                            widget: 'treeselect',
+                            idKey: 'key',
+                            nameKey: 'value',
+                            default: '2',
+                            transcode: (vs) => {
+                                return Promise.resolve(['女'])
+                            },
+                            modalOptions: {
+                                title: '选择一个桃子',
+                                style: "height:200px;overflow:auto;",
+                                //树
+                                treeOptions: {
+                                    autoExpand: true,
+                                    check: 'multi',
+                                    setting: {
+                                        data: {
+                                            key: {
+                                                name: 'value',
+                                                title: 'value'
+                                            },
+                                            simpleData: {
+                                                enable: true,
+                                                idKey: 'key',
+                                                pIdKey: 'parent',
+                                                rootPId: null
+                                            }
+                                        },
+                                        check: {
+                                            radioType: 'all'
+                                        },
+                                        format: {
+                                            nodeToValue(treeNode) {
+                                                return treeNode && treeNode.data;
+                                            }
+                                        }
+                                    }
+                                },
+                                treeNodes: BootstrapStore.treeNodes()
+                            }
+                        },
                         {
                             label: '文件',
                             name: 'file',
@@ -220,6 +258,14 @@
                             spliter: ';',
                             monopolize: true,
                             disabled: false
+                        },
+                        {
+                            label : '富文本',
+                            name : 'editor',
+                            widget : 'editor',
+                            toolbar : 'bold,italic,superscript,subscript,spechars',
+                            readonly : false,
+                            monopolize : true
                         }
                     ],
                     format: (model) => {

@@ -1,5 +1,3 @@
-import iView from 'iview';
-import 'iview-style';
 import 'font-awesome/css/font-awesome.min.css';
 
 const prefix = 'Sunset';
@@ -20,22 +18,8 @@ Sunset.Service = require('./services/index');
 //组件
 Sunset.Components = require('./components/index');
 
-import {
-    Container,
-    Sidebar,
-    Header,
-    Major,
-    Layout
-} from './layout';
-const Layouts = {
-    Container: Container,
-    Header: Header,
-    Sidebar: Sidebar,
-    Major: Major,
-    Layout: Layout
-}
-
-
+//布局
+const Layouts = require('./layout/index');
 
 //请求组件
 window.Base = {};
@@ -66,9 +50,12 @@ window.$http = function (...args) {
 var OuterVue = null,
     waitRegistList = [];
 
-//安装VUE
+//安装
 exports.install = function install(Vue, options) {
-    Vue.use(iView);
+    //基础
+    Filters(Vue);
+    Directives(Vue);
+    Validators(Vue);
     //布局
     Object.keys(Layouts).forEach(c => {
         Vue.component(`${prefix}${c}`, Layouts[c]);
@@ -129,9 +116,5 @@ exports.registComponent = function (name, widget) {
 
 //安装字典(type,key,value)
 exports.installDictionary = function (dictionary) {
-    // Promise.resolve().then(() => {
-    //     return dictionary;
-    // }).then(res => {
     Sunset.Service.Dictionary.install(dictionary || []);
-    // });
 }

@@ -15,7 +15,9 @@
 			nodes: {},
 			checked: {
 				type: Array,
-				default: []
+				default () {
+					return [];
+				}
 			}
 		},
 		data() {
