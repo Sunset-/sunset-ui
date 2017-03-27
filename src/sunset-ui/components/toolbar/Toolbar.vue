@@ -19,7 +19,7 @@
 					<i-button :loading="tool.loading" :size="size" :type="tool.color||'primary'" :icon="tool.icon" @click="operate(tool)">{{tool.label}}</i-button>
 				</template>
 				<template v-if="tool.type=='file'">
-					<sunset-file :options="tool" :ctx="ctx"></sunset-file>
+					<sunset-file :options="tool" :size="size" :ctx="ctx"></sunset-file>
 				</template>
 				<template v-if="tool.type=='dropdown'">
 					<sunset-dropdown :size="size" :options="tool" :ctx="ctx"></sunset-dropdown>

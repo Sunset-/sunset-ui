@@ -1,4 +1,21 @@
 <style lang="sass">
+    .sunset-file-wrap:hover .test-class {
+        background: red;
+    }
+    
+    .sunset-file-wrap:active .test-class {
+        background: yellow;
+    }
+    
+    .test-class {
+        display: inline-block;
+        width: 100px;
+        height: 100px;
+        background: yellowgreen;
+        &:hover {
+            background: red;
+        }
+    }
 </style>
 <template>
     <h2>Dropdown</h2>
@@ -7,14 +24,13 @@
     </div>
     <h2>FileUploader</h2>
     <div class="component-wrap">
-        <sunset-file :options="options.tools[2]" :ctx="{name : '小明'}" @success="queue" @progress="progress"></sunset-file>
+        <sunset-file :options="options.tools[2]" :ctx="{name : '小明'}" @success="queue" @progress="progress">
+            <div class="test-class"></div>
+        </sunset-file>
     </div>
     <h2>Toolbar</h2>
     <div class="component-wrap">
         <sunset-toolbar :options="options" :ctx="{name : '小明'}"></sunset-toolbar>
-    </div>
-    <div class="component-alert" type="error">
-        1.文件上传：上传自定义Picker样式未解决
     </div>
 </template>
 <script>
@@ -46,7 +62,7 @@
                     }, {
                         label: '文件选择',
                         icon: 'ios-cloud-upload',
-                        color: 'warning',
+                        color: 'success',
                         type: 'file',
                         url: '/service/system/file/upload',
                         className: 'my-uploader-trigger',
@@ -60,7 +76,7 @@
                         }
                     }, {
                         label: '图标按钮',
-                        color: 'success',
+                        color: 'warning',
                         type: 'dropdown',
                         items: [{
                             label: '图标按钮1',

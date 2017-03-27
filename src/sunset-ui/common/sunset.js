@@ -330,7 +330,7 @@ window.Sunset = {
         }
     },
     clone: function (obj) {
-        if (typeof (obj) != 'object' || Sunset.isDate(obj))
+        if (typeof (obj) != 'object' || Sunset.isDate(obj) || obj === null || obj === void 0)
             return obj;
         var re;
         if (obj.constructor == Array) {

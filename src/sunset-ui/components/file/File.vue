@@ -2,65 +2,76 @@
 	.sunset-file-wrap {
 		position: relative !important;
 		display: inline-block;
-		&>div {
-			height: 100%;
-			width: 100%;
-			z-index: 1;
-		}
-	}
-	
-	//trigger
-	.sunset-file-wrap.trigger {
-		width: 80px;
-		height: 80px;
-		line-height: 29px;
-		padding: 0;
-		border: 2px solid #d7dde4;
-		background: #fff;
-		color: #fff;
-		overflow: hidden;
-		&:after,
-		&:before {
-			content: "";
+		&>.sunset-file-trigger {}
+		&>.sunset-file-pick {
 			position: absolute;
-			z-index: 0;
-			background: #d7dde4;
-			cursor: pointer;
+			top: 0px;
+			left: 0px;
+			right: 0px;
+			bottom: 0px;
+			&>div {
+				height: 100%;
+				width: 100%;
+				z-index: 1;
+				color: rgba(0, 0, 0, 0);
+			}
 		}
-		&:before {
-			left: 10%;
-			width: 80%;
-			top: 50%;
-			margin-top: -2px;
-			height: 4px;
+		//按钮样式
+		&:hover {
+			.ivu-btn-primary {
+				background-color: #5cadff;
+				border-color: #5cadff;
+			}
+			.ivu-btn-info {
+				background-color: #57c5f7;
+				border-color: #57c5f7;
+			}
+			.ivu-btn-success {
+				background-color: #33d685;
+				border-color: #33d685;
+			}
+			.ivu-btn-warning {
+				background-color: #ffad33;
+				border-color: #ffad33;
+			}
+			.ivu-btn-error {
+				background-color: #ff5c33;
+				border-color: #ff5c33;
+			}
 		}
-		&:after {
-			left: 50%;
-			margin-left: -2px;
-			top: 10%;
-			height: 80%;
-			width: 4px;
+		&:active {
+			.ivu-btn-primary {
+				background-color: #3091f2;
+				border-color: #3091f2;
+			}
+			.ivu-btn-info {
+				background-color: #57c5f7;
+				border-color: #57c5f7;
+			}
+			.ivu-btn-success {
+				background-color: #00c261;
+				border-color: #00c261;
+			}
+			.ivu-btn-warning {
+				background-color: #f29100;
+				border-color: #f29100;
+			}
+			.ivu-btn-error {
+				background-color: #f23000;
+				border-color: #f23000;
+			}
 		}
-	}
-	
-	//button
-	.sunset-file-wrap.button {
-		width: 80px;
-		height: 30px;
-		padding: 0px;
-		text-align: center;
-		color: #FFF;
-		box-sizing: border-box;
-		text-align: center;
-		line-height: 30px;
-		background-color: #39f;
-		border-color: #39f;
-		border: none;
-		border-radius: 4px;
 	}
 </style>
 <template>
-	<div :id="id" :class="['sunset-file-wrap',options.className?options.className:'button']">{{options.label}}</div>
+	<div class="sunset-file-wrap">
+		<div class="sunset-file-trigger">
+			<slot>
+				<i-button :type="options.color||'primary'" :size="options.size||size" :icon="options.icon">{{options.label||'上传文件'}}</i-button>
+			</slot>
+		</div>
+		<div :id="id" class="sunset-file-pick"></div>
+	</div>
 </template>
 <script>
 	import WebUploader from '../../vendor/webuploader/webuploader.min';
@@ -69,6 +80,9 @@
 	export default {
 		props: {
 			options: {
+
+			},
+			size: {
 
 			},
 			queue: {
