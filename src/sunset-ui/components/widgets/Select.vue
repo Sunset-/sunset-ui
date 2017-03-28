@@ -2,7 +2,7 @@
 	<div :class="['sunset-field-wrap',invalid?'field-invalid':'']">
 		<label :class="['sunset-field-label',options.label?'':'sunset-field-label-empty']">{{options.label}}</label>
 		<div class="sunset-field">
-			<i-select v-if="items.length" :model.sync="widgetValue" :placeholder="options.placeholder" :clearable="options.clearable"
+			<i-select :model.sync="widgetValue" :placeholder="options.placeholder" :clearable="options.clearable"
 			    :multiple="options.multiple" :filterable="options.filterable">
 				<template v-if="groupable">
 					<Option-group v-for="group in items" :label="group.group">

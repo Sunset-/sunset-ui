@@ -1,6 +1,6 @@
 {
   "name": "sunset-ui",
-  "version": "0.1.4",
+  "version": "0.1.7",
   "description": "sunset ui for manage",
   "main": "dist/sunset-ui.js",
   "scripts": {
