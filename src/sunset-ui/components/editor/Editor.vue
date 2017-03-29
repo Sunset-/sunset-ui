@@ -22,7 +22,6 @@
 	</div>
 </template>
 <script>
-
 	var uid = 0;
 
 	export default {
@@ -79,7 +78,11 @@
 							this.pending || this.setValueSilent(editor.getContent());
 						});
 						//只读
-						this.readOnly && editor.setDisabled();
+						if (this.readOnly) {
+							editor.setDisabled();
+						} else {
+							editor.setEnabled();
+						}
 					});
 				});
 			},
@@ -106,6 +109,18 @@
 					} else {
 						this.waitValue = v;
 					}
+				}
+			},
+			readonly(v) {
+				try {
+					//只读
+					if (!!v) {
+						this.editor.setDisabled();
+					} else {
+						this.editor.setEnabled();
+					}
+				} catch (e) {
+					console.error(e);
 				}
 			}
 		}
