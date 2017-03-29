@@ -22,6 +22,9 @@
 	</div>
 </template>
 <script>
+	import ueditor_config from '../../vendor/ueditor/ueditor.config.js';
+	import ueditor from '../../vendor/ueditor/ueditor.sunset.js';
+
 	var uid = 0;
 
 	export default {
@@ -51,9 +54,6 @@
 		},
 		methods: {
 			init() {
-				if (!window.UE) {
-					throw new Error('未引入UEditor库');
-				}
 				this.ready = false;
 				this.id = `sunset-editor-${++uid}`;
 				this.$nextTick(() => {
@@ -74,15 +74,15 @@
 						editor.addListener('contentChange', () => {
 							this.pending || this.setValueSilent(editor.getContent());
 						});
-						editor.addListener('focus', () => {
-							this.pending || this.setValueSilent(editor.getContent());
-						});
 						//只读
 						if (this.readOnly) {
 							editor.setDisabled();
 						} else {
 							editor.setEnabled();
 						}
+						// editor.addListener('focus', () => {
+						// 	this.pending || this.setValueSilent(editor.getContent());
+						// });
 					});
 				});
 			},
@@ -114,13 +114,14 @@
 			readonly(v) {
 				try {
 					//只读
+					console.log('EDITOR-READONLY:' + v);
 					if (!!v) {
 						this.editor.setDisabled();
 					} else {
 						this.editor.setEnabled();
 					}
 				} catch (e) {
-					console.error(e);
+					console.warn(e);
 				}
 			}
 		}
