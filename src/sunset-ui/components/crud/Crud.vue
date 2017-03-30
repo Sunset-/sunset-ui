@@ -116,7 +116,7 @@
 						this.$refs.table.refresh(1, true);
 						break;
 					case 'FILTER':
-						this.$refs.table.resetFilter(record);
+						this.$refs.table.search.apply(this.$refs.table, [].slice.call(arguments, 1));
 						break;
 				}
 				this.$emit('signal', signal, record);

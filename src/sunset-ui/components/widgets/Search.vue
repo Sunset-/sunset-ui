@@ -41,7 +41,7 @@
 			},
 			keydown(ev) {
 				if (ev.keyCode == 13) {
-					this.$emit('FIELD_SEARCH');
+					this.search();
 				}
 			}
 		}

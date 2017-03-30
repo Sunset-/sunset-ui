@@ -1,7 +1,7 @@
 <style lang="sass">
 	.sunset-filter-field {
 		display: inline-block;
-		margin-right: 15px;
+		margin-right: 10px;
 		vertical-align: middle;
 		&:last-child {
 			margin-right: 0px;

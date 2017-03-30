@@ -446,13 +446,18 @@ store : 存储
 				} else {
 					list = this.data && Sunset.getAttribute(this.data, this.format['list'] || 'list', []);
 				}
+				var v1, v2;
 				if (sortOrder == 'ASC') {
 					list && list.sort((o1, o2) => {
-						return o1[sortCol] < o2[sortCol] ? -1 : (o1[sortCol] > o2[sortCol] ? 1 : 0);
+						v1 = Sunset.getAttribute(o1, sortCol);
+						v2 = Sunset.getAttribute(o2, sortCol);
+						return v1 < v2 ? -1 : (v1 > v2 ? 1 : 0);
 					});
 				} else {
 					list && list.sort((o1, o2) => {
-						return o1[sortCol] > o2[sortCol] ? -1 : (o1[sortCol] < o2[sortCol] ? 1 : 0);
+						v1 = Sunset.getAttribute(o1, sortCol);
+						v2 = Sunset.getAttribute(o2, sortCol);
+						return v1 > v2 ? -1 : (v1 < v2 ? 1 : 0);
 					});
 				}
 			},

@@ -2,8 +2,8 @@
 	<div :class="['sunset-field-wrap',invalid?'field-invalid':'']">
 		<label :class="['sunset-field-label',options.label?'':'sunset-field-label-empty']">{{options.label}}</label>
 		<div class="sunset-field">
-			<i-select :model.sync="widgetValue" :placeholder="options.placeholder" :clearable="options.clearable"
-			    :multiple="options.multiple" :filterable="options.filterable">
+			<i-select :model.sync="widgetValue" :placeholder="options.placeholder" :clearable="options.clearable" :multiple="options.multiple"
+			    :filterable="options.filterable">
 				<template v-if="groupable">
 					<Option-group v-for="group in items" :label="group.group">
 						<i-option v-for="item in group.items" :value="item.value">{{ item.text }}</i-option>
@@ -75,8 +75,20 @@
 					if (this.options.defaultFirst && this.value === void 0) {
 						this.value = this.items[0].group ? this.items[0].items[0].value : this.items[0].value;
 					}
+					this.refreshWidgetValue(this.value || '');
 					this.$emit('ready', this.options.name);
 				});
+			},
+			refreshWidgetValue(v) {
+				if (this.options.multiple) {
+					if (Sunset.isArray(v)) {
+						this.widgetValue = v;
+					} else {
+						this.widgetValue = (v || '').split(this.spliter);
+					}
+				} else {
+					this.widgetValue = v;
+				}
 			}
 		},
 		ready() {
@@ -98,15 +110,7 @@
 			},
 			value(v) {
 				if (!this.lock) {
-					if (this.options.multiple) {
-						if (Sunset.isArray(v)) {
-							this.widgetValue = v;
-						} else {
-							this.widgetValue = (v || '').split(this.spliter);
-						}
-					} else {
-						this.widgetValue = v;
-					}
+					this.refreshWidgetValue(v);
 				}
 			}
 		}

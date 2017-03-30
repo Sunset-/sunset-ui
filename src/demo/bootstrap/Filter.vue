@@ -1,5 +1,4 @@
 <style lang="sass">
-
 </style>
 <template>
     <h2>Filter</h2>
@@ -33,7 +32,7 @@
                             return new Promise(resolve => {
                                 setTimeout(() => {
                                     resolve('ccccc');
-                                }, 3000)
+                                }, 500)
                             })
                         }
                     }, {
@@ -59,6 +58,14 @@
                             '1': '男',
                             '2': '女'
                         }
+                    }, {
+                        name: 'sex1',
+                        widget: 'checkbox',
+                        defaultFirst: true,
+                        watch: ['job', (deps) => {
+
+                        }],
+                        enum: 'SEX'
                     }, {
                         label: '',
                         name: 'date',

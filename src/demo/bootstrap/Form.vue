@@ -50,13 +50,16 @@
                             label: '单选',
                             name: 'sex',
                             widget: 'radio',
-                            defaultFirst: true,
+                            // defaultFirst: true,
+                            default: '2',
                             enum: 'SEX'
                         }, {
                             label: '多选',
                             name: 'sex1',
                             widget: 'checkbox',
-                            defaultFirst: true,
+                            default: '2',
+                            watch: ['sex', (deps) => {
+                            }],
                             enum: 'SEX'
                         }, {
                             label: '下拉框',
@@ -260,12 +263,12 @@
                             disabled: false
                         },
                         {
-                            label : '富文本',
-                            name : 'editor',
-                            widget : 'editor',
-                            toolbar : 'bold,italic,superscript,subscript,spechars',
-                            readonly : false,
-                            monopolize : true
+                            label: '富文本',
+                            name: 'editor',
+                            widget: 'editor',
+                            toolbar: 'bold,italic,superscript,subscript,spechars',
+                            readonly: false,
+                            monopolize: true
                         }
                     ],
                     format: (model) => {
