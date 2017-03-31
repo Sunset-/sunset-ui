@@ -32,6 +32,9 @@
     <div class="component-wrap">
         <sunset-toolbar :options="options" :ctx="{name : '小明'}"></sunset-toolbar>
     </div>
+    <div>
+        <sunset-chart v-ref:chart style="width:500px;height:200px;"  :options="echartsOptions"></sunset-chart>
+    </div>
 </template>
 <script>
     export default {
@@ -41,13 +44,34 @@
         },
         data() {
             return {
+                echartsOptions: {
+                    title: {
+                        text: 'ECharts 入门示例'
+                    },
+                    tooltip: {},
+                    legend: {
+                        data: ['销量']
+                    },
+                    xAxis: {
+                        data: ["衬衫", "羊毛衫", "雪纺衫", "裤子", "高跟鞋", "袜子"]
+                    },
+                    yAxis: {},
+                    series: [{
+                        name: '销量',
+                        type: 'bar',
+                        data: [5, 20, 36, 10, 10, 20]
+                    }]
+                },
                 options: {
                     size: 'small',
                     tools: [{
                         label: '普通按钮',
                         color: 'primary',
-                        operate() {
-                            alert(123)
+                        operate: () => {
+                            // var op = Sunset.clone(this.echartsOptions)
+                            this.echartsOptions.series[0].data[0] = 15;
+                            this.$refs.chart.refresh();
+                            // this.echartsOptions = op;
                         }
                     }, {
                         label: '图标按钮',
@@ -56,12 +80,14 @@
                         premise(ctx) {
                             return true;
                         },
-                        operate() {
-                            alert(123)
+                        operate: () => {
+                            this.options.tools[2].disabled = false;
+                            this.options.tools[0].disabled = false;
                         }
                     }, {
                         label: '文件选择',
                         icon: 'ios-cloud-upload',
+                        disabled: true,
                         color: 'success',
                         type: 'file',
                         url: '/service/system/file/upload',
@@ -78,15 +104,22 @@
                         label: '图标按钮',
                         color: 'warning',
                         type: 'dropdown',
+                        disabled() {
+                            return false;
+                        },
                         items: [{
                             label: '图标按钮1',
                             icon: 'refresh',
+                            disabled: true,
                             operate() {
                                 alert(record.name)
                             }
                         }, {
                             label: '图标按钮2',
                             icon: 'refresh',
+                            premise(ctx) {
+                                return false;
+                            },
                             operate() {
                                 alert(record.name)
                             }

@@ -37,6 +37,9 @@ import Crud from './crud/Crud.vue';
 //面包屑导航
 import Breadcrumb from './breadcrumb/Breadcrumb';
 
+//图表
+import Chart from './chart/Chart.vue';
+
 
 module.exports = {
     Dropdown: Dropdown,
@@ -55,5 +58,6 @@ module.exports = {
     TreeModal: TreeModal,
     ViewModal: ViewModal,
     Breadcrumb: Breadcrumb,
-    Crud : Crud
+    Crud : Crud,
+    Chart : Chart
 };

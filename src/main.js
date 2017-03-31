@@ -5,10 +5,13 @@ import './vendor/ztree/jquery.ztree.all-3.5.min';
 import './vendor/ztree/zTreeStyle/zTreeStyle.css';
 import UEditorConfig from './vendor/ueditor/ueditor.config.js';
 import UEditor from './vendor/ueditor/ueditor.sunset.js';
+import echarts from 'echarts';
 
 import Vue from 'vue';
 import Router from 'vue-router';
 import SunsetUI from './sunset-ui/index.js';
+
+window.echarts = echarts;
 
 Vue.use(Router);
 Vue.use(iView);

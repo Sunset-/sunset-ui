@@ -44,7 +44,11 @@
                         name: 'nickname'
                     }, {
                         title: '登录名',
-                        name: 'account'
+                        name: 'account',
+                        align: 'center',
+                        format(v) {
+                            return `${parseInt(Math.random()*100)}`;
+                        }
                     }, {
                         title: '类型',
                         name: 'type',

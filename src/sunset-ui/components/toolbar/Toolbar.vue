@@ -16,7 +16,8 @@
 		<template v-for="tool in showTools">
 			<div v-permission="tool.permission" class="sunset-toolbar-item">
 				<template v-if="!tool.type">
-					<i-button :loading="tool.loading" :size="size" :type="tool.color||'primary'" :icon="tool.icon" @click="operate(tool)">{{tool.label}}</i-button>
+					<i-button :disabled="tool.disabled" :loading="tool.loading" :size="size" :type="tool.color||'primary'" :icon="tool.icon"
+					    @click="operate(tool)">{{tool.label}}</i-button>
 				</template>
 				<template v-if="tool.type=='file'">
 					<sunset-file :options="tool" :size="size" :ctx="ctx"></sunset-file>
@@ -40,6 +41,13 @@
 			showTools() {
 				var tools = Sunset.isArray(this.options) ? this.options : this.options && this.options.tools;
 				return tools && tools.filter(item => {
+					if (item.disabled === true) {
+						item.disabled = true;
+					} else if (Sunset.isFunction(item.disabled)) {
+						item.disabled = !!item.disabled(this.ctx);
+					} else {
+						item.disabled = false;
+					}
 					if (item.premise && Sunset.isFunction(item.premise)) {
 						return item.premise(this.ctx);
 					} else {
@@ -53,6 +61,9 @@
 		},
 		methods: {
 			operate(tool) {
+				if (tool.disabled) {
+					return;
+				}
 				Helper.operate.call(this, tool, this.ctx);
 			}
 		}

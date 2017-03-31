@@ -137,7 +137,7 @@ store : 存储
 								<input type="checkbox" :checked="isAllCheck" @change="checkAll($event.currentTarget.checked)" />
 							</th>
 							<th v-if="options.showIndex" class="text-center" style="width:60px;">序号</th>
-							<th v-for="col in columns" :style="col.style||{}">
+							<th v-for="col in columns">
 								<div @click="sort(col)" style="cursor:pointer;">
 									{{col.title}}
 									<i v-if="sortable&&col.sortable!==false" :class="['fa',sortCol!=col.name?'fa-sort text-stable':(sortOrder=='ASC'?'fa-sort-asc':'fa-sort-desc')]"></i>
@@ -153,7 +153,7 @@ store : 存储
 								/>
 							</th>
 							<td v-if="options.showIndex" class="text-center">{{(pageNumber-1)*pageSize+ $index+1}}</td>
-							<td v-for="col in columns" :style="col.style||{}">{{{ item | sunset_namespace col.name | sunset_transcode col item}}}</td>
+							<td v-for="col in columns" :style="col.style||{'text-align':col.align}">{{{ item | sunset_namespace col.name | sunset_transcode col item}}}</td>
 							<td v-if="recordTools" class="sunset-table-record-tools" class="text-center">
 								<div>
 									<div>

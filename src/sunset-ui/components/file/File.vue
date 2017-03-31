@@ -16,8 +16,14 @@
 				color: rgba(0, 0, 0, 0);
 			}
 		}
+		&.disabled {
+			cursor: not-allowed;
+			label {
+				display: none !important;
+			}
+		}
 		//按钮样式
-		&:hover {
+		&:not(.disabled):hover {
 			.ivu-btn-primary {
 				background-color: #5cadff;
 				border-color: #5cadff;
@@ -39,7 +45,7 @@
 				border-color: #ff5c33;
 			}
 		}
-		&:active {
+		&:not(.disabled):active {
 			.ivu-btn-primary {
 				background-color: #3091f2;
 				border-color: #3091f2;
@@ -64,10 +70,10 @@
 	}
 </style>
 <template>
-	<div class="sunset-file-wrap">
+	<div :class="['sunset-file-wrap',options.disabled===true?'disabled':'']">
 		<div class="sunset-file-trigger">
 			<slot>
-				<i-button :type="options.color||'primary'" :size="options.size||size" :icon="options.icon">{{options.label||'上传文件'}}</i-button>
+				<i-button :disabled="options.disabled===true" :type="options.color||'primary'" :size="options.size||size" :icon="options.icon">{{options.label||'上传文件'}}</i-button>
 			</slot>
 		</div>
 		<div :id="id" class="sunset-file-pick"></div>
