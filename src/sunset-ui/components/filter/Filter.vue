@@ -117,6 +117,16 @@
 					}
 				}
 			},
+			getFilter() {
+				var filter = Object.assign({}, this.filter);
+				if (Sunset.isFunction(this.options.format)) {
+					filter = this.options.format(filter) || filter;
+				}
+				return {
+					filter: filter,
+					localFilter: this.generateLocalFilter()
+				};
+			},
 			search() {
 				if (!this.fields) {
 					return;

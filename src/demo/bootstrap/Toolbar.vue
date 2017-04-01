@@ -33,12 +33,14 @@
         <sunset-toolbar :options="options" :ctx="{name : '小明'}"></sunset-toolbar>
     </div>
     <div>
-        <sunset-chart v-ref:chart style="width:400px;height:200px;" :options="echartsOptions"></sunset-chart>
+        <sunset-chart v-ref:chart style="width:400px;height:200px;" :options="echartsOptions" @chart-click="chartClick"></sunset-chart>
     </div>
 </template>
 <script>
     export default {
         methods: {
+            chartClick(params){
+            },
             progress(dd) {},
             queue(quene) {}
         },

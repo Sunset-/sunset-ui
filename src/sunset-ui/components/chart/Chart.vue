@@ -18,6 +18,9 @@
                     this.$el.addEventListener('resize', () => {
                         this.chart.resize();
                     }, false);
+                    this.chart.on('click', (params) => {
+                        this.$emit('chart-click', params);
+                    });
                 }
                 this.chart.setOption(this.options);
             },
