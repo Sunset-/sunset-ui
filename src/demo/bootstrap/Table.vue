@@ -47,7 +47,7 @@
                         name: 'account',
                         align: 'center',
                         format(v) {
-                            return `${parseInt(Math.random()*100)}`;
+                            return `<span class="text-success">${parseInt(Math.random()*100)}</span>`;
                         }
                     }, {
                         title: '类型',
@@ -79,6 +79,9 @@
                             icon: 'edit',
                             color: 'warning',
                             signal: 'MODIFY',
+                            disabled(record) {
+                                return record && record.nickname != '陈军';
+                            },
                             permission: 'Dictionary_MODIFY'
                         }, {
                             label: '删除',

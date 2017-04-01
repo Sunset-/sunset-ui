@@ -70,10 +70,10 @@
 	}
 </style>
 <template>
-	<div :class="['sunset-file-wrap',options.disabled===true?'disabled':'']">
+	<div :class="['sunset-file-wrap',disabled===true?'disabled':'']">
 		<div class="sunset-file-trigger">
 			<slot>
-				<i-button :disabled="options.disabled===true" :type="options.color||'primary'" :size="options.size||size" :icon="options.icon">{{options.label||'上传文件'}}</i-button>
+				<i-button :disabled="disabled===true" :type="options.color||'primary'" :size="options.size||size" :icon="options.icon">{{options.label||'上传文件'}}</i-button>
 			</slot>
 		</div>
 		<div :id="id" class="sunset-file-pick"></div>
@@ -86,6 +86,9 @@
 	export default {
 		props: {
 			options: {
+
+			},
+			disabled : {
 
 			},
 			size: {

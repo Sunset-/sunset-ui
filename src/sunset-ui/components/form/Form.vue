@@ -174,7 +174,6 @@
 				this.generateModel().then(model => {
 					if (Sunset.isFunction(this.options.submit)) {
 						this.options.submit(model);
-						this.$emit('submit', model);
 					} else if (this.options.store) {
 						this.options.store[this.options.method || 'save'](model).then(res => {
 							Sunset.tip(this.options.successTip || '保存成功', 'success');
@@ -184,6 +183,7 @@
 							this.$emit('signal', 'SAVE-ERROR', e);
 						});
 					}
+					this.$emit('submit', model);
 				}).catch(e => {
 					this.$emit('signal', 'SAVE-ERROR', e);
 					if (e && e.message) {

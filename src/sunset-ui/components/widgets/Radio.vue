@@ -49,7 +49,15 @@
                     if (this.options.defaultFirst && this.value === void 0) {
                         this.value = this.items[0].value;
                     }
+                    this.refreshValue();
                     this.$emit('ready', this.options.name);
+                });
+            },
+            refreshValue() {
+                var temp = this.value;
+                this.value = '';
+                this.$nextTick(() => {
+                    this.value = temp;
                 });
             }
         },

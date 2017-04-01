@@ -33,7 +33,7 @@
         <sunset-toolbar :options="options" :ctx="{name : '小明'}"></sunset-toolbar>
     </div>
     <div>
-        <sunset-chart v-ref:chart style="width:500px;height:200px;"  :options="echartsOptions"></sunset-chart>
+        <sunset-chart v-ref:chart style="width:400px;height:200px;" :options="echartsOptions"></sunset-chart>
     </div>
 </template>
 <script>
@@ -42,6 +42,7 @@
             progress(dd) {},
             queue(quene) {}
         },
+        ready() {},
         data() {
             return {
                 echartsOptions: {

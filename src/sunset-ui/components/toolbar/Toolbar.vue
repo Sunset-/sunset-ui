@@ -16,14 +16,14 @@
 		<template v-for="tool in showTools">
 			<div v-permission="tool.permission" class="sunset-toolbar-item">
 				<template v-if="!tool.type">
-					<i-button :disabled="tool.disabled" :loading="tool.loading" :size="size" :type="tool.color||'primary'" :icon="tool.icon"
+					<i-button :disabled="tool.disabledValue" :loading="tool.loading" :size="size" :type="tool.color||'primary'" :icon="tool.icon"
 					    @click="operate(tool)">{{tool.label}}</i-button>
 				</template>
 				<template v-if="tool.type=='file'">
-					<sunset-file :options="tool" :size="size" :ctx="ctx"></sunset-file>
+					<sunset-file :disabled="tool.disabledValue" :options="tool" :size="size" :ctx="ctx"></sunset-file>
 				</template>
 				<template v-if="tool.type=='dropdown'">
-					<sunset-dropdown :size="size" :options="tool" :ctx="ctx"></sunset-dropdown>
+					<sunset-dropdown :disabled="tool.disabledValue" :size="size" :options="tool" :ctx="ctx"></sunset-dropdown>
 				</template>
 			</div>
 		</template>
@@ -42,11 +42,11 @@
 				var tools = Sunset.isArray(this.options) ? this.options : this.options && this.options.tools;
 				return tools && tools.filter(item => {
 					if (item.disabled === true) {
-						item.disabled = true;
+						item.disabledValue = true;
 					} else if (Sunset.isFunction(item.disabled)) {
-						item.disabled = !!item.disabled(this.ctx);
+						item.disabledValue = !!item.disabled(this.ctx);
 					} else {
-						item.disabled = false;
+						item.disabledValue = false;
 					}
 					if (item.premise && Sunset.isFunction(item.premise)) {
 						return item.premise(this.ctx);

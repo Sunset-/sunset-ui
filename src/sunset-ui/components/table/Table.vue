@@ -153,7 +153,7 @@ store : 存储
 								/>
 							</th>
 							<td v-if="options.showIndex" class="text-center">{{(pageNumber-1)*pageSize+ $index+1}}</td>
-							<td v-for="col in columns" :style="col.style||{'text-align':col.align}">{{{ item | sunset_namespace col.name | sunset_transcode col item}}}</td>
+							<td v-for="col in columns" :style="col.style||{'text-align':col.align}">{{{ item.__sunset_col_texts[$index]}}}</td>
 							<td v-if="recordTools" class="sunset-table-record-tools" class="text-center">
 								<div>
 									<div>
@@ -320,51 +320,42 @@ store : 存储
 			refresh(pageNumber, force) {
 				pageNumber = pageNumber == void 0 ? this.pageNumber : pageNumber;
 				this.pageNumber = pageNumber;
+				//过滤条件
 				var filter = $.extend(true, {}, this.filter);
-				if (!this.isLocalPage) {
-					if (!this.store) {
-						throw new Error('table remote datasorce need store !');
+				filter[this.format['currentPage'] || 'currentPage'] = (this.options.pageNumberStart === 0) ? pageNumber - 1 :
+					pageNumber;
+				filter[this.format['pageSize'] || 'pageSize'] = this.pageSize;
+				filter = this.formatFilter && this.formatFilter(filter) || filter;
+				Promise.resolve((() => {
+					var datasource = this.datasource || this.store && this.store[this.options.method || 'list'].bind(this.store);
+					if (datasource) {
+						this.loading = true;
+						return Sunset.isFunction(datasource) ? datasource(filter) : datasource;
+					} else {
+						throw new Error('table load data need datasource or store');
 					}
-					//后端分页
-					filter[this.format['currentPage'] || 'currentPage'] = (this.options.pageNumberStart === 0) ? pageNumber - 1 :
-						pageNumber;
-					filter[this.format['pageSize'] || 'pageSize'] = this.pageSize;
-					filter = this.formatFilter && this.formatFilter(filter) || filter;
-					this.loading = true;
-					this.store[this.options.method || 'list'](filter).then(res => {
-						this.data = res;
-						this.refrechCheckAll();
-						this.loading = false;
-					});
+				})()).then(res => {
+					this.loading = false;
+					this.setData(res);
+				});
+			},
+			setData(res) {
+				var columns = this.columns,
+					list;
+				if (this.format && this.format['list'] == '') {
+					list = res || [];
 				} else {
-					//本地分页
-					if (force || !this.data) {
-						var datasource = this.datasource;
-						if (datasource) {
-							if (Sunset.isArray(datasource) || Sunset.isObject(datasource)) {
-								this.data = datasource;
-							} else if (Sunset.isFunction(datasource)) {
-								var res = datasource();
-								if (res.then) {
-									this.loading = true;
-									res.then(data => {
-										this.data = Sunset.isArray(data) ? data.slice(0) : Object.assign({}, data);
-										this.loading = false;
-									});
-								} else {
-									this.data = Sunset.isArray(res) ? res.slice(0) : Object.assign({}, res);
-								}
-							}
-						} else {
-							filter = this.formatFilter && this.formatFilter(filter) || filter;
-							this.loading = true;
-							this.store[this.options.method || 'list'](filter).then(res => {
-								this.data = res;
-								this.loading = false;
-							});
-						}
-					}
+					list = res && Sunset.getAttribute(res, this.format['list'] || 'list', []);
 				}
+				list.forEach(record => {
+					record.__sunset_col_texts = {};
+					columns.forEach((col, index) => {
+						record.__sunset_col_texts[index] = Sunset.Service.Common.tableColTranscode(Sunset.getAttribute(record, col.name,
+							''), col, record)
+					});
+				});
+				this.data = res;
+				this.refrechCheckAll();
 			},
 			refreshAfterRemove() {
 				if (this.pageNumber > 1 && (this.count - 1 == (this.pageNumber - 1) * this.pageSize)) {
@@ -372,9 +363,6 @@ store : 存储
 				} else {
 					this.refresh(void 0, true);
 				}
-			},
-			setData(data) {
-				this.data = data;
 			},
 			//设置行操作栏
 			setRecordTools(tools) {
@@ -432,9 +420,9 @@ store : 存储
 				}
 				this.sortCol = sortCol;
 				this.sortOrder = sortOrder;
-				this.sortData();
+				this.sortData(this.columns.indexOf(col));
 			},
-			sortData() {
+			sortData(colIndex) {
 				if (!this.sortable || !this.sortCol) {
 					return;
 				}
@@ -449,14 +437,14 @@ store : 存储
 				var v1, v2;
 				if (sortOrder == 'ASC') {
 					list && list.sort((o1, o2) => {
-						v1 = Sunset.getAttribute(o1, sortCol);
-						v2 = Sunset.getAttribute(o2, sortCol);
+						v1 = o1.__sunset_col_texts[colIndex]; //  Sunset.getAttribute(o1, sortCol);
+						v2 = o2.__sunset_col_texts[colIndex]; //Sunset.getAttribute(o2, sortCol);
 						return v1 < v2 ? -1 : (v1 > v2 ? 1 : 0);
 					});
 				} else {
 					list && list.sort((o1, o2) => {
-						v1 = Sunset.getAttribute(o1, sortCol);
-						v2 = Sunset.getAttribute(o2, sortCol);
+						v1 = o1.__sunset_col_texts[colIndex]; //  Sunset.getAttribute(o1, sortCol);
+						v2 = o2.__sunset_col_texts[colIndex]; //Sunset.getAttribute(o2, sortCol);
 						return v1 > v2 ? -1 : (v1 < v2 ? 1 : 0);
 					});
 				}
