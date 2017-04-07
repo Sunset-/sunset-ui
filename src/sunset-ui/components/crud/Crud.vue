@@ -22,10 +22,10 @@
 		<!-- 数据表格 -->
 		<div v-show="PAGE=='CRUD_TABLE'">
 			<div v-if="filterOptions||toolbarOptions" class="crud-toolbar-filter-wrap">
-				<sunset-toolbar :options="toolbarOptions" @signal="operateSignal"></sunset-toolbar>
-				<sunset-filter :options="filterOptions" @filter="filterData"></sunset-filter>
+				<sunset-toolbar v-if="toolbarOptions" :options="toolbarOptions" @signal="operateSignal"></sunset-toolbar>
+				<sunset-filter v-if="filterOptions" :options="filterOptions" @filter="filterData"></sunset-filter>
 			</div>
-			<sunset-table v-ref:table :options="options.tableOptions" @signal="operateSignal"></sunset-table>
+			<sunset-table v-ref:table :options="tableOptions" @signal="operateSignal"></sunset-table>
 		</div>
 		<!-- 编辑表单 -->
 		<div v-show="PAGE=='CRUD_FORM'">
@@ -63,6 +63,12 @@
 			},
 			filterOptions() {
 				return this.options.filterOptions || this.options.tableOptions.filter;
+			},
+			tableOptions() {
+				if (this.filterOptions) {
+					this.options.tableOptions.lazy = true;
+				}
+				return this.options.tableOptions;
 			},
 			store() {
 				return this.options.store;

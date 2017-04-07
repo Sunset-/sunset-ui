@@ -29,6 +29,7 @@
 		<form :class="['sunset-search-form form-inline form-horizontal',right?'pull-right':'']" onsubmit="return false">
 			<filter-field v-for="field in fields" :options="field" :value.sync="filter[field.name]" @search="fieldTriggerSearch" @ready="fieldReady"></filter-field>
 			<i-button v-if="searchButton" :type="searchButton.color||'primary'" :icon="searchButton.icon" @click="search">{{searchButton.label}}</i-button>
+			<sunset-toolbar v-if="options.toolbar" :options="options.toolbar"></sunset-toolbar>
 		</form>
 		<div class="sunset-search-form-tip" v-if="options.tip">
 			<Alert :type="options.tip.color" show-icon>{{options.tip.text}}</Alert>
