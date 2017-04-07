@@ -53,7 +53,7 @@
     </div>
 </template>
 <script>
-    import widgets from './widgets.js';
+    import widgets from './table-widgets.js';
 
     export default {
         components: widgets,

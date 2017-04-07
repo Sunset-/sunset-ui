@@ -46,7 +46,7 @@
             init() {
                 Utils.generateItems(this.options).then(items => {
                     this.items = items;
-                    if (this.options.defaultFirst && this.value === void 0 || this.value.length == 0) {
+                    if (this.options.defaultFirst && (this.value === void 0 || this.value.length == 0)) {
                         this.value = this.items[0].value;
                     }
                     this.refreshValue();
