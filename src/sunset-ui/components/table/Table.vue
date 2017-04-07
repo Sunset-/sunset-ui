@@ -129,7 +129,7 @@ store : 存储
 	<div class="sunset-crud-table-container">
 		<!--表格主体-->
 		<div class="table-wrap sunset-crud-table-wrap">
-			<sunset-loading :loading.sync="loading" top="40">
+			<sunset-loading :style="widthStyle" :loading.sync="loading" top="40">
 				<table :class="['table table-bordered table-striped',options.condensed?'table-condensed':'']">
 					<thead>
 						<tr class="noselect">
@@ -200,6 +200,13 @@ store : 存储
 			}
 		},
 		computed: {
+			widthStyle() {
+				if (this.options.minWidth) {
+					return {
+						'min-width': `${this.options.minWidth}px`
+					}
+				}
+			},
 			//是否本地分页
 			isLocalPage() {
 				return !!this.options.localPage;

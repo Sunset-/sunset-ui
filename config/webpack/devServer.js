@@ -10,7 +10,9 @@ module.exports = {
     proxy: {
         '/service/*': {
             target: 'http://localhost:9090/',
-            pathRewrite: {'^/service' : '/'},
+            pathRewrite: {
+                '^/service': '/'
+            },
             secure: false,
             changeOrigin: true
         },

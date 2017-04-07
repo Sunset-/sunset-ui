@@ -25,9 +25,9 @@
 	}
 </style>
 <template>
-	<div class="sunset-search-form-container">
+	<div :class="['sunset-search-form-container',right?'pull-right':'']">
 		<form :class="['sunset-search-form form-inline form-horizontal',right?'pull-right':'']" onsubmit="return false">
-			<filter-field v-for="field in fields" :options="field" :value.sync="filter[field.name]" @search="search" @ready="fieldReady"></filter-field>
+			<filter-field v-for="field in fields" :options="field" :value.sync="filter[field.name]" @search="fieldTriggerSearch" @ready="fieldReady"></filter-field>
 			<i-button v-if="searchButton" :type="searchButton.color||'primary'" :icon="searchButton.icon" @click="search">{{searchButton.label}}</i-button>
 		</form>
 		<div class="sunset-search-form-tip" v-if="options.tip">
@@ -61,7 +61,8 @@
 				inited: false,
 				lock: false,
 				filter: {},
-				waitReadyWidgetCounter: 0
+				waitReadyWidgetCounter: 0,
+				waitReadyWidgetMap: {}
 			};
 		},
 		methods: {
@@ -82,6 +83,7 @@
 					}
 					if (field.defaultFirst) {
 						this.waitReadyWidgetCounter++;
+						this.waitReadyWidgetMap[field.name] = true;
 					}
 				});
 				Promise.all(prall).then((res) => {
@@ -89,12 +91,12 @@
 						res.forEach((dv, index) => {
 							filter[defaultValueFields[index].name] = dv;
 						});
-						if (this.waitReadyWidgetCounter <= 0) {
-							this.$nextTick(() => {
-								this.lock = false;
+						this.$nextTick(() => {
+							this.lock = false;
+							if (this.waitReadyWidgetCounter <= 0) {
 								this.search();
-							});
-						}
+							}
+						});
 					}
 				});
 			},
@@ -106,14 +108,17 @@
 					this.search();
 				});
 			},
-			fieldReady() {
-				if (this.waitReadyWidgetCounter > 0) {
+			fieldReady(fieldName) {
+				if (this.waitReadyWidgetMap[fieldName] && this.waitReadyWidgetCounter > 0) {
 					this.waitReadyWidgetCounter--;
 					if (this.waitReadyWidgetCounter == 0) {
-						this.$nextTick(() => {
-							this.lock = false;
-							this.search();
-						});
+						if (!this.lock) {
+							this.$nextTick(() => {
+								var f = this.filter;
+								this.lock = false;
+								this.search();
+							});
+						}
 					}
 				}
 			},
@@ -127,12 +132,15 @@
 					localFilter: this.generateLocalFilter()
 				};
 			},
+			fieldTriggerSearch() {
+				this.search();
+			},
 			search() {
 				if (!this.fields) {
 					return;
 				}
 				if (!this.lock) {
-					var filter = Object.assign({}, this.filter);
+					var filter = Sunset.clone(this.filter);
 					if (Sunset.isFunction(this.options.format)) {
 						filter = this.options.format(filter) || filter;
 					}

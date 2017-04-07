@@ -58,8 +58,7 @@
                             name: 'sex1',
                             widget: 'checkbox',
                             default: '2',
-                            watch: ['sex', (deps) => {
-                            }],
+                            watch: ['sex', (deps) => {}],
                             enum: 'SEX'
                         }, {
                             label: '下拉框',
@@ -102,6 +101,7 @@
                             textPlace: 'label',
                             clearable: true,
                             multiple: true,
+                            max: 3,
                             filterable: true,
                             placeholder: "请选择城市",
                             data: [{
@@ -145,6 +145,7 @@
                             label: '数字',
                             name: 'number',
                             widget: 'number',
+                            digits: 2,
                             max: 10,
                             min: -5,
                             step: 0.1,
@@ -248,6 +249,7 @@
                             label: '文件',
                             name: 'file',
                             widget: 'file',
+                            dom: '<div style="display:inline-block;width:50px;height:50px;border:1px solid #ccc;">1234</div>',
                             url: '/upload/api/1.0.0/file/storage',
                             default: '5763f45a5d51d4de133b24ccc0f9e3ae',
                             thumbnail: (result, file) => {

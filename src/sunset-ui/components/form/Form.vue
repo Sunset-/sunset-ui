@@ -20,7 +20,7 @@
 					<div class="group-title">{{field.group}}</div>
 				</i-col>
 				<i-col :span="computedFieldClass(field)">
-					<sunset-field v-ref:field :options="field" :value.sync="model[field.name]" :model="model"></sunset-field>
+					<sunset-field v-ref:field :options="field" :value.sync="model[field.name]" :model="model" @ready="promiseWidgetReady"></sunset-field>
 				</i-col>
 			</template>
 		</Row>
@@ -52,7 +52,8 @@
 				record: null,
 				model: {},
 				hasModel: false,
-				fieldsRefresher: 0
+				fieldsRefresher: 0,
+				defaultValueMap: {}
 			}
 		},
 		computed: {
@@ -109,7 +110,7 @@
 					defaultValueFields = [],
 					prall = [];
 				fields.forEach(field => {
-					this.$set(`model.${field.name}`, void 0);
+					this.$set(`model.${field.name}`, this.defaultValueMap[field.name]);
 					var defaulValue = field.default || field.defaultValue;
 					if (defaulValue) {
 						defaultValueFields.push(field);
@@ -125,6 +126,9 @@
 						});
 					}
 				});
+			},
+			promiseWidgetReady(name, defaultValue) {
+				this.defaultValueMap[name] = defaultValue;
 			},
 			computedFieldClass(field) {
 				if (field.monopolize) {
@@ -201,6 +205,9 @@
 				this.fieldsRefresher++;
 				this.$nextTick(() => {
 					this.model = model;
+					if (!this.hasModel) {
+						this.init();
+					}
 				});
 			},
 			cast(model) {

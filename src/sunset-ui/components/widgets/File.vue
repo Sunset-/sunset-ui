@@ -56,7 +56,9 @@
         <label class="sunset-field-label">{{options.label}}</label>
         <div class="sunset-field">
             <upload-image v-for="item in queue" :data.sync="item" :size="options.thumbnailSize" @remove="remove"></upload-image>
-            <sunset-file v-ref:file :options="options" :queue="queue" @queue="refreshQueue" @success="success"></sunset-file>
+            <sunset-file v-ref:file :options="options" :queue="queue" @queue="refreshQueue" @success="success">
+                {{{options.dom}}}
+            </sunset-file>
         </div>
     </div>
 </template>

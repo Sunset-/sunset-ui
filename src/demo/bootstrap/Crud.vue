@@ -64,12 +64,12 @@
 					}],
 					//搜索
 					filterOptions: {
-						left: false,
+						align: 'right',
 						fields: [{
 							name: 'select',
 							widget: 'select',
 							placeholder: '下拉',
-							defaultFirst : true,
+							defaultFirst: true,
 							// changeFilter :true,
 							data: {
 								'1': '男',
@@ -91,7 +91,7 @@
 
 						},
 						searchButton: {
-							label : '查询'
+							label: '查询'
 						}
 					},
 					//表格
@@ -102,18 +102,18 @@
 						}, {
 							title: '昵称',
 							name: 'nickname',
-							sortable : false
+							sortable: false
 						}, {
 							title: '类型',
 							name: 'type',
-							enum: 'ManagerType'
+							format: 'MONEY'
 						}],
 						showIndex: true,
 						pageSize: 5,
 						localPage: false,
 						multiCheck: true,
 						sortable: true,
-						lazy : true,
+						lazy: true,
 						format: {
 							list: 'rows',
 							count: 'count',
@@ -203,6 +203,7 @@
 							label: '登录名',
 							name: 'account',
 							widget: 'input',
+							default : '123456',
 							validate: {
 								required: true,
 								maxlength: 32
@@ -211,6 +212,7 @@
 							label: '密码',
 							name: 'password',
 							widget: 'input',
+							default : 'aaa',
 							premise(model) {
 								return !model.id;
 							},
@@ -231,6 +233,7 @@
 							name: 'type',
 							widget: 'select',
 							enum: 'ACCOUNT_TYPE',
+							defaultFirst : true,
 							dataType: String,
 							validate: {
 								required: true

@@ -34,21 +34,14 @@
                 return this.options.maxlength || this.options.validate && this.options.validate.maxlength && this.options
                     .validate.maxlength
                     .rule;
+            },
+            digits() {
+                return this.options.digits || 0;
             }
         },
         methods: {
             blur() {
-                try {
-                    var value = +this.value;
-                    if (!isNaN(value)) {
-                        this.value = Sunset.Numbers.fixed(this.value, this.options.digits);
-                    } else {
-                        this.value = Sunset.Numbers.fixed(0, this.options.digits);
-                    }
-                } catch (e) {
-                    this.value = Sunset.Numbers.fixed(0, this.options.digits);
-                }
-
+                this.value = Sunset.Numbers.fixed(this.value, this.digits);
             }
         }
     };

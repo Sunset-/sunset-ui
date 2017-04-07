@@ -65,13 +65,20 @@
 			fieldSearch() {
 				this.$emit('search');
 			},
-			widgetReady() {
-				this.$emit('ready');
+			widgetReady(name, defaultValue) {
+				this.$emit('ready', name, defaultValue);
 			}
 		},
 		ready() {
 			if (this.options.onChange || this.options.changeFilter) {
-				this.$watch('value', (v) => {
+				this.$watch('value', (v, oldv) => {
+					if (v === void 0) {
+						this.value = '';
+						return;
+					}
+					if (oldv === void 0 && v === '') {
+						return;
+					}
 					this.options.onChange && this.options.onChange(v);
 					this.options.changeFilter && this.$emit('search');
 				});

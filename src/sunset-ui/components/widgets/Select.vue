@@ -72,11 +72,11 @@
 					} else {
 						this.items = items;
 					}
-					if (this.options.defaultFirst && this.value === void 0) {
+					if (this.options.defaultFirst && this.value === void 0 || this.value.length == 0) {
 						this.value = this.items[0].group ? this.items[0].items[0].value : this.items[0].value;
 					}
 					this.refreshWidgetValue(this.value || '');
-					this.$emit('ready', this.options.name);
+					this.$emit('ready', this.options.name, this.value);
 				});
 			},
 			refreshWidgetValue(v) {
@@ -84,7 +84,7 @@
 					if (Sunset.isArray(v)) {
 						this.widgetValue = v;
 					} else {
-						this.widgetValue = (v || '').split(this.spliter);
+						this.widgetValue = !!v ? v.split(this.spliter) : [];
 					}
 				} else {
 					this.widgetValue = v;
@@ -99,6 +99,12 @@
 				this.$nextTick(() => {
 					this.lock = true;
 					if (Sunset.isArray(v)) {
+						if (this.options.max) {
+							if (v.length > this.options.max) {
+								Sunset.tip(`最多选择${this.options.max}个`);
+								v.pop();
+							}
+						}
 						this.value = v.length ? v.join(this.spliter) : '';
 					} else {
 						this.value = v;

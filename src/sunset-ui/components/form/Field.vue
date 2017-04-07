@@ -40,7 +40,7 @@
 <template>
 	<div :class="['sunset-form-field',options.validate&&options.validate.required?'required-field':'']">
 		<validator name="validation">
-			<div :is="widget" :ref="widget" :options="options" :value.sync="value" :invalid="invalid"></div>
+			<div :is="widget" :ref="widget" :options="options" :value.sync="value" :invalid="invalid" @ready="widgetReady"></div>
 			<input type="hidden" :maxlength="maxlength" field="field" v-model="value" v-validate="options.validate" />
 			<i v-show="invalid" class="field-invalid-tip ivu-icon ivu-icon-information-circled text-warning sunset-pop" :data-content="invalid"></i>
 		</validator>
@@ -103,6 +103,9 @@
 			},
 		},
 		methods: {
+			widgetReady(name, defaultValue) {
+				this.$emit('ready', name, defaultValue);
+			},
 			generateWatchDependent(watchs) {
 				var dep = {},
 					model = this.model;

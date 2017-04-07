@@ -9,15 +9,17 @@
 <script>
     export default {
         ready() {
-            // setTimeout(()=>{
-            //     this.$refs.filter.reset({
-            //         keyword : 'aaa'
-            //     })
-            // },1000)
+            setTimeout(()=>{
+                console.error('RESET')
+                this.$refs.filter.reset({
+                    keyword : 'aaa',
+                    sex1 : '1'
+                })
+            },3000)
         },
         methods: {
             filter(a, b) {
-                console.log(JSON.stringify(a));
+                console.warn(JSON.stringify(a));
             }
         },
         data() {
@@ -27,45 +29,37 @@
                         label: '',
                         name: 'keyword',
                         placeholder: '关键字',
-                        widget: 'input',
-                        default () {
-                            return new Promise(resolve => {
-                                setTimeout(() => {
-                                    resolve('ccccc');
-                                }, 500)
-                            })
-                        }
+                        widget: 'input'
                     }, {
                         label: '',
-                        name: 'sex',
+                        name: 'sexdefault',
                         placeholder: '性别',
                         widget: 'select',
                         style: {
                             width: '100px'
                         },
+                        changeFilter: true,
+                        default:'2',
                         data: {
                             '1': '男',
                             '2': '女'
                         }
-                    }, {
+                    },{
+                        name: 'sexfirst',
+                        widget: 'checkbox',
+                        defaultFirst: true,
+                        changeFilter: false,
+                        enum: 'SEX'
+                    },  {
                         label: '',
                         name: 'job',
                         placeholder: '职业',
                         widget: 'radio',
                         type: 'button',
-                        changeFilter: true,
                         data: {
                             '1': '男',
                             '2': '女'
                         }
-                    }, {
-                        name: 'sex1',
-                        widget: 'checkbox',
-                        defaultFirst: true,
-                        watch: ['job', (deps) => {
-
-                        }],
-                        enum: 'SEX'
                     }, {
                         label: '',
                         name: 'date',

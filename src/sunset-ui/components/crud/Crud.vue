@@ -80,7 +80,7 @@
 						this.$refs.breadcrumb.pop();
 						break;
 					case 'ADD':
-						this.$refs.form.reset({});
+						this.$refs.form.reset();
 						this.PAGE = 'CRUD_FORM';
 						this.PAGE_DETAIL = '新增';
 						this.$refs.breadcrumb.append({

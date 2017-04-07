@@ -157,13 +157,32 @@ window.Sunset = {
         }
     },
     Numbers: {
-        fixed: function (value, point) {
-            point = point || 2;
-            if (!value) {
-                return '0.00';
-            } else {
-                return (+value).toFixed(point);
+        fixed: function (value, digits) {
+            digits = digits || 0;
+            var v, res;
+            try {
+                v = +value;
+                if (!isNaN(v)) {
+                    if (digits == 0) {
+                        res = Math.round(v);
+                    } else {
+                        res = (v).toFixed(digits);
+                    }
+                } else {
+                    if (digits == 0) {
+                        res = 0;
+                    } else {
+                        res = (0).toFixed(digits);
+                    }
+                }
+            } catch (e) {
+                if (digits == 0) {
+                    res = 0;
+                } else {
+                    res = (0).toFixed(digits);
+                }
             }
+            return res;
         }
     },
     /**

@@ -13,6 +13,9 @@ module.exports = {
                     case 'DATE':
                         return Sunset.Dates.format(new Date(value), 'yyyy-MM-dd');
                         break;
+                    case 'MONEY':
+                        return `<div style="text-align: right;">${Sunset.Numbers.fixed(value,2)}<div>`;
+                        break;
                 }
             }
         }
