@@ -49,15 +49,15 @@
                     if (this.options.defaultFirst && (this.value === void 0 || this.value.length == 0)) {
                         this.value = this.items[0].value;
                     }
-                    this.refreshValue();
-                    this.$emit('ready', this.options.name, this.value);
+                    var initValue = this.value;
+                    this.refreshValue(initValue);
+                    this.$emit('ready', this.options.name, initValue);
                 });
             },
-            refreshValue() {
-                var temp = this.value;
-                this.value = '';
+            refreshValue(v) {
+                this.value = void 0;
                 this.$nextTick(() => {
-                    this.value = temp;
+                    this.value = v;
                 });
             }
         },

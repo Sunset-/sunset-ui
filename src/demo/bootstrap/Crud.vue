@@ -203,7 +203,7 @@
 							label: '登录名',
 							name: 'account',
 							widget: 'input',
-							default : '123456',
+							default: '123456',
 							validate: {
 								required: true,
 								maxlength: 32
@@ -212,7 +212,7 @@
 							label: '密码',
 							name: 'password',
 							widget: 'input',
-							default : 'aaa',
+							default: 'aaa',
 							premise(model) {
 								return !model.id;
 							},
@@ -231,9 +231,18 @@
 						}, {
 							label: '类型',
 							name: 'type',
-							widget: 'select',
+							widget: 'radio',
+							valuePlace: 'key',
+							textPlace: 'value',
 							enum: 'ACCOUNT_TYPE',
-							defaultFirst : true,
+							// data: () => {
+							// 	return new Promise(resolve => {
+							// 		setTimeout(() => {
+							// 			resolve(Sunset.Service.Dictionary.getEnums('ACCOUNT_TYPE'))
+							// 		}, 5000)
+							// 	});
+							// },
+							defaultFirst: true,
 							dataType: String,
 							validate: {
 								required: true
