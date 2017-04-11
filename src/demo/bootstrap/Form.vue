@@ -3,7 +3,7 @@
 <template>
     <h2>Form</h2>
     <div class="component-wrap">
-        <sunset-form v-ref:form :options="options"></sunset-form>
+        <sunset-form v-ref:form :options="options" @submit="save"></sunset-form>
     </div>
     <div class="component-alert" type="error">
         1.富文本编辑器样式调试<br />2.表格选择和树选择
@@ -18,6 +18,9 @@
         methods: {
             filter(a, b) {
                 console.log(JSON.stringify(a));
+            },
+            save(model){
+                alert(model.editor)
             }
         },
         data() {
@@ -270,14 +273,17 @@
                             widget: 'editor',
                             toolbar: 'bold,italic,superscript,subscript,spechars',
                             readonly: false,
-                            monopolize: true
+                            monopolize: true,
+                            validate : {
+                                required : true
+                            }
                         }
                     ],
                     format: (model) => {
                         return model;
                     },
                     validate: (model) => {
-                        return new Promise((resolve, reject) => {});
+                        return true;
                     },
                     tools: null
                 }

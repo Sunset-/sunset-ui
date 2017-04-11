@@ -74,15 +74,15 @@
 						editor.addListener('contentChange', () => {
 							this.pending || this.setValueSilent(editor.getContent());
 						});
+						editor.addListener('blur', () => {
+							this.value = editor.getContent();
+						});
 						//只读
 						if (this.readOnly) {
 							editor.setDisabled();
 						} else {
 							editor.setEnabled();
 						}
-						// editor.addListener('focus', () => {
-						// 	this.pending || this.setValueSilent(editor.getContent());
-						// });
 					});
 				});
 			},
