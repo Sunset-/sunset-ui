@@ -21,16 +21,13 @@
 	<form :class="['sunset-form form-horizontal',showWarning?'sunset-form-show-warning':'']" @submit.prevent="submit">
 		<Row>
 			<template v-for="field in fields" v-ref:fields>
-				<template v-if="field.newline">
-		</Row>
-		<Row>
-			</template>
-			<i-col v-if="field.group" :span="24">
-				<div class="group-title">{{field.group}}</div>
-			</i-col>
-			<i-col :span="computedFieldClass(field)">
-				<sunset-field v-ref:field :options="field" :value.sync="model[field.name]" :model="model" @ready="promiseWidgetReady" @change="fieldValueChange"></sunset-field>
-			</i-col>
+				{{{newline(field)}}}
+				<i-col v-if="field.group" :span="24">
+					<div class="group-title">{{field.group}}</div>
+				</i-col>
+				<i-col :span="computedFieldClass(field)">
+					<sunset-field v-ref:field :options="field" :value.sync="model[field.name]" :model="model" @ready="promiseWidgetReady" @change="fieldValueChange"></sunset-field>
+				</i-col>
 			</template>
 		</Row>
 		<Alert v-if="options.tip" :type="tip.color">
@@ -234,6 +231,9 @@
 			},
 			fieldValueChange() {
 				this.showWarning = false;
+			},
+			newline(field) {
+				return field.newline ? `</div><div class="ivu-row">` : '';
 			}
 		},
 		ready() {

@@ -62,7 +62,7 @@ module.exports = {
      * @param {any} ctx 
      * @returns 
      */
-    operate(tool, ctx) {
+    operate(tool, ctx, value) {
         if (tool.signal) {
             this.$emit('signal', tool.signal, ctx);
         } else if (Sunset.isFunction(tool.operate)) {
@@ -75,7 +75,7 @@ module.exports = {
                         loading: true,
                         onOk: () => {
                             Promise.resolve().then(() => {
-                                return tool.operate(ctx);
+                                return tool.operate(ctx, value);
                             }).then(res => {
                                 clear();
                             });
@@ -83,7 +83,7 @@ module.exports = {
                     });
                 });
             } else {
-                tool.operate(ctx);
+                return tool.operate(ctx, value);
             }
         }
     }

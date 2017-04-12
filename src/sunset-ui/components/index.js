@@ -40,6 +40,9 @@ import Breadcrumb from './breadcrumb/Breadcrumb';
 //图表
 import Chart from './chart/Chart.vue';
 
+//小组件
+import Switch from './switch/Switch.vue';
+
 
 module.exports = {
     Dropdown: Dropdown,
@@ -58,6 +61,7 @@ module.exports = {
     TreeModal: TreeModal,
     ViewModal: ViewModal,
     Breadcrumb: Breadcrumb,
-    Crud : Crud,
-    Chart : Chart
+    Crud: Crud,
+    Chart: Chart,
+    Switch: Switch
 };

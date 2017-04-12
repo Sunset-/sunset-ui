@@ -25,6 +25,9 @@
 				<template v-if="tool.type=='dropdown'">
 					<sunset-dropdown :disabled="tool.disabledValue" :size="size" :options="tool" :ctx="ctx"></sunset-dropdown>
 				</template>
+				<template v-if="tool.type=='switch'">
+					<sunset-switch :options="tool" :value="tool.default&&tool.default(ctx)" :disabled="tool.disabledValue" @change="switchOperate"></sunset-switch>
+				</template>
 			</div>
 		</template>
 	</div>
@@ -61,10 +64,18 @@
 		},
 		methods: {
 			operate(tool) {
-				if (tool.disabled) {
+				if (tool.disabledValue) {
 					return;
 				}
 				Helper.operate.call(this, tool, this.ctx);
+			},
+			switchOperate(v, tool, widget) {
+				if (tool.disabledValue) {
+					return;
+				}
+				Promise.resolve(Helper.operate.call(this, tool, this.ctx, v)).catch(e => {
+					widget.reset(!v);
+				});
 			}
 		}
 

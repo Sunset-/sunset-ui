@@ -2,6 +2,9 @@
 	<sunset-layout title="Sunset组件库 - CRUD">
 		<h4 class="wrapper-y-md">CRUD</h4>
 		<div style="border:1px solid #09c;">
+			<Switch :checked.sync="showCols.showNick">
+			</Switch>
+			{{showNick}}
 			<sunset-crud :options="options"></sunset-crud>
 		</div>
 	</sunset-layout>
@@ -31,6 +34,9 @@
 		},
 		data() {
 			return {
+				showCols : {
+					showNick: true
+				},
 				options: {
 					title: '管理账户',
 					store: CrudStore,
@@ -80,8 +86,7 @@
 							name: 'date',
 							widget: 'date',
 							type: 'daterange',
-							placeholder: '开始时间',
-							style: 'width:240px;'
+							placeholder: '开始时间'
 						}, {
 							name: 'keyword',
 							widget: 'search',
@@ -96,12 +101,16 @@
 					},
 					//表格
 					tableOptions: {
+						minWidth : 1200,
 						columns: [{
 							title: '登录名',
 							name: 'account'
 						}, {
 							title: '昵称',
 							name: 'nickname',
+							premise: () => {
+								return this.showCols.showNick;
+							},
 							sortable: false
 						}, {
 							title: '类型',
@@ -192,6 +201,11 @@
 							color: 'error',
 							permission: 'SYSTEM_MANAGER_DICTIONARY_DELETE',
 							signal: 'DELETE'
+						}, {
+							type : 'switch',
+							operate(record,v){
+								return Promise.reject();
+							}
 						}],
 						store: CrudStore
 					},

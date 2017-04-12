@@ -136,14 +136,14 @@ store : 存储
 							<th v-if="options.multiCheck" class="text-center" style="width:60px;">
 								<input type="checkbox" :checked="isAllCheck" @change="checkAll($event.currentTarget.checked)" />
 							</th>
-							<th v-if="options.showIndex" class="text-center" style="width:60px;">序号</th>
-							<th v-for="col in columns">
+							<th v-if="options.showIndex" class="text-center" style="width:60px;">{{options.indexTitle||'序号'}}</th>
+							<th v-for="col in showColumns">
 								<div @click="sort(col)" style="cursor:pointer;">
 									{{col.title}}
 									<i v-if="sortable&&col.sortable!==false" :class="['fa',sortCol!=col.name?'fa-sort text-stable':(sortOrder=='ASC'?'fa-sort-asc':'fa-sort-desc')]"></i>
 								</div>
 							</th>
-							<th v-if="recordTools" class="text-center" :style="{width:(recordToolsWidth+'px')}">操作</th>
+							<th v-if="recordTools" class="text-center" :style="{width:(recordToolsWidth+'px')}">{{options.recordToolsTitle||'操作'}}</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -153,7 +153,7 @@ store : 存储
 								/>
 							</th>
 							<td v-if="options.showIndex" class="text-center">{{(pageNumber-1)*pageSize+ $index+1}}</td>
-							<td v-for="col in columns" :style="col.style||{'text-align':col.align}">{{{ item.__sunset_col_texts[$index]}}}</td>
+							<td v-for="col in showColumns" :style="col.style||{'text-align':col.align}">{{{ item.__sunset_col_texts[col.__sunset_col_index]}}}</td>
 							<td v-if="recordTools" class="sunset-table-record-tools" class="text-center">
 								<div>
 									<div>
@@ -213,7 +213,13 @@ store : 存储
 			},
 			//列
 			columns() {
-				return this.options.columns || [];
+				return (this.options.columns || []).map((col, index) => {
+					col.__sunset_col_index = index;
+					return col;
+				});
+			},
+			showColumns() {
+				return this.columns.filter(col => !!col.name && (col.premise ? col.premise() : true));
 			},
 			//行操作栏
 			recordTools() {
@@ -244,7 +250,7 @@ store : 存储
 						var tools = Sunset.isArray(recordTools) ? recordTools : recordTools.tools,
 							space = recordTools.size == 'small' ? 20 : 34;
 						tools.forEach(t => {
-							w += t.label.length * 14 + (t.icon ? 20 : 0) + space;
+							w += (t.label && t.label.length || 0) * 14 + (t.icon ? 20 : 0) + space;
 						});
 					}
 					return Math.max(w, 60);
@@ -429,7 +435,7 @@ store : 存储
 				}
 				this.sortCol = sortCol;
 				this.sortOrder = sortOrder;
-				this.sortData(this.columns.indexOf(col));
+				this.sortData(col.__sunset_col_index);
 			},
 			sortData(colIndex) {
 				if (!this.sortable || !this.sortCol) {

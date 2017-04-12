@@ -28,6 +28,10 @@
             <div class="test-class"></div>
         </sunset-file>
     </div>
+    <h2>Switch</h2>
+    <div class="component-wrap">
+        <sunset-switch :value.sync="switchValue" :options="{disabled:true}" @change="switchChange"></sunset-switch>{{switchValue}}
+    </div>
     <h2>Toolbar</h2>
     <div class="component-wrap">
         <sunset-toolbar :options="options" :ctx="{name : '小明'}"></sunset-toolbar>
@@ -39,14 +43,17 @@
 <script>
     export default {
         methods: {
-            chartClick(params){
-            },
+            chartClick(params) {},
             progress(dd) {},
-            queue(quene) {}
+            queue(quene) {},
+            switchChange(v) {
+                alert(v)
+            }
         },
         ready() {},
         data() {
             return {
+                switchValue: false,
                 echartsOptions: {
                     title: {
                         text: 'ECharts 入门示例'
@@ -133,6 +140,26 @@
                                 alert(record.name)
                             }
                         }]
+                    }, {
+                        label: '图标按钮',
+                        icon: 'refresh',
+                        color: 'success',
+                        type: 'switch',
+                        disabled(ctx) {
+                            return false;
+                        },
+                        premise(ctx) {
+                            return true;
+                        },
+                        default (ctx) {
+                            return true;
+                        },
+                        operate: (record, v) => {
+                            record.name = 'false';
+                            return Promise.resolve().then(() => {
+                                throw new Error();
+                            });
+                        }
                     }]
                 }
             }
