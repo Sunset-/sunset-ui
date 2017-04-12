@@ -233,7 +233,7 @@
 				this.showWarning = false;
 			},
 			newline(field) {
-				return field.newline ? `</div><div class="ivu-row">` : '';
+				return field.newline ? `</div><div style="z-index:-1;" class="ivu-row">` : '';
 			}
 		},
 		ready() {
