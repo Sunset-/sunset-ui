@@ -9,13 +9,13 @@
 <script>
     export default {
         ready() {
-            setTimeout(()=>{
-                console.error('RESET')
-                this.$refs.filter.reset({
-                    keyword : 'aaa',
-                    sex1 : '1'
-                })
-            },3000)
+            // setTimeout(()=>{
+            //     console.error('RESET')
+            //     this.$refs.filter.reset({
+            //         keyword : 'aaa',
+            //         sex1 : '1'
+            //     })
+            // },3000)
         },
         methods: {
             filter(a, b) {
@@ -39,6 +39,7 @@
                             width: '100px'
                         },
                         changeFilter: true,
+                        // defaultFirst:true,
                         default:'2',
                         data: {
                             '1': '男',
@@ -56,6 +57,8 @@
                         placeholder: '职业',
                         widget: 'radio',
                         type: 'button',
+                        changeFilter: true,
+                        default:'2',
                         data: {
                             '1': '男',
                             '2': '女'

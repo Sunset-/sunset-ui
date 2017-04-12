@@ -4,7 +4,7 @@
         <i-button type="success" @click="test2">表格Modal</i-button>
         <i-button type="warning" @click="test3">树Modal</i-button>
         <sunset-form-modal v-ref:formmodal :options="{title : '表单modal', style : 'max-height:400px',formOptions : options.formOptions}"></sunset-form-modal>
-        <sunset-table-modal @submit="tableSelected" v-ref:tablemodal :options="{title : '表格modal',width:1000,validate:tableValidate,checked:{multi:true,max:3,label : 'nickname'},tableOptions : options.tableOptions}"></sunset-table-modal>
+        <sunset-table-modal @submit="tableSelected" v-ref:tablemodal :options="{title : '表格modal',width:1000,validate:tableValidate,checked:false,tableOptions : options.tableOptions}"></sunset-table-modal>
         <sunset-tree-modal @submit="treeSelected" v-ref:treemodal :options="options.treeModalOptions"></sunset-tree-modal>
     </div>
 </template>

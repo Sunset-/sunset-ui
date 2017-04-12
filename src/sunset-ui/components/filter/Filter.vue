@@ -114,6 +114,7 @@
 					this.waitReadyWidgetCounter--;
 					if (this.waitReadyWidgetCounter == 0) {
 						if (!this.lock) {
+							this.lock = true;
 							this.$nextTick(() => {
 								var f = this.filter;
 								this.lock = false;
@@ -134,7 +135,9 @@
 				};
 			},
 			fieldTriggerSearch() {
-				this.search();
+				if (this.waitReadyWidgetCounter == 0) {
+					this.search();
+				}
 			},
 			search() {
 				if (!this.fields) {

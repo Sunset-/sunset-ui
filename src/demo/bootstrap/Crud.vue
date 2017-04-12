@@ -213,6 +213,7 @@
 							name: 'password',
 							widget: 'input',
 							default: 'aaa',
+							newline: true,
 							premise(model) {
 								return !model.id;
 							},
@@ -224,6 +225,7 @@
 							label: '昵称',
 							name: 'nickname',
 							widget: 'input',
+							newline: true,
 							validate: {
 								required: true,
 								maxlength: 32
@@ -234,6 +236,7 @@
 							widget: 'radio',
 							valuePlace: 'key',
 							textPlace: 'value',
+							newline: true,
 							enum: 'ACCOUNT_TYPE',
 							// data: () => {
 							// 	return new Promise(resolve => {

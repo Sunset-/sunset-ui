@@ -65,7 +65,7 @@ store : 存储
 						border-color: #eee;
 						border-top: 0;
 						border-bottom: 1px solid #eee;
-						padding: 12px 15px;
+						padding: 8px 8px;
 						border: 1px solid #eee;
 						line-height: 1.42857143;
 						vertical-align: middle;
@@ -84,7 +84,7 @@ store : 存储
 			.table>thead>tr>th,
 			.table>tbody>tr>th,
 			.table>tfood>tr>th {
-				padding: 10px 15px;
+				padding: 8px;
 			}
 			.table>tbody>tr>td.sunset-table-record-tools {
 				position: relative;
@@ -217,20 +217,22 @@ store : 存储
 			},
 			//行操作栏
 			recordTools() {
+				var result = false;
 				var recordTools = this.options.recordTools;
 				if (recordTools) {
-					if (Sunset.isArray(recordTools)) {
-						recordTools = {
+					if (Sunset.isArray(recordTools) && recordTools.length) {
+						result = {
 							size: 'small',
 							tools: recordTools
 						};
-					} else if (Sunset.isArray(recordTools.tools) && recordTools.size == void 0) {
-						recordTools.size = 'small';
+					} else if (Sunset.isArray(recordTools.tools) && recordTools.tools.length) {
+						result = recordTools;
+						if (recordTools.size == void 0) {
+							recordTools.size = 'small';
+						}
 					}
-					return recordTools;
-				} else {
-					return false;
 				}
+				return result;
 			},
 			recordToolsWidth() {
 				if (this.options.recordToolsWidth) {

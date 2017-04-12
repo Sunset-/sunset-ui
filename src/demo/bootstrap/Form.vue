@@ -43,6 +43,9 @@
                                         resolve('ccccc');
                                     }, 200)
                                 })
+                            },
+                            validate : {
+                                required : true
                             }
                         }, {
                             label: '密码',

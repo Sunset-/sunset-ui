@@ -35,6 +35,33 @@
 				padding: 0px 2px;
 			}
 		}
+		$color: rgba(#464c5b, 0.9);
+		.sunset-field-wraning-pop-wrap {
+			display: none;
+			position: absolute;
+			z-index: 9999;
+			padding: 5px 8px;
+			background: $color;
+			border: 1px solid $color;
+			color: #FFF;
+			border-radius: 3px;
+			font-size: 12px;
+			right: -40px;
+			top: -32px;
+			&:before {
+				position: absolute;
+				right: 20px;
+				content: '';
+				width: 0px;
+				height: 0px;
+				border-style: solid;
+				border-width: 8px 6px;
+			}
+			&:before {
+				bottom: -17px;
+				border-color: $color transparent transparent transparent;
+			}
+		}
 	}
 </style>
 <template>
@@ -42,6 +69,7 @@
 		<validator name="validation">
 			<div :is="widget" :ref="widget" :options="options" :value.sync="value" :invalid="invalid" @ready="widgetReady"></div>
 			<input type="hidden" :maxlength="maxlength" field="field" v-model="value" v-validate="options.validate" />
+			<div v-show="invalid" class="sunset-field-wraning-pop-wrap">{{invalid}}</div>
 			<i v-show="invalid" class="field-invalid-tip ivu-icon ivu-icon-information-circled text-warning sunset-pop" :data-content="invalid"></i>
 		</validator>
 	</div>
@@ -123,12 +151,11 @@
 			}
 		},
 		ready() {
-			if (this.options.onChange) {
-				//监听变化
-				this.$watch('value', function (v) {
-					this.options.onChange(v);
-				});
-			}
+			//监听变化
+			this.$watch('value', function (v) {
+				this.options.onChange && this.options.onChange(v);
+				this.$emit('change', v);
+			});
 			if (this.options.watch) {
 				var watchs,
 					rebuild;

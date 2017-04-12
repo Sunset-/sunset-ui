@@ -10,18 +10,27 @@
 		.sunset-toolbar {
 			display: block;
 		}
+		&.sunset-form-show-warning {
+			.sunset-field-wraning-pop-wrap {
+				display: block;
+			}
+		}
 	}
 </style>
 <template>
-	<form class="sunset-form form-horizontal" @submit.prevent="submit">
+	<form :class="['sunset-form form-horizontal',showWarning?'sunset-form-show-warning':'']" @submit.prevent="submit">
 		<Row>
 			<template v-for="field in fields" v-ref:fields>
-				<i-col v-if="field.group" :span="24">
-					<div class="group-title">{{field.group}}</div>
-				</i-col>
-				<i-col :span="computedFieldClass(field)">
-					<sunset-field v-ref:field :options="field" :value.sync="model[field.name]" :model="model" @ready="promiseWidgetReady"></sunset-field>
-				</i-col>
+				<template v-if="field.newline">
+		</Row>
+		<Row>
+			</template>
+			<i-col v-if="field.group" :span="24">
+				<div class="group-title">{{field.group}}</div>
+			</i-col>
+			<i-col :span="computedFieldClass(field)">
+				<sunset-field v-ref:field :options="field" :value.sync="model[field.name]" :model="model" @ready="promiseWidgetReady" @change="fieldValueChange"></sunset-field>
+			</i-col>
 			</template>
 		</Row>
 		<Alert v-if="options.tip" :type="tip.color">
@@ -53,7 +62,8 @@
 				model: {},
 				hasModel: false,
 				fieldsRefresher: 0,
-				defaultValueMap: {}
+				defaultValueMap: {},
+				showWarning: false
 			}
 		},
 		computed: {
@@ -143,7 +153,8 @@
 				return Promise.resolve().then(() => {
 					//校验
 					if (!this.formValid) {
-						throw new Error('校验不通过');
+						this.showWarning = true;
+						throw new Error();
 						return;
 					}
 					var model = Sunset.clone(this.model);
@@ -220,6 +231,9 @@
 					}
 				});
 				return model;
+			},
+			fieldValueChange() {
+				this.showWarning = false;
 			}
 		},
 		ready() {

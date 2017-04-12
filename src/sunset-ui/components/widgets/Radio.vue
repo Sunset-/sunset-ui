@@ -14,7 +14,7 @@
     <div :class="['sunset-field-wrap',invalid?'field-invalid':'']">
         <label :class="['sunset-field-label',options.label?'':'sunset-field-label-empty']">{{options.label}}</label>
         <div :class="['sunset-field radio-group-wrap',options.type=='button'?'':'radio-pd']">
-            <Radio-group :type="options.type" :size="options.size" :model.sync="value">
+            <Radio-group :type="options.type" :size="options.size" :model.sync="widgetValue">
                 <Radio v-for="item in items" :value="item.value" :disabled="item.disabled">
                     <span>{{item.text}}</span>
                 </Radio>
@@ -34,7 +34,10 @@
         },
         data() {
             return {
-                items: []
+                items: [],
+                lock: false,
+                widgetLock: false,
+                widgetValue: null
             };
         },
         computed: {
@@ -50,7 +53,7 @@
                         this.value = this.items[0].value;
                     }
                     var initValue = this.value;
-                    this.refreshValue(initValue);
+                    this.refreshWidgetValue(initValue);
                     this.$emit('ready', this.options.name, initValue);
                 });
             },
@@ -59,6 +62,30 @@
                 this.$nextTick(() => {
                     this.value = v;
                 });
+            },
+            refreshWidgetValue(v) {
+                this.widgetLock = true;
+                this.widgetValue = void 0;
+                this.$nextTick(() => {
+                    this.widgetValue = v;
+                    this.widgetLock = false;
+                });
+            }
+        },
+        watch: {
+            widgetValue(v) {
+                if (!this.widgetLock) {
+                    this.lock = true;
+                    this.value = v;
+                    this.$nextTick(() => {
+                        this.lock = false;
+                    });
+                }
+            },
+            value(v) {
+                if (!this.lock) {
+                    this.refreshWidgetValue(v);
+                }
             }
         },
         ready() {

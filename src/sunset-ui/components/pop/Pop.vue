@@ -1,20 +1,19 @@
 <style lang="sass">
-
-    $color: rgba(#464c5b,0.9);
-
+    $color: rgba(#464c5b, 0.9);
     .sunset-pop {
         position: absolute;
         right: -20px;
         top: 10px;
+        font-size: 12px;
     }
     
     .sunset-pop-wrap {
         position: absolute;
         z-index: 9999;
         padding: 5px 8px;
-        background:  $color;
-        border: 1px solid  $color;
-        color : #FFF;
+        background: $color;
+        border: 1px solid $color;
+        color: #FFF;
         border-radius: 3px;
         &:before {
             position: absolute;
@@ -27,7 +26,7 @@
         }
         &:before {
             bottom: -17px;
-            border-color:  $color transparent transparent transparent;
+            border-color: $color transparent transparent transparent;
         }
     }
 </style>

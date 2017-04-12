@@ -63,7 +63,9 @@
                     <span>清空</span>
                 </div>
             </div>
-            <sunset-filter v-ref:filter v-if="filterOptions" :options="filterOptions" @filter="filterData"></sunset-filter>
+            <div style="overflow:hidden;">
+                <sunset-filter v-ref:filter v-if="filterOptions" :options="filterOptions" @filter="filterData"></sunset-filter>
+            </div>
             <sunset-table v-ref:table :options="tableOptions" :checkeds.sync="checkeds" :store="options.store"></sunset-table>
         </div>
         <div slot="footer">
@@ -138,7 +140,7 @@
                 if (this.multi) {
                     tableOptions.multiCheck = true;
                     tableOptions.recordTools = tableOptions.__modalCacheRecordTools || tableOptions.recordTools;
-                } else {
+                } else if (this.options.checked !== false) {
                     tableOptions.multiCheck = false;
                     if (!tableOptions.__modalCacheRecordTools && tableOptions.recordTools) {
                         tableOptions.__modalCacheRecordTools = tableOptions.recordTools;
@@ -158,11 +160,11 @@
                 tableOptions.condensed = true;
                 return tableOptions;
             },
-            open(checkeds) {
+            open(checkeds, filter) {
                 if (this.$refs.filter) {
-                    this.$refs.filter.reset();
+                    this.$refs.filter.reset(filter);
                 } else {
-                    this.$refs.table.search({}, null, true);
+                    this.$refs.table.search(filter || {}, null, true);
                 }
                 this.refreshTableOptions();
                 this.checkeds = checkeds || [];
