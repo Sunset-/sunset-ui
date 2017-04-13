@@ -8,10 +8,10 @@ module.exports = {
             } else {
                 switch (col.format) {
                     case 'DATETIME':
-                        return Sunset.Dates.format(new Date(value));
+                        return Sunset.Dates.format(new Date(isNaN(value) ? value : (+value)));
                         break;
                     case 'DATE':
-                        return Sunset.Dates.format(new Date(value), 'yyyy-MM-dd');
+                        return Sunset.Dates.format(new Date(isNaN(value) ? value : (+value)), 'yyyy-MM-dd');
                         break;
                     case 'MONEY':
                         return `<div style="text-align: right;">${Sunset.Numbers.fixed(value,2)}<div>`;
