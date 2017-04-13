@@ -324,6 +324,9 @@ store : 存储
 			//排序
 			sortable() {
 				return !!this.options.sortable;
+			},
+			slientLoading() {
+				return this.options.loading === false;
 			}
 		},
 		methods: {
@@ -344,15 +347,20 @@ store : 存储
 				Promise.resolve((() => {
 					var datasource = this.datasource || this.store && this.store[this.options.method || 'list'].bind(this.store);
 					if (datasource) {
-						this.loading = true;
+						this.refreshLoader(true);
 						return Sunset.isFunction(datasource) ? datasource(filter) : datasource;
 					} else {
 						throw new Error('table load data need datasource or store');
 					}
 				})()).then(res => {
-					this.loading = false;
+					this.refreshLoader(false);
 					this.setData(res);
 				});
+			},
+			refreshLoader(flag) {
+				if (!this.slientLoading) {
+					this.loading = flag;
+				}
 			},
 			setData(res) {
 				var columns = this.columns,
