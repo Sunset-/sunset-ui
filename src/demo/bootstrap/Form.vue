@@ -19,7 +19,7 @@
             filter(a, b) {
                 console.log(JSON.stringify(a));
             },
-            save(model){
+            save(model) {
                 alert(model.editor)
             }
         },
@@ -37,6 +37,10 @@
                             widget: 'input',
                             type: 'input',
                             placeholder: "不能为空",
+                            append: 'aaa',
+                            click(a, v) {
+                                alert(v)
+                            },
                             default () {
                                 return new Promise(resolve => {
                                     setTimeout(() => {
@@ -44,8 +48,42 @@
                                     }, 200)
                                 })
                             },
-                            validate : {
-                                required : true
+                            validate: {
+                                required: true
+                            }
+                        }, {
+                            label: '年龄',
+                            name: 'age',
+                            widget: 'input',
+                            type: 'input',
+                            placeholder: "不能为空",
+                            default : 'w,5,day',
+                            icon : '',
+                            prepend: {
+                                style: 'width:50px',
+                                data: [{
+                                    text: '男',
+                                    value: 'm'
+                                }, {
+                                    text: '女',
+                                    value: 'w'
+                                }]
+                            },
+                            append: {
+                                style: 'width:50px',
+                                data: [{
+                                    text: '岁',
+                                    value: 'year'
+                                }, {
+                                    text: '月',
+                                    value: 'month'
+                                }, {
+                                    text: '日',
+                                    value: 'day'
+                                }]
+                            },
+                            validate: {
+                                required: true
                             }
                         }, {
                             label: '密码',
@@ -277,8 +315,8 @@
                             toolbar: 'bold,italic,superscript,subscript,spechars',
                             readonly: false,
                             monopolize: true,
-                            validate : {
-                                required : true
+                            validate: {
+                                required: true
                             }
                         }
                     ],
