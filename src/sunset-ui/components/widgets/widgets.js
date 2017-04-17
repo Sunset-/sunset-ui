@@ -1,11 +1,11 @@
 const widgets = {
-	'Input': ['Input', 'Password'],
+	'Input': ['Input', 'Password', 'Number'],
 	'Radio': 'Radio',
 	'Checkbox': 'Checkbox',
 	'Select': 'Select',
 	'Switch': 'Switch',
 	'Date': 'Date',
-	'Number': 'Number',
+	// 'Number': 'Number',
 	'Cascader': 'Cascader',
 	'Textarea': 'Textarea',
 	'File': ['File', 'Image'],

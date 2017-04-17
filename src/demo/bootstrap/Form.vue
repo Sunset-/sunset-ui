@@ -13,6 +13,22 @@
     import BootstrapStore from './BootstrapStore.js';
     import simpleTableOptions from './simpleTableOptions.js';
 
+    import RegionData from '../../sunset-ui/components/data/regionJSON.js';
+
+    function generateCascaderData(list) {
+        return (list || RegionData).map(item => {
+            var children;
+            if (item.sub) {
+                children = generateCascaderData(item.sub);
+            }
+            return {
+                label: item.name,
+                value: item.name,
+                children: children
+            };
+        })
+    }
+
     export default {
         ready() {},
         methods: {
@@ -54,11 +70,11 @@
                         }, {
                             label: '年龄',
                             name: 'age',
-                            widget: 'input',
-                            type: 'input',
+                            widget: 'number',
+                            // type: 'input',
                             placeholder: "不能为空",
-                            default : 'w,5,day',
-                            icon : '',
+                            default: 'w,5,day',
+                            icon: '',
                             prepend: {
                                 style: 'width:50px',
                                 data: [{
@@ -203,6 +219,9 @@
                             name: 'region',
                             widget: 'cascader',
                             type: 'region',
+                            data: () => {
+                                return generateCascaderData();
+                            },
                             disabled: false
                         }, {
                             label: '文本域',

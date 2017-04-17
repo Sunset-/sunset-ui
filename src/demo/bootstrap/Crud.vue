@@ -12,6 +12,22 @@
 <script>
 	import CrudStore from './BootstrapStore';
 
+	import RegionData from '../../sunset-ui/components/data/regionJSON.js';
+
+	function generateCascaderData(list) {
+		return (list || RegionData).map(item => {
+			var children;
+			if (item.sub) {
+				children = generateCascaderData(item.sub);
+			}
+			return {
+				label: item.name,
+				value: item.name,
+				children: children
+			};
+		})
+	}
+
 	const now = new Date().getTime();
 
 	export default {
@@ -34,7 +50,7 @@
 		},
 		data() {
 			return {
-				showCols : {
+				showCols: {
 					showNick: true
 				},
 				options: {
@@ -101,7 +117,7 @@
 					},
 					//表格
 					tableOptions: {
-						minWidth : 1200,
+						minWidth: 1200,
 						columns: [{
 							title: '登录名',
 							name: 'account'
@@ -202,8 +218,8 @@
 							permission: 'SYSTEM_MANAGER_DICTIONARY_DELETE',
 							signal: 'DELETE'
 						}, {
-							type : 'switch',
-							operate(record,v){
+							type: 'switch',
+							operate(record, v) {
 								return Promise.reject();
 							}
 						}],
@@ -244,6 +260,15 @@
 								required: true,
 								maxlength: 32
 							}
+						}, {
+							label: '区域',
+							name: 'region',
+							widget: 'cascader',
+							type: 'region',
+							data: () => {
+								return generateCascaderData();
+							},
+							disabled: false
 						}, {
 							label: '类型',
 							name: 'type',

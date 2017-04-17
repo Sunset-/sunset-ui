@@ -2,12 +2,12 @@
     <div :class="['sunset-field-wrap',invalid?'field-invalid':'']">
         <label class="sunset-field-label">{{options.label}}</label>
         <div class="sunset-field">
-            <Cascader :data="data" :value.sync="value"></Cascader>
+            <Cascader :data="data" :value.sync="widgetValue"></Cascader>
         </div>
     </div>
 </template>
 <script>
-    // import regionJSON from '../data/regionJSON.js';
+    import regionJSON from '../data/regionJSON.js';
     var RegionJSON = null;
 
     function generateCascaderData(list) {
@@ -33,10 +33,16 @@
         },
         data() {
             return {
-                data: []
+                data: [],
+                widgetValue: [],
+                lock: false
             };
         },
-        computed: {},
+        computed: {
+            spliter() {
+                return this.options.spliter || ',';
+            }
+        },
         methods: {
             init() {
                 Promise.resolve().then(res => {
@@ -57,6 +63,25 @@
         },
         ready() {
             this.init();
+        },
+        watch: {
+            value(v) {
+                if (!this.lock) {
+                    var widgetValue = this.widgetValue;
+                    while (widgetValue.pop()) {}
+                    (v || '').split(this.spliter).forEach(item => {
+                        widgetValue.push(item);
+                    });
+                    $('input', this.$el).val(widgetValue.join(' / '));
+                }
+            },
+            widgetValue(v) {
+                this.lock = true;
+                this.value = v && v.join(this.spliter);
+                this.$nextTick(() => {
+                    this.lock = false;
+                });
+            }
         }
     };
 </script>

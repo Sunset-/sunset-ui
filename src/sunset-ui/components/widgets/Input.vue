@@ -2,7 +2,7 @@
 	<div :class="['sunset-field-wrap',invalid?'field-invalid':'']">
 		<label :class="['sunset-field-label',options.label?'':'sunset-field-label-empty']">{{options.label}}</label>
 		<div class="sunset-field">
-			<i-input :type="type" :value.sync="inputValue" :maxlength="maxlength" :disabled="options.disabled" :readonly="options.readonly"
+			<i-input @on-blur="blur" :type="type" :value.sync="inputValue" :maxlength="maxlength" :disabled="options.disabled" :readonly="options.readonly"
 			    :placeholder="options.placeholder" :icon="options.icon" :size="options.size" :style="options.style">
 				<!-- prepend -->
 				<span v-if="prependText" slot="prepend">{{options.prependText}}</span>
@@ -40,7 +40,13 @@
 		},
 		computed: {
 			type() {
-				return this.options.type == 'input' ? 'text' : this.options.type;
+				return (this.options.type == 'input' || this.options.type == 'number') ? 'text' : this.options.type;
+			},
+			isNumber() {
+				return this.options.widget == 'number' || this.options.type == 'number';
+			},
+			digits() {
+				return this.options.digits || 0;
 			},
 			maxlength() {
 				return this.options.maxlength || this.options.validate && this.options.validate.maxlength && this.options.validate.maxlength
@@ -95,6 +101,11 @@
 						this.lock = false;
 					});
 				});
+			},
+			blur() {
+				if (this.isNumber) {
+					this.inputValue = Sunset.Numbers.fixed(this.inputValue, this.digits) + '';
+				}
 			}
 		},
 		ready() {
@@ -111,6 +122,7 @@
 				this.slientRefreshValue();
 			},
 			value(v) {
+				v = (v === void 0 || v === null) ? '' : (v + '');
 				if (!this.lock) {
 					//拆出前缀
 					if (this.prependSelect && ~v.indexOf(this.prependSpliter)) {
