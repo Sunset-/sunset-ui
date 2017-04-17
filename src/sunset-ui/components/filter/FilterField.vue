@@ -51,6 +51,9 @@
 			},
 			value: {
 
+			},
+			filter: {
+
 			}
 		},
 		data() {
@@ -67,6 +70,21 @@
 			},
 			widgetReady(name, defaultValue) {
 				this.$emit('ready', name, defaultValue);
+			},
+			generateWatchDependent(watchs) {
+				var dep = {},
+					filter = this.filter;
+				watchs.split(',').forEach(w => {
+					dep[w] = filter[w];
+				});
+				return dep;
+			},
+			rebuild(watchs, rebuild) {
+				Promise.resolve().then(() => {
+					return rebuild.call(this.options, this.generateWatchDependent(watchs), this.options, this.filter);
+				}).then(res => {
+					this.$children[0].init && this.$children[0].init();
+				});
 			}
 		},
 		ready() {
@@ -82,6 +100,29 @@
 					this.options.onChange && this.options.onChange(v);
 					this.options.changeFilter && this.$emit('search');
 				});
+			}
+
+			if (this.options.watch) {
+				var watchs,
+					rebuild;
+				if (Sunset.isString(this.options.watch) && Sunset.isFunction(this.options.rebuild)) {
+					watchs = this.options.watch;
+					rebuild = this.options.rebuild;
+				} else if (Sunset.isArray(this.options.watch)) {
+					if (Sunset.isString(this.options.watch[0]) && Sunset.isFunction(this.options.watch[1])) {
+						watchs = this.options.watch[0];
+						rebuild = this.options.watch[1];
+					}
+				}
+				//监听重建
+				if (watchs && rebuild) {
+					watchs.split(',').forEach(w => {
+						this.$watch(`filter.${w}`, (v) => {
+							this.rebuild(watchs, rebuild);
+						});
+					});
+					this.rebuild(watchs, rebuild);
+				}
 			}
 		}
 	};

@@ -1,4 +1,5 @@
 <style lang="sass">
+
 </style>
 <template>
     <h2>Filter</h2>
@@ -40,25 +41,37 @@
                         },
                         changeFilter: true,
                         // defaultFirst:true,
-                        default:'2',
+                        default: '2',
                         data: {
                             '1': '男',
                             '2': '女'
                         }
-                    },{
+                    }, {
                         name: 'sexfirst',
                         widget: 'checkbox',
                         defaultFirst: true,
                         changeFilter: false,
+                        watch: ['sexdefault', (deps, options) => {
+                            if (deps.sexdefault == 2) {
+                                delete this.enum;
+                                this.data = {
+                                    '1': '大',
+                                    '2': '小'
+                                }
+                            } else {
+                                delete this.data;
+                                this.enum = 'SEX'
+                            }
+                        }],
                         enum: 'SEX'
-                    },  {
+                    }, {
                         label: '',
                         name: 'job',
                         placeholder: '职业',
                         widget: 'radio',
                         type: 'button',
                         changeFilter: true,
-                        default:'2',
+                        default: '2',
                         data: {
                             '1': '男',
                             '2': '女'

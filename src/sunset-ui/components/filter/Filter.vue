@@ -27,7 +27,8 @@
 <template>
 	<div :class="['sunset-search-form-container',right?'pull-right':'']">
 		<form :class="['sunset-search-form form-inline form-horizontal',right?'pull-right':'']" onsubmit="return false">
-			<filter-field v-for="field in fields" :options="field" :value.sync="filter[field.name]" @search="fieldTriggerSearch" @ready="fieldReady"></filter-field>
+			<filter-field v-for="field in fields" :options="field" :filter="filter" :value.sync="filter[field.name]" @search="fieldTriggerSearch"
+							@ready="fieldReady"></filter-field>
 			<i-button v-if="searchButton" :type="searchButton.color||'primary'" :icon="searchButton.icon" @click="search">{{searchButton.label}}</i-button>
 			<sunset-toolbar v-if="options.toolbar" :options="options.toolbar"></sunset-toolbar>
 		</form>
@@ -48,7 +49,9 @@
 		},
 		computed: {
 			fields() {
-				return this.options && this.options.fields || [];
+				var filter = this.filter;
+				return (this.options && this.options.fields || []).filter(field => (field.premise ? field.premise(filter) :
+					true));
 			},
 			right() {
 				return this.options && this.options.align == 'right';
