@@ -18,7 +18,7 @@
 </style>
 <template>
 	<Modal :class-name="'sunset-tree-modal '+(options.toolbar===false?'nofoot':'')" :visible.sync="visible" :title="options.title"
-	    :width="width">
+					:width="width">
 		<div :style="options.style">
 			<sunset-tree v-ref:tree :options="options.treeOptions" :nodes="options.treeNodes" @inited="treeInited" @checked="treeChecked"></sunset-tree>
 		</div>
@@ -38,7 +38,8 @@
 			return {
 				modal_loading: false,
 				checkeds: [],
-				checkedIds: ''
+				checkedIds: '',
+				promise: null
 			}
 		},
 		computed: {
@@ -67,6 +68,12 @@
 				this.checkedIds = (Sunset.isArray(checkedIds) ? checkedIds.join(',') : checkedIds) || ''
 				this.$refs.tree.init();
 				this.visible = true;
+				return new Promise((resolve, reject) => {
+					this.promise = {
+						resolve,
+						reject
+					};
+				});
 			},
 			treeInited() {
 				this.$refs.tree.refreshChecked(this.checkedIds);
@@ -75,8 +82,24 @@
 				this.checkeds = checkeds;
 			},
 			ok() {
-				this.loading(true);
-				this.$emit('submit', this.checkeds);
+				Promise.resolve().then(() => {
+					var checkeds = this.checkeds;
+					return Promise.resolve().then(() => {
+						if (this.options.validate) {
+							return this.options.validate(checkeds);
+						}
+					}).then(() => {
+						return checkeds;
+					});
+				}).then(result => {
+					this.loading(true);
+					this.promise && this.promise.resolve(result);
+					this.$emit('submit', result);
+				}).catch(e => {
+					this.loading(false);
+					console.error(e);
+					e && e.message && Sunset.tip(e.message, 'warning');
+				});
 			},
 			loading(flag) {
 				this.modal_loading = !!flag;

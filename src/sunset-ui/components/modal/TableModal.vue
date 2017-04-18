@@ -194,6 +194,7 @@
                     this.promise && this.promise.resolve(result);
                     this.$emit('submit', result);
                 }).catch(e => {
+                    this.loading(false);
                     console.error(e);
                     e && e.message && Sunset.tip(e.message, 'warning');
                 });
