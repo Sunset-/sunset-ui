@@ -36,7 +36,7 @@
 
 	<div class="sunset-upload-item-wrap" :style="style">
 		<Icon class="sunset-upload-item-remove" type="close-round" @click="remove"></Icon>
-		<img class="viewer-image" v-if="data.src" :src="data.src" />
+		<img class="viewer-image" :group="group" v-if="data.src" :src="data.src" />
 		<img class="viewer-image" v-if="!data.src" :src="data.thumbnail" />
 		<div v-show="!data.src" class="sunset-upload-item-shim" :style="{height:((100-(data.progress||0)*100)+'%')}"></div>
 	</div>
@@ -46,6 +46,7 @@
 <script>
 	export default {
 		props: {
+			group: {},
 			size: {},
 			data: {
 				type: Object,

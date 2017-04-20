@@ -69,7 +69,7 @@
                 if (!this.lock) {
                     var widgetValue = this.widgetValue;
                     while (widgetValue.pop()) {}
-                    (v || '').split(this.spliter).forEach(item => {
+                    (Sunset.isArray(v) ? v : (v ? new String(v) : '').split(this.spliter)).forEach(item => {
                         widgetValue.push(item);
                     });
                     $('input', this.$el).val(widgetValue.join(' / '));
