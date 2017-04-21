@@ -50,13 +50,63 @@
             }
         }
     }
+
+    .sunset-upload-item-wrap {
+        position: relative;
+        border: 1px solid #eee;
+        display: inline-block;
+        vertical-align: top;
+        margin-right: 10px;
+        font-size: 0px;
+        .upload-thumbnail-wrap {
+            display: inline-block;
+        }
+        img {
+            width: 100%;
+            height: 100%;
+        }
+        .sunset-upload-item-shim {
+            position: absolute;
+            top: 0px;
+            z-index: 1;
+            left: 0px;
+            right: 0px;
+            background: rgba(0, 0, 0, 0.7);
+            transition: 0.5s;
+        }
+        .sunset-upload-item-remove {
+            position: absolute;
+            top: 2px;
+            z-index: 2;
+            right: 2px;
+            color: #FFF;
+            font-size: 18px;
+            &:hover {
+                color: #d9534f;
+            }
+        }
+        &.readonly {
+            .sunset-upload-item-remove {
+                display: none;
+            }
+        }
+    }
 </style>
 <template>
     <div :class="['sunset-field-wrap']">
         <label class="sunset-field-label">{{options.label}}</label>
         <div class="sunset-field">
-            <upload-image v-for="item in queue" :data.sync="item" :group="options.name" :size="options.thumbnailSize" @remove="remove"></upload-image>
-            <sunset-file v-ref:file :options="options" :queue="queue" @queue="refreshQueue" @success="success">
+            <!-- thumbnail start -->
+            <div v-for="item in queue" :class="['sunset-upload-item-wrap',options.readonly?'readonly':'']">
+                <Icon class="sunset-upload-item-remove" type="close-round" @click="remove(item)"></Icon>
+                <div class="upload-thumbnail-wrap" :style="thumbnailStyle">
+                    {{{thumbnail(item)}}}
+                </div>
+                <div v-show="!item.src" class="sunset-upload-item-shim" :style="{height:((100-(item.progress||0)*100)+'%')}"></div>
+            </div>
+            <!-- thumbnail end -->
+            <sunset-file v-if="!options.readonly" v-ref:file :options="options" :queue="queue" :disabled="options.readonly" @queue="refreshQueue"
+                @success="success">
                 <template v-if="options.dom">
                     {{{options.dom}}}
                 </template>
@@ -86,7 +136,23 @@
                 queue: []
             };
         },
+        computed: {
+            thumbnailStyle() {
+                var thumbnailSize = this.options.thumbnailSize;
+                return this.options.thumbnailStyle || {
+                    width: `${thumbnailSize&&thumbnailSize.width||100}px`,
+                    height: `${thumbnailSize&&thumbnailSize.height||100}px`
+                };
+            }
+        },
         methods: {
+            thumbnail(item) {
+                if (Sunset.isFunction(this.options.thumbnailRender)) {
+                    return this.options.thumbnailRender(item.src || item.thumbnail);
+                } else {
+                    return `<img class="viewer-image" group="${this.options.name}" src="${item.src||item.thumbnail}" />`;
+                }
+            },
             refreshQueue(queue) {
                 this.queue = queue;
             },

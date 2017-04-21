@@ -1,16 +1,25 @@
+<style lang="sass">
+	.sunset-input-noicon {
+		.ivu-input-wrapper {
+			.ivu-input-icon+.ivu-input {
+				padding-right: 4px;
+			}
+		}
+	}
+</style>
 <template>
-	<div :class="['sunset-field-wrap',invalid?'field-invalid':'']">
+	<div :class="['sunset-field-wrap',invalid?'field-invalid':'',!options.icon?'sunset-input-noicon':'']">
 		<label :class="['sunset-field-label',options.label?'':'sunset-field-label-empty']">{{options.label}}</label>
 		<div class="sunset-field">
 			<i-input @on-blur="blur" :type="type" :value.sync="inputValue" :maxlength="maxlength" :disabled="options.disabled" :readonly="options.readonly"
 			    :placeholder="options.placeholder" :icon="options.icon" :size="options.size" :style="options.style">
 				<!-- prepend -->
-				<span v-if="prependText" slot="prepend">{{options.prependText}}</span>
+				<span v-if="prependText" slot="prepend">{{{options.prependText}}}</span>
 				<i-select v-if="prependSelect" :model.sync="prependValue" slot="prepend" :style="prependSelect.style">
 					<i-option v-for="item in prependItems" :value="item.value">{{ item.text }}</i-option>
 				</i-select>
 				<!-- append -->
-				<span v-if="appendText" style="cursor:pointer;" @click="clickButton" slot="append">{{appendText}}</span>
+				<span v-if="appendText" style="cursor:pointer;" @click="clickButton" slot="append">{{{appendText}}}</span>
 				<i-select v-if="appendSelect" :model.sync="appendValue" slot="append" :style="appendSelect.style">
 					<i-option v-for="item in appendItems" :value="item.value">{{ item.text }}</i-option>
 				</i-select>

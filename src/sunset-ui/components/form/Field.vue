@@ -68,8 +68,7 @@
 	<div :class="['sunset-form-field',options.validate&&options.validate.required?'required-field':'']">
 		<validator name="validation">
 			<div :is="widget" :ref="widget" :options="options" :value.sync="value" :invalid="invalid" @ready="widgetReady"></div>
-			<input type="hidden" :maxlength="maxlength" field="field" v-model="value" v-validate="options.validate"
-			/>
+			<input type="hidden" :maxlength="maxlength" field="field" v-model="value" v-validate="options.validate" />
 			<div v-show="invalid" class="sunset-field-wraning-pop-wrap">{{invalid}}</div>
 			<i v-show="invalid" class="field-invalid-tip ivu-icon ivu-icon-information-circled text-warning sunset-pop" :data-content="invalid"></i>
 		</validator>

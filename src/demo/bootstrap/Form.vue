@@ -1,4 +1,5 @@
 <style lang="sass">
+
 </style>
 <template>
     <h2>Form</h2>
@@ -53,7 +54,7 @@
                             widget: 'input',
                             type: 'input',
                             placeholder: "不能为空",
-                            append: 'aaa',
+                            append: '<span style="color:red;">aaa</span>',
                             click(a, v) {
                                 alert(v)
                             },
@@ -68,13 +69,26 @@
                                 required: true
                             }
                         }, {
+                            label: '输入框组',
+                            name: 'inputgroup',
+                            widget: 'inputgroup',
+                            spliter: ';',
+                            items: [{
+                                placeholder: '左眼视力',
+                                type: 'number',
+                                digits: 2,
+                                style: 'width:40%;margin-right:5px;'
+                            }, {
+                                placeholder: '右眼视力',
+                                style: 'width:40%;margin-right:5px;'
+                            }]
+                        }, {
                             label: '年龄',
                             name: 'age',
                             widget: 'number',
                             // type: 'input',
                             placeholder: "不能为空",
                             default: 'w,5,day',
-                            icon: '',
                             prepend: {
                                 style: 'width:50px',
                                 data: [{
@@ -105,6 +119,7 @@
                             label: '密码',
                             name: 'password',
                             widget: 'input',
+                            icon: 'locked',
                             type: 'password'
                         }, {
                             label: '单选',
@@ -315,8 +330,12 @@
                             dom: '<div style="display:inline-block;width:50px;height:50px;border:1px solid #ccc;">1234</div>',
                             url: '/upload/api/1.0.0/file/storage',
                             default: '5763f45a5d51d4de133b24ccc0f9e3ae',
+                            readonly: false,
                             thumbnail: (result, file) => {
                                 return result && `/upload/api/1.0.0/file/acquisition/${result}`;
+                            },
+                            thumbnailRender(src) {
+                                return `<div style="border:2px solid blue;width:100%;height:100%"><img class="viewer-image" group="eye" style="height:100%;width:100%;" src="${src}"></div>`
                             },
                             thumbnailSize: {
                                 width: 120,

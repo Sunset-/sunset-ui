@@ -28,7 +28,7 @@ store : 存储
 <style lang="sass">
 	.sunset-crud-table-container {
 		.sunset-crud-table-wrap {
-			overflow-y: auto;
+			overflow-y: visible;
 			border-top: 1px solid #eeeeee;
 			border-bottom: 1px solid #eeeeee;
 			.text-center {

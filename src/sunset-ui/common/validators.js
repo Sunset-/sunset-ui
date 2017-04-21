@@ -3,6 +3,19 @@
 	module.exports = function (Vue) {
 		Vue.use(VueValidator);
 
+		//非空
+		Vue.validator('required', {
+			check: function (val) {
+				if (val === void 0 || val === null) {
+					return false;
+				}
+				if (Sunset.isString(val) && val.trim() == "") {
+					return false;
+				}
+				return true;
+			}
+		});
+
 		//邮箱
 		Vue.validator('email', {
 			message: '邮箱格式不合法',

@@ -1,5 +1,6 @@
 const widgets = {
 	'Input': ['Input', 'Password', 'Number'],
+	'Inputgroup': 'Inputgroup',
 	'Radio': 'Radio',
 	'Checkbox': 'Checkbox',
 	'Select': 'Select',
