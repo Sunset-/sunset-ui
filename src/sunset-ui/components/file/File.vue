@@ -2,6 +2,7 @@
 	.sunset-file-wrap {
 		position: relative !important;
 		display: inline-block;
+		overflow: hidden;
 		&>.sunset-file-trigger {}
 		&>.sunset-file-pick {
 			position: absolute;
@@ -21,8 +22,7 @@
 			label {
 				display: none !important;
 			}
-		}
-		//按钮样式
+		} //按钮样式
 		&:not(.disabled):hover {
 			.ivu-btn-primary {
 				background-color: #5cadff;
@@ -88,7 +88,7 @@
 			options: {
 
 			},
-			disabled : {
+			disabled: {
 
 			},
 			size: {

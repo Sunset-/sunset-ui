@@ -355,6 +355,10 @@ store : 存储
 				})()).then(res => {
 					this.refreshLoader(false);
 					this.setData(res);
+				}).catch(e => {
+					console.error(e);
+					this.$emit('load-error', e);
+					this.refreshLoader(false);
 				});
 			},
 			refreshLoader(flag) {

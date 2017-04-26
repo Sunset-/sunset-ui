@@ -7,11 +7,11 @@
 </style>
 <template>
     <div class="sunset-datapage-container"></div>
-    <div>
+    <sunset-loading :loading.sync="loading">
         <slot></slot>
-    </div>
+    </sunset-loading>
     <!--分页-->
-    <div class="sunset-crud-datapage-footer">
+    <div v-show="showPager" class="sunset-crud-datapage-footer">
         <sunset-page @change="refresh" right="true" :page-number.sync="pageNumber" :show-total="true" :page-size="pageSize" :total.sync="count"></sunset-page>
     </div>
     </div>
@@ -29,7 +29,8 @@
                 filter: {},
                 localFilter: null,
                 data: null,
-                count: 0
+                count: 0,
+                loading: false
             }
         },
         computed: {
@@ -47,6 +48,12 @@
             },
             formatFilter() {
                 return this.options.formatFilter;
+            },
+            showPager() {
+                return this.count > this.pageSize;
+            },
+            slientLoading() {
+                return this.options.loading === false;
             }
         },
         methods: {
@@ -78,16 +85,24 @@
                     if (this.isLocalPage && this.data && !force) {
                         return this.data;
                     } else {
+                        this.refreshLoader(true);
                         return this.datasource(filter);
                     }
                 }).then(res => {
                     this.data = res;
                     this.output();
                     this.$emit('load-end');
+                    this.refreshLoader(false);
                 }).catch(e => {
                     console.error(e);
                     this.$emit('load-error', e);
+                    this.refreshLoader(false);
                 });
+            },
+            refreshLoader(flag) {
+                if (!this.slientLoading) {
+                    this.loading = flag;
+                }
             },
             //输出数据
             output() {
