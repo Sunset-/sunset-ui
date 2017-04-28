@@ -2,6 +2,7 @@
 	.sunset-form-field {
 		position: relative;
 		width: 76%;
+		min-height: 35px;
 		margin-left: 20px;
 		margin-bottom: 15px;
 		font-size: 0px;
@@ -99,7 +100,7 @@
 								if (validate[k] && (typeof validate[k] != 'object')) {
 									validate[k] = {
 										rule: validate[k],
-										message: RULE_MESSAGE_REPLACES[k].replace('FIELD', field.label).replace('RULE', validate[k])
+										message: RULE_MESSAGE_REPLACES[k].replace('FIELD', field.label || '').replace('RULE', validate[k])
 									};
 								}
 							}

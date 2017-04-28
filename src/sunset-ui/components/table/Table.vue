@@ -287,7 +287,7 @@ store : 存储
 				if (this.format && this.format['list'] == '') {
 					list = this.data || [];
 				} else {
-					list = this.data && Sunset.getAttribute(this.data, this.format['list'] || 'list', []);
+					list = this.data && Sunset.getAttribute(this.data, this.format['list'] || 'list', []) || [];
 				}
 				if (this.isLocalPage) {
 					//本地分页
