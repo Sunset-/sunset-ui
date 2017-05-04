@@ -1,12 +1,9 @@
 <template>
-	<div :class="['sunset-field-wrap']">
-		<label class="sunset-field-label">{{options.label}}</label>
-		<div class="sunset-field">
-			<i-input :value="text" @click="select" :placeholder="options.placeholder" :readonly="true">
-				<i-button @click.stop="select" slot="append">选择</i-button>
-			</i-input>
-		</div>
-		<sunset-tree-modal @submit="selected" v-ref:treemodal :options="options.modalOptions"></sunset-tree-modal>
+	<div class="sunset-field">
+		<i-input :value="text" @click="select" :placeholder="options.placeholder" :readonly="true">
+			<i-button @click.stop="select" slot="append">选择</i-button>
+		</i-input>
+		<sunset-tree-modal v-if="inited" @submit="selected" v-ref:treemodal :options="options.modalOptions"></sunset-tree-modal>
 	</div>
 </template>
 <script>
@@ -20,7 +17,8 @@
 		data() {
 			return {
 				text: '',
-				lock: false
+				lock: false,
+				inited: false
 			};
 		},
 		computed: {
@@ -36,7 +34,14 @@
 		},
 		methods: {
 			select() {
-				this.$refs.treemodal.open(this.value);
+				if (!this.inited) {
+					this.inited = true;
+					this.$nextTick(() => {
+						this.$refs.treemodal.open(this.value);
+					});
+				} else {
+					this.$refs.treemodal.open(this.value);
+				}
 			},
 			selected(items) {
 				this.lock = true;

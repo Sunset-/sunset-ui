@@ -11,15 +11,12 @@
     }
 </style>
 <template>
-    <div :class="['sunset-field-wrap',invalid?'field-invalid':'']">
-        <label :class="['sunset-field-label',options.label?'':'sunset-field-label-empty']">{{options.label}}</label>
-        <div :class="['sunset-field radio-group-wrap',options.type=='button'?'':'radio-pd']">
-            <Radio-group :type="options.type" :size="options.size" :model.sync="widgetValue">
-                <Radio v-for="item in items" :value="item.value" :disabled="item.disabled">
-                    <span>{{item.text}}</span>
-                </Radio>
-            </Radio-group>
-        </div>
+    <div :class="['sunset-field radio-group-wrap',options.type=='button'?'':'radio-pd']">
+        <Radio-group :type="options.type" :size="options.size" :model.sync="widgetValue">
+            <Radio v-for="item in items" :value="item.value" :disabled="item.disabled">
+                <span>{{item.text}}</span>
+            </Radio>
+        </Radio-group>
     </div>
 </template>
 <script>

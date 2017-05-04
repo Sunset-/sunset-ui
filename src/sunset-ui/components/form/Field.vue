@@ -68,7 +68,10 @@
 <template>
 	<div :class="['sunset-form-field',options.validate&&options.validate.required?'required-field':'']">
 		<validator name="validation">
-			<div :is="widget" :ref="widget" :options="options" :value.sync="value" :invalid="invalid" @ready="widgetReady"></div>
+			<div class="sunset-field-wrap">
+				<label v-if="options.label" :style="labelStyle" class="sunset-field-label">{{options.label}}</label>
+				<div :is="widget" :ref="widget" :options="options" :value.sync="value" :invalid="invalid" @ready="widgetReady"></div>
+			</div>
 			<input type="hidden" :maxlength="maxlength" field="field" v-model="value" v-validate="options.validate" />
 			<div v-show="invalid" class="sunset-field-wraning-pop-wrap">{{invalid}}</div>
 			<i v-show="invalid" class="field-invalid-tip ivu-icon ivu-icon-information-circled text-warning sunset-pop" :data-content="invalid"></i>
@@ -89,6 +92,9 @@
 	export default {
 		components: widgets,
 		props: {
+			formOptions: {
+
+			},
 			options: {
 				type: Object,
 				coerce(field) {
@@ -120,6 +126,15 @@
 			return {};
 		},
 		computed: {
+			labelStyle() {
+				if (this.options.labelStyle) {
+					return this.options.labelStyle;
+				} else if (this.formOptions.labelWidth) {
+					return `min-width:${this.formOptions.labelWidth}px`;
+				} else {
+					return `min-width:${Sunset.getConfig('FORM_FIELD_LABEL_WIDTH',80)}px`;
+				}
+			},
 			widget() {
 				return 'widget-' + (this.options.widget || this.options.type);
 			},

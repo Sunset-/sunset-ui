@@ -228,13 +228,13 @@ store : 存储
 				if (recordTools) {
 					if (Sunset.isArray(recordTools) && recordTools.length) {
 						result = {
-							size: 'small',
+							size: Sunset.getConfig('TABLE_TOOLBAR_SIZE'),
 							tools: recordTools
 						};
 					} else if (Sunset.isArray(recordTools.tools) && recordTools.tools.length) {
 						result = recordTools;
 						if (recordTools.size == void 0) {
-							recordTools.size = 'small';
+							recordTools.size = Sunset.getConfig('TABLE_TOOLBAR_SIZE');
 						}
 					}
 				}

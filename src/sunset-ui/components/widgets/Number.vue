@@ -5,15 +5,12 @@
     }
 </style>
 <template>
-    <div :class="['sunset-field-wrap',invalid?'field-invalid':'']">
-        <label class="sunset-field-label">{{options.label}}</label>
-        <div class="sunset-field sunset-number-input">
-            <i-input @on-blur="blur" :type="type" :value.sync="value" :maxlength="maxlength" :disabled="options.disabled" :readonly="options.readonly"
-                :placeholder="options.placeholder" :icon="options.icon" :size="options.size" :style="options.style">
-                <span v-if="options.prepend" slot="prepend">{{options.prepend}}</span>
-                <span v-if="options.append" style="cursor:pointer;" @click="clickButton" slot="append">{{options.append}}</span>
-            </i-input>
-        </div>
+    <div class="sunset-field sunset-number-input">
+        <i-input @on-blur="blur" :type="type" :value.sync="value" :maxlength="maxlength" :disabled="options.disabled" :readonly="options.readonly"
+            :placeholder="options.placeholder" :icon="options.icon" :size="options.size" :style="options.style">
+            <span v-if="options.prepend" slot="prepend">{{options.prepend}}</span>
+            <span v-if="options.append" style="cursor:pointer;" @click="clickButton" slot="append">{{options.append}}</span>
+        </i-input>
     </div>
 </template>
 <script>

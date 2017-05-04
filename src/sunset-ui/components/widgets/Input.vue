@@ -8,23 +8,20 @@
 	}
 </style>
 <template>
-	<div :class="['sunset-field-wrap',invalid?'field-invalid':'',!options.icon?'sunset-input-noicon':'']">
-		<label :class="['sunset-field-label',options.label?'':'sunset-field-label-empty']">{{options.label}}</label>
-		<div class="sunset-field">
-			<i-input @on-blur="blur" :type="type" :value.sync="inputValue" :maxlength="maxlength" :disabled="options.disabled" :readonly="options.readonly"
-			    :placeholder="options.placeholder" :icon="options.icon" :size="options.size" :style="options.style">
-				<!-- prepend -->
-				<span v-if="prependText" slot="prepend">{{{prependText}}}</span>
-				<i-select v-if="prependSelect" :model.sync="prependValue" slot="prepend" :style="prependSelect.style">
-					<i-option v-for="item in prependItems" :value="item.value">{{ item.text }}</i-option>
-				</i-select>
-				<!-- append -->
-				<span v-if="appendText" style="cursor:pointer;" @click="clickButton" slot="append">{{{appendText}}}</span>
-				<i-select v-if="appendSelect" :model.sync="appendValue" slot="append" :style="appendSelect.style">
-					<i-option v-for="item in appendItems" :value="item.value">{{ item.text }}</i-option>
-				</i-select>
-			</i-input>
-		</div>
+	<div :class="['sunset-field',options.className||'',!options.icon?'sunset-input-noicon':'']">
+		<i-input @on-blur="blur" :type="type" :value.sync="inputValue" :maxlength="maxlength" :disabled="options.disabled" :readonly="options.readonly"
+		    :placeholder="options.placeholder" :icon="options.icon" :size="options.size" :style="options.style">
+			<!-- prepend -->
+			<span v-if="prependText" slot="prepend">{{{prependText}}}</span>
+			<i-select v-if="prependSelect" :model.sync="prependValue" slot="prepend" :style="prependSelect.style">
+				<i-option v-for="item in prependItems" :value="item.value">{{ item.text }}</i-option>
+			</i-select>
+			<!-- append -->
+			<span v-if="appendText" style="cursor:pointer;" @click="clickButton" slot="append">{{{appendText}}}</span>
+			<i-select v-if="appendSelect" :model.sync="appendValue" slot="append" :style="appendSelect.style">
+				<i-option v-for="item in appendItems" :value="item.value">{{ item.text }}</i-option>
+			</i-select>
+		</i-input>
 	</div>
 </template>
 <script>
@@ -49,7 +46,7 @@
 		},
 		computed: {
 			type() {
-				return (this.options.type == 'input' || this.options.type == 'number') ? 'text' : this.options.type;
+				return ((this.options.type == 'input' || this.options.type == 'number') ? 'text' : this.options.type) || 'text';
 			},
 			isNumber() {
 				return this.options.widget == 'number' || this.options.type == 'number';

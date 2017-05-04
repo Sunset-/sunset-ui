@@ -7,7 +7,6 @@
         <sunset-form v-ref:form :options="options" @submit="save"></sunset-form>
     </div>
     <div class="component-alert" type="error">
-        1.富文本编辑器样式调试<br />2.表格选择和树选择
     </div>
 </template>
 <script>
@@ -52,7 +51,7 @@
                             label: '用户名',
                             name: 'account',
                             widget: 'input',
-                            type: 'input',
+                            type: 'text',
                             placeholder: "不能为空",
                             append: '<span style="color:red;">aaa</span>',
                             click(a, v) {
@@ -69,14 +68,13 @@
                                 required: true
                             }
                         }, {
-                            label: '输入框组',
+                            label: '输入框组组23',
                             name: 'inputgroup',
                             widget: 'inputgroup',
-                            newline : true,
+                            newline: true,
                             spliter: ';',
                             items: [{
                                 placeholder: '左眼视力',
-                                type: 'number',
                                 digits: 2,
                                 style: 'width:40%;margin-right:5px;'
                             }, {

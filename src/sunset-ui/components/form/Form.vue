@@ -22,12 +22,13 @@
 		<Row>
 			<template v-for="field in fields" v-ref:fields>
 				{{{newline(field)}}}
-				<i-col v-if="field.group" :span="24">
+				<div v-if="field.group" :class="'ivu-col ivu-col-span-24'">
 					<div class="group-title">{{field.group}}</div>
-				</i-col>
-				<i-col :span="computedFieldClass(field)">
-					<sunset-field v-ref:field :options="field" :value.sync="model[field.name]" :model="model" @ready="promiseWidgetReady" @change="fieldValueChange"></sunset-field>
-				</i-col>
+				</div>
+				<div :class="'ivu-col ivu-col-span-'+computedFieldClass(field)">
+					<sunset-field v-ref:field :options="field" :form-options="options" :value.sync="model[field.name]" :model="model" @ready="promiseWidgetReady"
+					    @change="fieldValueChange"></sunset-field>
+				</div>
 			</template>
 		</Row>
 		<Alert v-if="options.tip" :type="tip.color">

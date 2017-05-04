@@ -5,15 +5,12 @@
     }
 </style>
 <template>
-    <div :class="['sunset-field-wrap',invalid?'field-invalid':'']">
-        <label :class="['sunset-field-label',options.label?'':'sunset-field-label-empty']">{{options.label}}</label>
-        <div class="sunset-field checkbox-group-wrap">
-            <Checkbox-group :model.sync="widgetValue">
-                <Checkbox v-for="item in items" :value="item.value" :disabled="item.disabled">
-                    <span>{{item.text}}</span>
-                </Checkbox>
-            </Checkbox-group>
-        </div>
+    <div class="sunset-field checkbox-group-wrap">
+        <Checkbox-group :model.sync="widgetValue">
+            <Checkbox v-for="item in items" :value="item.value" :disabled="item.disabled">
+                <span>{{item.text}}</span>
+            </Checkbox>
+        </Checkbox-group>
     </div>
 </template>
 <script>
@@ -41,13 +38,12 @@
         methods: {
             init() {
                 Utils.generateItems(this.options).then(items => {
-                    console.log('ITEMS READY');
                     this.items = items;
                     if (this.options.defaultFirst && (this.value === void 0 || this.value.length == 0)) {
                         this.value = this.items[0].value;
                     }
                     this.refreshWidgetValue(this.value || '');
-					this.$emit('ready', this.options.name, this.value);
+                    this.$emit('ready', this.options.name, this.value);
                 });
             },
             refreshWidgetValue(v) {

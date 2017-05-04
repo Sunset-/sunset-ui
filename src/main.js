@@ -16,28 +16,31 @@ window.echarts = echarts;
 Vue.use(Router);
 Vue.use(iView);
 Vue.use(SunsetUI);
+SunsetUI.config({
+	FORM_FIELD_LABEL_WIDTH: 100
+})
 
 window.$http = function (...args) {
 
-    var promise = $.Deferred();
+	var promise = $.Deferred();
 
-    $.ajax.apply($, args).then((res) => {
-        if (typeof res == 'object' && res.code) {
-            if (res.code == 200) {
-                promise.resolve(res.data);
-            } else if (res.code == 401) {
-                promise.reject(res);
-            } else {
-                Sunset.tip && Sunset.tip(res.message || '服务异常', 'warning')
-            }
-        }
-        promise.reject(res);
-    }, (err) => {
-        console.log(err.message || err);
-        promise.reject(err);
-    });
+	$.ajax.apply($, args).then((res) => {
+		if (typeof res == 'object' && res.code) {
+			if (res.code == 200) {
+				promise.resolve(res.data);
+			} else if (res.code == 401) {
+				promise.reject(res);
+			} else {
+				Sunset.tip && Sunset.tip(res.message || '服务异常', 'warning')
+			}
+		}
+		promise.reject(res);
+	}, (err) => {
+		console.log(err.message || err);
+		promise.reject(err);
+	});
 
-    return promise;
+	return promise;
 }
 
 

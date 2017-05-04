@@ -27,7 +27,25 @@
             return {
                 options: {
                     fields: [{
+                        name: 'keyword',
+                        placeholder: '关键字',
+                        widget: 'input'
+                    }, {
                         label: '',
+                        name: 'sexdefault',
+                        placeholder: '性别',
+                        widget: 'select',
+                        style: {
+                            width: '100px'
+                        },
+                        changeFilter: true,
+                        // defaultFirst:true,
+                        default: '2',
+                        data: {
+                            '1': '男',
+                            '2': '女'
+                        }
+                    },{
                         name: 'keyword',
                         placeholder: '关键字',
                         widget: 'input'

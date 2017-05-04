@@ -93,25 +93,22 @@
     }
 </style>
 <template>
-    <div :class="['sunset-field-wrap']">
-        <label class="sunset-field-label">{{options.label}}</label>
-        <div class="sunset-field">
-            <!-- thumbnail start -->
-            <div v-for="item in queue" :class="['sunset-upload-item-wrap',options.readonly?'readonly':'']">
-                <Icon class="sunset-upload-item-remove" type="close-round" @click="remove(item)"></Icon>
-                <div class="upload-thumbnail-wrap" :style="thumbnailStyle">
-                    {{{thumbnail(item)}}}
-                </div>
-                <div v-show="!item.src" class="sunset-upload-item-shim" :style="{height:((100-(item.progress||0)*100)+'%')}"></div>
+    <div class="sunset-field">
+        <!-- thumbnail start -->
+        <div v-for="item in queue" :class="['sunset-upload-item-wrap',options.readonly?'readonly':'']">
+            <Icon class="sunset-upload-item-remove" type="close-round" @click="remove(item)"></Icon>
+            <div class="upload-thumbnail-wrap" :style="thumbnailStyle">
+                {{{thumbnail(item)}}}
             </div>
-            <!-- thumbnail end -->
-            <sunset-file v-if="!options.readonly" v-ref:file :options="options" :queue="queue" :disabled="options.readonly" @queue="refreshQueue"
-                @success="success">
-                <template v-if="options.dom">
-                    {{{options.dom}}}
-                </template>
-            </sunset-file>
+            <div v-show="!item.src" class="sunset-upload-item-shim" :style="{height:((100-(item.progress||0)*100)+'%')}"></div>
         </div>
+        <!-- thumbnail end -->
+        <sunset-file v-if="!options.readonly" v-ref:file :options="options" :queue="queue" :disabled="options.readonly" @queue="refreshQueue"
+            @success="success">
+            <template v-if="options.dom">
+                {{{options.dom}}}
+            </template>
+        </sunset-file>
     </div>
 </template>
 <script>

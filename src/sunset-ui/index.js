@@ -11,6 +11,7 @@ window.Sunset = Sunset;
 import Filters from './common/filters';
 import Directives from './common/directives';
 import Validators from './common/validators';
+import ConfigService from './common/config';
 
 //服务
 Sunset.Service = require('./services/index');
@@ -70,6 +71,10 @@ exports.install = function install(Vue, options) {
         }
     };
 }
+
+//全局配置
+exports.config = ConfigService.config;
+Sunset.getConfig = ConfigService.getConfig;
 
 //注册外部表单组件
 exports.registFormWidget = function (name, widget) {

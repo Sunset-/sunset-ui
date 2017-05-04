@@ -1,9 +1,6 @@
 <template>
-    <div :class="['sunset-field-wrap',invalid?'field-invalid':'']">
-        <label class="sunset-field-label">{{options.label}}</label>
-        <div class="sunset-field">
-            <Cascader :data="data" :value.sync="widgetValue"></Cascader>
-        </div>
+    <div class="sunset-field">
+        <Cascader :data="data" :value.sync="widgetValue"></Cascader>
     </div>
 </template>
 <script>

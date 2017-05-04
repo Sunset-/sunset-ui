@@ -1,12 +1,9 @@
 <template>
-	<div :class="['sunset-field-wrap']">
-		<label class="sunset-field-label">{{options.label}}</label>
-		<div class="sunset-field">
-			<i-input :value="text" @click="select" :placeholder="options.placeholder" :readonly="true">
-				<i-button @click.stop="select" slot="append">选择</i-button>
-			</i-input>
-		</div>
-		<sunset-table-modal @submit="tableSelected" v-ref:tablemodal :options="options.modalOptions"></sunset-table-modal>
+	<div class="sunset-field">
+		<i-input :value="text" @click="select" :placeholder="options.placeholder" :readonly="true">
+			<i-button @click.stop="select" slot="append">选择</i-button>
+		</i-input>
+		<sunset-table-modal v-if="inited" @submit="tableSelected" v-ref:tablemodal :options="options.modalOptions"></sunset-table-modal>
 	</div>
 </template>
 <script>
@@ -20,7 +17,8 @@
 		data() {
 			return {
 				text: '',
-				lock: false
+				lock: false,
+				inited: false
 			};
 		},
 		computed: {
@@ -47,7 +45,14 @@
 						});
 					}
 				}).then(checkeds => {
-					this.$refs.tablemodal.open(checkeds);
+					if (!this.inited) {
+						this.inited = true;
+						this.$nextTick(() => {
+							this.$refs.tablemodal.open(checkeds);
+						});
+					} else {
+						this.$refs.tablemodal.open(checkeds);
+					}
 				});
 			},
 			tableSelected(items) {

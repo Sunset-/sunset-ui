@@ -8,14 +8,11 @@
     }
 </style>
 <template>
-    <div :class="['sunset-field-wrap',invalid?'field-invalid':'']">
-        <label class="sunset-field-label">{{options.label}}</label>
-        <div class="sunset-field sunset-group-input">
-            <i-input v-for="option in options.items" :type="option.type" @on-blur="blur(option)" :value.sync="inputValues[`value${$index}`]"
-                :maxlength="option.maxlength" :disabled="option.disabled" :readonly="option.readonly" :placeholder="option.placeholder"
-                :size="option.size" :style="option.style">
-            </i-input>
-        </div>
+    <div class="sunset-field sunset-group-input">
+        <i-input v-for="option in options.items" :type="option.type||'text'" @on-blur="blur(option)" :value.sync="inputValues[`value${$index}`]"
+            :maxlength="option.maxlength" :disabled="option.disabled" :readonly="option.readonly" :placeholder="option.placeholder"
+            :size="option.size" :style="option.style">
+        </i-input>
     </div>
 </template>
 <script>

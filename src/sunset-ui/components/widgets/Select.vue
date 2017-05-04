@@ -1,19 +1,16 @@
 <template>
-	<div :class="['sunset-field-wrap',invalid?'field-invalid':'']">
-		<label :class="['sunset-field-label',options.label?'':'sunset-field-label-empty']">{{options.label}}</label>
-		<div class="sunset-field">
-			<i-select :model.sync="widgetValue" :placeholder="options.placeholder" :clearable="options.clearable" :multiple="options.multiple"
-			    :filterable="options.filterable">
-				<template v-if="groupable">
-					<Option-group v-for="group in items" :label="group.group">
-						<i-option v-for="item in group.items" :value="item.value">{{ item.text }}</i-option>
-					</Option-group>
-				</template>
-				<template v-if="!groupable">
-					<i-option v-for="item in items" :value="item.value">{{ item.text }}</i-option>
-				</template>
-			</i-select>
-		</div>
+	<div class="sunset-field">
+		<i-select :model.sync="widgetValue" :placeholder="options.placeholder" :clearable="options.clearable" :multiple="options.multiple"
+		    :filterable="options.filterable">
+			<template v-if="groupable">
+				<Option-group v-for="group in items" :label="group.group">
+					<i-option v-for="item in group.items" :value="item.value">{{ item.text }}</i-option>
+				</Option-group>
+			</template>
+			<template v-if="!groupable">
+				<i-option v-for="item in items" :value="item.value">{{ item.text }}</i-option>
+			</template>
+		</i-select>
 	</div>
 </template>
 <script>

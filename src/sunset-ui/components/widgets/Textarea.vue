@@ -1,16 +1,13 @@
 <template>
-	<div :class="['sunset-field-wrap',invalid?'field-invalid':'']">
-		<label class="sunset-field-label">{{options.label}}</label>
-		<div class="sunset-field">
-			<i-input type="textarea" :value.sync="value" :maxlength="maxlength" :disabled="options.disabled" :readonly="options.readonly"
-							:placeholder="options.placeholder" :icon="options.icon" :size="options.size" :rows="options.rows||3" :autosize=options.autosize
-							:style="options.style">
-				<span v-if="options.prepend" slot="prepend">{{options.prepend}}</span>
-				<span v-if="options.append" slot="append">{{options.append}}</span>
-			</i-input>
-			<div v-if="maxlength&&options.lengthTip" style="padding:2px;font-size:14px;color:#ababab;text-align:right;">
-				{{inputlength}}&nbsp;/&nbsp;{{maxlength}}
-			</div>
+	<div class="sunset-field">
+		<i-input type="textarea" :value.sync="value" :maxlength="maxlength" :disabled="options.disabled" :readonly="options.readonly"
+		    :placeholder="options.placeholder" :icon="options.icon" :size="options.size" :rows="options.rows||3" :autosize=options.autosize
+		    :style="options.style">
+			<span v-if="options.prepend" slot="prepend">{{options.prepend}}</span>
+			<span v-if="options.append" slot="append">{{options.append}}</span>
+		</i-input>
+		<div v-if="maxlength&&options.lengthTip" style="padding:2px;font-size:14px;color:#ababab;text-align:right;">
+			{{inputlength}}&nbsp;/&nbsp;{{maxlength}}
 		</div>
 	</div>
 </template>

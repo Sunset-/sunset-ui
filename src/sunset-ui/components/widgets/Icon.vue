@@ -24,14 +24,11 @@
     }
 </style>
 <template>
-    <div :class="['sunset-field-wrap']">
-        <label class="sunset-field-label">{{options.label}}</label>
-        <div class="sunset-field">
-            <i-input :value="value" @click="select" :placeholder="options.placeholder" :readonly="true">
-                <i-button @click="select" slot="append">选择</i-button>
-            </i-input>
-        </div>
-        <Modal class-name="sunset-icon-modal" :visible.sync="visible" :title="options.title" :width="options.width||700">
+    <div class="sunset-field">
+        <i-input :value="value" @click="select" :placeholder="options.placeholder" :readonly="true">
+            <i-button @click="select" slot="append">选择</i-button>
+        </i-input>
+        <Modal v-if="inited" class-name="sunset-icon-modal" :visible.sync="visible" :title="options.title" :width="options.width||700">
             <Icon v-for="icon in icons" :type="icon" @click="selected(icon)"></Icon>
             <div slot="footer">
             </div>
@@ -781,12 +778,20 @@
         data() {
             return {
                 icons: ICONS,
-                visible: false
+                visible: false,
+                inited: false
             };
         },
         methods: {
             select() {
-                this.visible = true;
+                if (!this.inited) {
+                    this.inited = true;
+                    this.$nextTick(() => {
+                        this.visible = true;
+                    });
+                } else {
+                    this.visible = true;
+                }
             },
             selected(icon) {
                 this.value = icon;

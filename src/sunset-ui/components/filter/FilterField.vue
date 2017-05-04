@@ -37,7 +37,10 @@
 </style>
 <template>
 	<div v-show="!options.hide" :style="options.style" class="sunset-filter-field">
-		<div :is="widget" :options="options" :value.sync="value" @search="fieldSearch" @ready="widgetReady"></div>
+		<div class="sunset-field-wrap">
+			<label v-if="options.label" class="sunset-field-label">{{options.label}}</label>
+			<div :is="widget" :options="options" :value.sync="value" @search="fieldSearch" @ready="widgetReady"></div>
+		</div>
 	</div>
 </template>
 <script>
