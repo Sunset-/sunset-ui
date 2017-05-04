@@ -63,7 +63,7 @@
                     <span>清空</span>
                 </div>
             </div>
-            <div style="overflow:hidden;">
+            <div>
                 <sunset-filter v-ref:filter v-if="filterOptions" :options="filterOptions" @filter="filterData"></sunset-filter>
             </div>
             <sunset-table v-ref:table :options="tableOptions" :checkeds.sync="checkeds" :store="options.store"></sunset-table>

@@ -143,7 +143,7 @@ store : 存储
 									<i v-if="sortable&&col.sortable!==false" :class="['fa',sortCol!=col.name?'fa-sort text-stable':(sortOrder=='ASC'?'fa-sort-asc':'fa-sort-desc')]"></i>
 								</div>
 							</th>
-							<th v-if="recordTools" class="text-center" :style="{width:(recordToolsWidth+'px')}">{{options.recordToolsTitle||'操作'}}</th>
+							<th v-if="recordTools" class="text-center" :style="options.recordToolsStyle||{width:(recordToolsWidth+'px')}">{{options.recordToolsTitle||'操作'}}</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -248,7 +248,7 @@ store : 存储
 						recordTools = this.recordTools;
 					if (recordTools) {
 						var tools = Sunset.isArray(recordTools) ? recordTools : recordTools.tools,
-							space = recordTools.size == 'small' ? 20 : 34;
+							space = recordTools.size == 'small' ? 26 : 38;
 						tools.forEach(t => {
 							w += (t.label && t.label.length || 0) * 14 + (t.icon ? 20 : 0) + space;
 						});

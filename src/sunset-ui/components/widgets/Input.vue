@@ -14,7 +14,7 @@
 			<i-input @on-blur="blur" :type="type" :value.sync="inputValue" :maxlength="maxlength" :disabled="options.disabled" :readonly="options.readonly"
 			    :placeholder="options.placeholder" :icon="options.icon" :size="options.size" :style="options.style">
 				<!-- prepend -->
-				<span v-if="prependText" slot="prepend">{{{options.prependText}}}</span>
+				<span v-if="prependText" slot="prepend">{{{prependText}}}</span>
 				<i-select v-if="prependSelect" :model.sync="prependValue" slot="prepend" :style="prependSelect.style">
 					<i-option v-for="item in prependItems" :value="item.value">{{ item.text }}</i-option>
 				</i-select>

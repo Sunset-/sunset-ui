@@ -2,11 +2,11 @@
     .sunset-file-wrap:hover .test-class {
         background: red;
     }
-    
+
     .sunset-file-wrap:active .test-class {
         background: yellow;
     }
-    
+
     .test-class {
         display: inline-block;
         width: 100px;
@@ -121,7 +121,7 @@
                             label: '图标按钮1',
                             icon: 'refresh',
                             disabled: true,
-                            operate() {
+                            operate(record) {
                                 alert(record.name)
                             }
                         }, {

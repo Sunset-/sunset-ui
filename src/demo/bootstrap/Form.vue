@@ -72,6 +72,7 @@
                             label: '输入框组',
                             name: 'inputgroup',
                             widget: 'inputgroup',
+                            newline : true,
                             spliter: ';',
                             items: [{
                                 placeholder: '左眼视力',

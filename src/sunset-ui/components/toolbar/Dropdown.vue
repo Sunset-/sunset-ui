@@ -5,7 +5,7 @@
             <Icon type="arrow-down-b"></Icon>
         </i-button>
         <Dropdown-menu slot="list" style="text-align:left;">
-            <Dropdown-item v-for="item in items" :disabled="item.disabledValue" :divided="item.divided" @click="operate(item)">
+            <Dropdown-item v-for="item in items" :disabled="checkDisabled(item)" :divided="item.divided" @click="operate(item)">
                 <Icon v-if="item.icon" :type="item.icon"></Icon>
                 {{item.label}}
             </Dropdown-item>
@@ -18,7 +18,7 @@
     export default {
         props: {
             options: {},
-            disabled : {},
+            disabled: {},
             ctx: {},
             size: {}
         },
@@ -26,13 +26,6 @@
             items() {
                 var tools = this.options.items || [];
                 return tools && tools.filter(item => {
-                    if (item.disabled === true) {
-                        item.disabledValue = true;
-                    } else if (Sunset.isFunction(item.disabled)) {
-                        item.disabledValue = !!item.disabled(this.ctx);
-                    } else {
-                        item.disabledValue = false;
-                    }
                     if (item.premise && Sunset.isFunction(item.premise)) {
                         return item.premise(this.ctx);
                     } else {
@@ -42,7 +35,21 @@
             }
         },
         methods: {
+            checkDisabled(tool) {
+                var disabledValue = false;
+                if (tool.disabled === true) {
+                    disabledValue = true;
+                } else if (Sunset.isFunction(tool.disabled)) {
+                    disabledValue = !!tool.disabled(this.ctx);
+                } else {
+                    disabledValue = false;
+                }
+                return disabledValue;
+            },
             operate(item) {
+                if (this.checkDisabled(item)) {
+                    return;
+                }
                 Helper.operate.call(this, item, this.ctx);
             }
         }
