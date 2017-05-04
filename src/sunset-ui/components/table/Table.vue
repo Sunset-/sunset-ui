@@ -367,6 +367,9 @@ store : 存储
 				}
 			},
 			setData(res) {
+				if (!this.$el) {
+					return;
+				}
 				var columns = this.columns,
 					list;
 				if (this.format && this.format['list'] == '') {
