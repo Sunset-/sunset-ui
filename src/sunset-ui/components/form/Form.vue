@@ -25,10 +25,10 @@
 				<div v-if="field.group" :class="'ivu-col ivu-col-span-24'">
 					<div class="group-title">{{field.group}}</div>
 				</div>
-				<div :class="'ivu-col ivu-col-span-'+computedFieldClass(field)">
+				<i-col :span="computedFieldClass(field)">
 					<sunset-field v-ref:field :options="field" :form-options="options" :value.sync="model[field.name]" :model="model" @ready="promiseWidgetReady"
 					    @change="fieldValueChange"></sunset-field>
-				</div>
+				</i-col>
 			</template>
 		</Row>
 		<Alert v-if="options.tip" :type="tip.color">
