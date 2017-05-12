@@ -3,6 +3,7 @@
 		display: inline-block;
 		margin-right: 10px;
 		vertical-align: middle;
+		font-size: 0px;
 		&:last-child {
 			margin-right: 0px;
 		}

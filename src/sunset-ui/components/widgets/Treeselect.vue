@@ -33,6 +33,9 @@
 			}
 		},
 		methods: {
+			init() {
+				this.watchedValue(this.value);
+			},
 			select() {
 				if (!this.inited) {
 					this.inited = true;
@@ -57,10 +60,8 @@
 				this.$nextTick(() => {
 					this.lock = false;
 				})
-			}
-		},
-		watch: {
-			value(v) {
+			},
+			watchedValue(v) {
 				if (!this.lock) {
 					var text;
 					if (v && this.options.transcode) {
@@ -75,6 +76,11 @@
 						this.text = '';
 					}
 				}
+			}
+		},
+		watch: {
+			value(v) {
+				this.watchedValue(v);
 			}
 		}
 	};

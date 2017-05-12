@@ -6,14 +6,14 @@
     }
 </style>
 <template>
-    <div class="sunset-datapage-container"></div>
-    <sunset-loading :loading.sync="loading">
-        <slot></slot>
-    </sunset-loading>
-    <!--分页-->
-    <div v-show="showPager" class="sunset-crud-datapage-footer">
-        <sunset-page @change="refresh" right="true" :page-number.sync="pageNumber" :show-total="true" :page-size="pageSize" :total.sync="count"></sunset-page>
-    </div>
+    <div class="sunset-datapage-container">
+        <sunset-loading :loading.sync="loading">
+            <slot></slot>
+        </sunset-loading>
+        <!--分页-->
+        <div v-show="showPager" class="sunset-crud-datapage-footer">
+            <sunset-page @change="refresh" right="true" :page-number.sync="pageNumber" :show-total="true" :page-size="pageSize" :total.sync="count"></sunset-page>
+        </div>
     </div>
 </template>
 <script>

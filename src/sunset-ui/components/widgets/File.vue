@@ -143,6 +143,9 @@
             }
         },
         methods: {
+            init() {
+                this.watchedValue(this.value);
+            },
             thumbnail(item) {
                 if (Sunset.isFunction(this.options.thumbnailRender)) {
                     return this.options.thumbnailRender(item.src || item.thumbnail);
@@ -171,10 +174,8 @@
             },
             refreshValue() {
                 this.value = this.queue.map(item => item.value).join(this.options.spliter || ',');
-            }
-        },
-        watch: {
-            value(value) {
+            },
+            watchedValue(value) {
                 if (!this.pending) {
                     var queue = this.queue;
                     queue.splice(0, queue.length);
@@ -194,6 +195,14 @@
                     this.pending = false;
                 }
             }
+        },
+        watch: {
+            value(value) {
+                this.watchedValue(value);
+            }
+        },
+        ready() {
+            this.init();
         }
     }
 </script>

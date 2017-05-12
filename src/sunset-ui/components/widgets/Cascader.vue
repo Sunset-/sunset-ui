@@ -50,6 +50,26 @@
                     }
                 }).then(data => {
                     this.data = data;
+                    this.watchedValue(this.value);
+                });
+            },
+            watchedValue(v) {
+                if (!this.lock) {
+                    var widgetValue = this.widgetValue;
+                    while (widgetValue.pop()) {}
+                    (Sunset.isArray(v) ? v : (v ? new String(v) : '').split(this.spliter)).forEach(item => {
+                        widgetValue.push(item);
+                    });
+                    $('input', this.$el).val(widgetValue.join(' / '));
+                }
+            },
+            watchedWidgetValue(v) {
+                this.lock = true;
+                this.$nextTick(() => {
+                    this.value = v && v.join(this.spliter);
+                    this.$nextTick(() => {
+                        this.lock = false;
+                    });
                 });
             }
         },
@@ -63,21 +83,10 @@
         },
         watch: {
             value(v) {
-                if (!this.lock) {
-                    var widgetValue = this.widgetValue;
-                    while (widgetValue.pop()) {}
-                    (Sunset.isArray(v) ? v : (v ? new String(v) : '').split(this.spliter)).forEach(item => {
-                        widgetValue.push(item);
-                    });
-                    $('input', this.$el).val(widgetValue.join(' / '));
-                }
+                this.watchedValue(v);
             },
             widgetValue(v) {
-                this.lock = true;
-                this.value = v && v.join(this.spliter);
-                this.$nextTick(() => {
-                    this.lock = false;
-                });
+                this.watchedWidgetValue(v);
             }
         }
     };

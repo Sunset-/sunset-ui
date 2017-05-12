@@ -43,27 +43,21 @@
             }
         },
         methods: {
+            init() {
+                this.options.items.forEach((item, index) => {
+                    item._valuePlace = `value${index}`;
+                    this.$set(`inputValues.value${index}`, '123');
+                });
+                this.watchedValue(this.value);
+            },
             blur(option) {
                 if (option.type == 'number') {
                     this.$set(`inputValues.${option._valuePlace}`, Sunset.Numbers.fixed(this.inputValues[option._valuePlace],
                             option.digits || 0) +
                         '');
                 }
-            }
-        },
-        ready() {
-            this.options.items.forEach((item, index) => {
-                item._valuePlace = `value${index}`;
-                this.$set(`inputValues.value${index}`, '123');
-            });
-        },
-        watch: {
-            inputValueStr(v) {
-                if (!this.lock) {
-                    this.value = v;
-                }
             },
-            value(v) {
+            watchedValue(v) {
                 this.lock = true;
                 var vs = [];
                 if (v && v.length) {
@@ -75,6 +69,19 @@
                 this.$nextTick(() => {
                     this.lock = false;
                 });
+            }
+        },
+        ready() {
+            this.init();
+        },
+        watch: {
+            inputValueStr(v) {
+                if (!this.lock) {
+                    this.value = v;
+                }
+            },
+            value(v) {
+                this.watchedValue(v);
             }
         }
     };

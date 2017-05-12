@@ -1,5 +1,3 @@
-import 'font-awesome/css/font-awesome.min.css';
-
 const prefix = 'Sunset';
 
 import FormWidgets from './components/widgets/widgets';

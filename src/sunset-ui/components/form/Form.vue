@@ -156,6 +156,13 @@
 						return;
 					}
 					var model = Sunset.clone(this.model);
+					if (model) {
+						Object.keys(model).forEach(key => {
+							if (Sunset.isString(model[key])) {
+								model[key] = model[key].trim();
+							}
+						});
+					}
 					//格式化
 					if (Sunset.isFunction(this.options.format)) {
 						model = this.options.format && this.options.format(model, this.record) || model;
@@ -207,7 +214,7 @@
 			reset(record) {
 				this.hasModel = !!record;
 				this.record = Sunset.clone(record);
-				var model = this.cast(record || {});
+				var model = this.cast(Sunset.clone(record) || {});
 				if (Sunset.isFunction(this.options.cast)) {
 					model = this.options.cast(model) || model;
 				}

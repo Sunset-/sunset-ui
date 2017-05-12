@@ -41,7 +41,8 @@
 				appendItems: [],
 				inputValue: (void 0),
 				prependValue: (void 0),
-				appendValue: (void 0)
+				appendValue: (void 0),
+				lock: false
 			};
 		},
 		computed: {
@@ -96,6 +97,7 @@
 						this.appendValue = items.length ? items[0].value : null;
 					});
 				}
+				this.valueToInputValue(this.value);
 			},
 			slientRefreshValue() {
 				this.$nextTick(() => {
@@ -111,6 +113,22 @@
 			blur() {
 				if (this.isNumber) {
 					this.inputValue = Sunset.Numbers.fixed(this.inputValue, this.digits) + '';
+				}
+			},
+			valueToInputValue(v) {
+				v = (v === void 0 || v === null) ? '' : (v + '');
+				if (!this.lock) {
+					//拆出前缀
+					if (this.prependSelect && ~v.indexOf(this.prependSpliter)) {
+						this.prependValue = v.substring(0, v.indexOf(this.prependSpliter));
+						v = v.substring(v.indexOf(this.prependSpliter) + 1, v.length);
+					}
+					//拆出后缀
+					if (this.appendSelect && ~v.indexOf(this.appendSpliter)) {
+						this.appendValue = v.substring(v.indexOf(this.appendSpliter) + 1, v.length);
+						v = v.substring(0, v.indexOf(this.appendSpliter));
+					}
+					this.inputValue = v;
 				}
 			}
 		},
@@ -128,20 +146,7 @@
 				this.slientRefreshValue();
 			},
 			value(v) {
-				v = (v === void 0 || v === null) ? '' : (v + '');
-				if (!this.lock) {
-					//拆出前缀
-					if (this.prependSelect && ~v.indexOf(this.prependSpliter)) {
-						this.prependValue = v.substring(0, v.indexOf(this.prependSpliter));
-						v = v.substring(v.indexOf(this.prependSpliter) + 1, v.length);
-					}
-					//拆出后缀
-					if (this.appendSelect && ~v.indexOf(this.appendSpliter)) {
-						this.appendValue = v.substring(v.indexOf(this.appendSpliter) + 1, v.length);
-						v = v.substring(0, v.indexOf(this.appendSpliter));
-					}
-					this.inputValue = v;
-				}
+				this.valueToInputValue(v);
 			}
 		}
 	};

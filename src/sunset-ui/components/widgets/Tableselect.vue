@@ -33,6 +33,9 @@
 			}
 		},
 		methods: {
+			init() {
+				this.watchedValue(this.value);
+			},
 			select() {
 				Promise.resolve().then(() => {
 					if (this.value) {
@@ -69,10 +72,8 @@
 				this.$nextTick(() => {
 					this.lock = false;
 				})
-			}
-		},
-		watch: {
-			value(v) {
+			},
+			watchedValue(v) {
 				if (!this.lock) {
 					var text;
 					if (v && this.options.transcode) {
@@ -88,6 +89,14 @@
 					}
 				}
 			}
+		},
+		watch: {
+			value(v) {
+				this.watchedValue(v);
+			}
+		},
+		ready() {
+			this.init();
 		}
 	};
 </script>
