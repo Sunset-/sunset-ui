@@ -63,7 +63,7 @@
 					this.ready = true;
 					//监听
 					coder.on('change', () => {
-						this.pending || this.setValueSilent(coder.getValue());
+						this.setValueSilent(coder.getValue());
 					});
 					coder.on('blur', () => {
 						this.value = coder.getValue();
