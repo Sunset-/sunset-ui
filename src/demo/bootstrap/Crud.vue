@@ -5,7 +5,8 @@
 			<Switch :checked.sync="showCols.showNick">
 			</Switch>
 			{{showNick}}
-			<sunset-crud :options="options"></sunset-crud>
+			<sunset-crud :options="options">
+			</sunset-crud>
 		</div>
 	</sunset-layout>
 </template>
@@ -234,6 +235,9 @@
 							name: 'account',
 							widget: 'input',
 							default: '123456',
+							premise(model) {
+								return !!model.show;
+							},
 							validate: {
 								required: true,
 								maxlength: 32

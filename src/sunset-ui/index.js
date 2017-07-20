@@ -20,6 +20,9 @@ Sunset.Components = require('./components/index');
 //布局
 const Layouts = require('./layout/index');
 
+//弹窗查看视频
+import './components/modal/VideoModal.vue';
+
 var OuterVue = null,
     waitRegistList = [];
 

@@ -14,7 +14,7 @@
 	}
 </style>
 <template>
-	<div class="sunset-toolbar">
+	<div class="sunset-toolbar" :style="options.style">
 		<template v-for="tool in showTools">
 			<div v-permission="tool.permission" class="sunset-toolbar-item">
 				<template v-if="!tool.type">

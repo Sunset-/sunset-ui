@@ -1,6 +1,13 @@
+<style lang="sass">
+	.editor-container {
+		position: relative;
+	}
+</style>
 <template>
-	<div class="sunset-field">
-		<sunset-input :value.sync="inputValue" :options="options"></sunset-input>
+	<div class="sunset-field editor-container">
+		<div>
+			<sunset-coder v-ref:editor :height="options.height" :value.sync="inputValue" :readonly="options.readonly" :options="options"></sunset-coder>
+		</div>
 	</div>
 </template>
 <script>
@@ -9,8 +16,7 @@
 			options: {
 				type: Object
 			},
-			value: {},
-			invalid: {}
+			value: {}
 		},
 		data() {
 			return {
@@ -24,9 +30,7 @@
 			slientRefreshValue() {
 				this.$nextTick(() => {
 					this.lock = true;
-					this.value = this.inputValue && this.inputValue.length ?
-						`${this.prependSelect?`${this.prependValue+this.prependSpliter}`:''}${this.inputValue}${this.appendSelect?`${this.appendSpliter+this.appendValue}`:''}` :
-						this.inputValue;
+					this.value = this.inputValue;
 					this.$nextTick(() => {
 						this.lock = false;
 					});

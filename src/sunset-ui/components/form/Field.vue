@@ -6,6 +6,9 @@
 		margin-left: 20px;
 		margin-bottom: 15px;
 		font-size: 0px;
+		&.monopolize-field {
+			width: 90%;
+		}
 		.sunset-field-wrap {
 			width: 100%;
 			display: inline-table;
@@ -66,11 +69,12 @@
 	}
 </style>
 <template>
-	<div :class="['sunset-form-field',options.validate&&options.validate.required?'required-field':'']">
+	<div :class="['sunset-form-field',options.validate&&options.validate.required?'required-field':'',options.monopolize?'monopolize-field':'']">
 		<validator name="validation">
 			<div class="sunset-field-wrap">
 				<label v-if="options.label" :style="labelStyle" class="sunset-field-label">{{options.label}}</label>
-				<div :is="widget" :ref="widget" :options="options" :value.sync="value" :invalid="invalid" @ready="widgetReady"></div>
+				<component :is="widget" :ref="widget" :options="options" :form-options="formOptions" :value.sync="value" :model="model" :invalid="invalid"
+				    @ready="widgetReady"></component>
 			</div>
 			<input type="hidden" :maxlength="maxlength" field="field" v-model="value" v-validate="options.validate" />
 			<div v-show="invalid" class="sunset-field-wraning-pop-wrap">{{invalid}}</div>
@@ -144,7 +148,7 @@
 						.field.errors[0].message;
 				}
 				return null;
-			},
+			}
 		},
 		methods: {
 			widgetReady(name, defaultValue) {
@@ -160,7 +164,7 @@
 			},
 			rebuild(watchs, rebuild) {
 				Promise.resolve().then(() => {
-					return rebuild.call(this.options, this.generateWatchDependent(watchs), this.options, this.model);
+					return rebuild.call(this.options, this.generateWatchDependent(watchs), this.options, this.model, this.formOptions);
 				}).then(res => {
 					this.$children[0].init && this.$children[0].init();
 				});

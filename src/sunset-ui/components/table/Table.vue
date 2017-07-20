@@ -149,7 +149,7 @@ store : 存储
 					<tbody>
 						<tr v-for="item in list">
 							<th v-if="options.multiCheck" class="text-center">
-								<input type="checkbox" :value="item[idKey]" :checked="computedCheck(item)" @change="checkRecord(item,$event.currentTarget.checked)"
+								<input type="checkbox" :value="item.self[idKey]" :checked="computedCheck(item.self)" @change="checkRecord(item.self,$event.currentTarget.checked)"
 								/>
 							</th>
 							<td v-if="options.showIndex" class="text-center">{{(pageNumber-1)*pageSize+ $index+1}}</td>
@@ -157,7 +157,7 @@ store : 存储
 							<td v-if="recordTools" class="sunset-table-record-tools" class="text-center">
 								<div>
 									<div>
-										<sunset-toolbar :options="recordTools" :ctx="item" @signal="operateRecord"></sunset-toolbar>
+										<sunset-toolbar :options="recordTools" :ctx="item.self" @signal="operateRecord"></sunset-toolbar>
 									</div>
 								</div>
 							</td>
@@ -377,13 +377,22 @@ store : 存储
 				} else {
 					list = res && Sunset.getAttribute(res, this.format['list'] || 'list', []);
 				}
-				list.forEach(record => {
-					record.__sunset_col_texts = {};
+				list = list.map(record => {
+					var copy = {};
+					var __sunset_col_texts = {};
 					columns.forEach((col, index) => {
-						record.__sunset_col_texts[index] = Sunset.Service.Common.tableColTranscode(Sunset.getAttribute(record, col.name,
+						__sunset_col_texts[index] = Sunset.Service.Common.tableColTranscode(Sunset.getAttribute(record, col.name,
 							''), col, record)
 					});
+					copy.__sunset_col_texts = __sunset_col_texts;
+					copy.self = record;
+					return copy;
 				});
+				if (this.format && this.format['list'] == '') {
+					res = list;
+				} else {
+					res && Sunset.setAttribute(res, this.format['list'] || 'list', list);
+				}
 				this.data = res;
 				this.refrechCheckAll();
 			},
@@ -401,7 +410,7 @@ store : 存储
 			//勾选
 			checkAll(isToCheck) {
 				this.list.forEach(item => {
-					this.checkRecord(item, isToCheck);
+					this.checkRecord(item.self, isToCheck);
 				});
 				this.isAllCheck = isToCheck;
 			},

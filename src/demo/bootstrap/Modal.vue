@@ -124,7 +124,7 @@
                         showIndex: true,
                         pageSize: 10,
                         localPage: false,
-                        multiCheck: true,
+                        multiCheck: false,
                         sortable: true,
                         format: {
                             list: 'rows',

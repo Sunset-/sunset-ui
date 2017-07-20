@@ -148,7 +148,7 @@
             },
             thumbnail(item) {
                 if (Sunset.isFunction(this.options.thumbnailRender)) {
-                    return this.options.thumbnailRender(item.src || item.thumbnail);
+                    return this.options.thumbnailRender(item.src || item.thumbnail, item.value);
                 } else {
                     return `<img class="viewer-image" group="${this.options.name}" src="${item.src||item.thumbnail}" />`;
                 }

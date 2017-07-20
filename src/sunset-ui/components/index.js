@@ -30,9 +30,13 @@ import ViewModal from './modal/ViewModal.vue';
 
 //富文本
 import Editor from './editor/Editor';
+import Coder from './coder/Coder';
 
 //CRUD
 import Crud from './crud/Crud.vue';
+
+//超级视图
+import Superview from './superview/Superview.vue';
 
 //面包屑导航
 import Breadcrumb from './breadcrumb/Breadcrumb';
@@ -40,8 +44,13 @@ import Breadcrumb from './breadcrumb/Breadcrumb';
 //图表
 import Chart from './chart/Chart.vue';
 
+//视频播放器
+import Video from './video/Video.vue';
+
 //小组件
+import Input from './input/Input.vue';
 import Switch from './switch/Switch.vue';
+import SearchInput from './searchInput/SearchInput.vue';
 
 
 module.exports = {
@@ -62,6 +71,11 @@ module.exports = {
     ViewModal: ViewModal,
     Breadcrumb: Breadcrumb,
     Crud: Crud,
+    Superview: Superview,
     Chart: Chart,
-    Switch: Switch
+    Video: Video,
+    Input: Input,
+    Switch: Switch,
+    SearchInput: SearchInput,
+    Coder : Coder
 };

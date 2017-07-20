@@ -30,7 +30,9 @@
 		<!-- 编辑表单 -->
 		<div v-show="PAGE=='CRUD_FORM'">
 			<div class="panel-body">
-				<sunset-form v-ref:form :options="options.formOptions" @signal="operateSignal"></sunset-form>
+				<slot name="CRUD_FORM">
+					<sunset-form v-ref:form :options="options.formOptions" @signal="operateSignal"></sunset-form>
+				</slot>
 			</div>
 		</div>
 		<!-- 查看页面 -->
@@ -86,7 +88,7 @@
 						this.$refs.breadcrumb.pop();
 						break;
 					case 'ADD':
-						this.$refs.form.reset();
+						this.resetForm();
 						this.PAGE = 'CRUD_FORM';
 						this.PAGE_DETAIL = '新增';
 						this.$refs.breadcrumb.append({
@@ -94,7 +96,7 @@
 						});
 						break;
 					case 'MODIFY':
-						this.$refs.form.reset(Object.assign({}, record));
+						this.resetForm(Object.assign({}, record));
 						this.PAGE = 'CRUD_FORM';
 						this.PAGE_DETAIL = '编辑';
 						this.$refs.breadcrumb.append({
@@ -126,6 +128,13 @@
 						break;
 				}
 				this.$emit('signal', signal, record);
+			},
+			resetForm(model) {
+				if (this.$refs.form) {
+					this.$refs.form.reset(model);
+				} else {
+					this.$emit('signal', 'RESET_FORM', model);
+				}
 			},
 			routePath(path) {
 				if (path.key == 'HOME') {

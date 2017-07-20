@@ -32,6 +32,9 @@
 			value: {
 
 			},
+			height: {
+
+			},
 			readonly: {
 
 			}
@@ -68,6 +71,9 @@
 					var editor = this.editor = UE.getEditor(this.id, opts);
 					//初始化值
 					editor.ready(() => {
+						if (this.height && !isNaN(+this.height)) {
+							editor.setHeight(+this.height);
+						}
 						editor.setContent(this.waitValue || '');
 						this.ready = true;
 						//监听
@@ -76,6 +82,10 @@
 						});
 						editor.addListener('blur', () => {
 							this.value = editor.getContent();
+							this.$emit('blur');
+						});
+						editor.addListener('focus', () => {
+							this.$emit('focus');
 						});
 						//只读
 						if (this.readOnly) {
@@ -95,6 +105,9 @@
 			},
 			setWidth(w) {
 				$(`#${this.id} .edui-editor`).css('width', w);
+			},
+			getEditor() {
+				return this.editor;
 			}
 		},
 		ready() {
@@ -104,8 +117,8 @@
 			value(v) {
 				if (!this.pending) {
 					if (this.ready) {
-						this.editor.setContent(v || '');
-						this.editor.focus(true);
+						this.editor && this.editor.setContent(v || '');
+						this.editor && this.editor.focus(true);
 					} else {
 						this.waitValue = v;
 					}
@@ -114,11 +127,10 @@
 			readonly(v) {
 				try {
 					//只读
-					console.log('EDITOR-READONLY:' + v);
 					if (!!v) {
-						this.editor.setDisabled();
+						this.editor && this.editor.setDisabled();
 					} else {
-						this.editor.setEnabled();
+						this.editor && this.editor.setEnabled();
 					}
 				} catch (e) {
 					console.warn(e);

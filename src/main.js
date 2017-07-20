@@ -7,6 +7,11 @@ import UEditorConfig from './vendor/ueditor/ueditor.config.js';
 import UEditor from './vendor/ueditor/ueditor.sunset.js';
 import echarts from 'echarts';
 
+import video_js from 'video.js';
+import 'video.js/dist/video-js.min.css';
+window.videojs = video_js;
+
+
 import Vue from 'vue';
 import Router from 'vue-router';
 import SunsetUI from './sunset-ui/index.js';

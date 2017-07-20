@@ -6,7 +6,7 @@
 <template>
 	<div class="sunset-field editor-container">
 		<div>
-			<sunset-editor v-ref:editor :value.sync="value" :readonly="options.readonly" :toolbar="options.toolbar"></sunset-editor>
+			<sunset-editor v-ref:editor :height="options.height" :value.sync="value" :readonly="options.readonly" :toolbar="options.toolbar"></sunset-editor>
 		</div>
 	</div>
 </template>

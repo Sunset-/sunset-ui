@@ -2,9 +2,21 @@
 
 </style>
 <template>
+    <h2>SearchInput</h2>
+    <div class="component-wrap">
+        <input v-model="inputValue" /> {{inputValue}}
+        <sunset-input :value.sync="inputValue" :options="inputOptions"></sunset-input>
+    </div>
+    <div class="component-wrap">
+        {{searchInputValue}}
+        <sunset-search-input :value.sync="searchInputValue" :options="searchInputOptions"></sunset-search-input>
+    </div>
     <h2>Form</h2>
     <div class="component-wrap">
-        <sunset-form v-ref:form :options="options" @submit="save"></sunset-form>
+        <sunset-form v-ref:form :options="options"></sunset-form>
+        <button type="button" @click="reset">重置</button>
+        <button type="button" @click="addField">添加字段</button>
+        <button type="button" @click="setModel">设置模型</button>
     </div>
     <div class="component-alert" type="error">
     </div>
@@ -28,7 +40,16 @@
             };
         })
     }
-
+    var items = [{
+        id: 1,
+        name: 'aaa'
+    }, {
+        id: 2,
+        name: 'bbb'
+    }, {
+        id: 3,
+        name: 'ccc'
+    }];
     export default {
         ready() {},
         methods: {
@@ -37,17 +58,112 @@
             },
             save(model) {
                 alert(model.editor)
+            },
+            reset() {
+                this.$refs.form.reset();
+            },
+            addField() {
+                this.options.fields.push({
+                    group: '基本组件',
+                    name: 'account111',
+                    widget: 'input',
+                    type: 'text',
+                    placeholder: "不能为空",
+                    append: '<span style="color:red;">aaa</span>',
+                    click(a, v) {
+                        alert(v)
+                    },
+                    default () {
+                        return new Promise(resolve => {
+                            setTimeout(() => {
+                                resolve('ccccc');
+                            }, 200)
+                        })
+                    },
+                    validate: {
+                        required: true
+                    }
+                });
+            },
+            setModel() {
+                this.$refs.form.reset({
+                    account: '222',
+                    newfield1: '1'
+                });
             }
         },
         data() {
             return {
+                inputValue: '',
+                inputOptions: {
+                    placeholder: "不能为空",
+                    default: 'w,5,day',
+                    prepend: {
+                        style: 'width:50px',
+                        data: [{
+                            text: '男',
+                            value: 'm'
+                        }, {
+                            text: '女',
+                            value: 'w'
+                        }],
+                        default: 'w'
+                    },
+                    defaultAppend: 'day',
+                    defaultPrepend: 'w',
+                    append: {
+                        style: 'width:50px',
+                        data: [{
+                            text: '岁',
+                            value: 'year'
+                        }, {
+                            text: '月',
+                            value: 'month'
+                        }, {
+                            text: '日',
+                            value: 'day'
+                        }],
+                        default: 'day'
+                    }
+                },
+                searchInputValue: '1,2,3',
+                searchInputOptions: {
+                    multi: true,
+                    check(v) {
+                        if (v.length > 10) {
+                            return false;
+                        }
+                    },
+                    search(keyword) {
+                        return items.filter(item => item >= (+keyword));
+                    }
+                },
                 options: {
                     submit(model) {
                         alert('提交');
                     },
                     cols: 3,
+                    rebuild(m, options) {
+                        options.fields.push({
+                            label: '新增字段',
+                            name: 'newfield1',
+                            widget: 'input',
+                            monopolize: true
+                        });
+                    },
                     fields: [{
                             group: '基本组件',
+                            groupToolbar: {
+                                style: {
+                                    'margin-left': '30px'
+                                },
+                                size: 'small',
+                                tools: [{
+                                    label: '自动识别',
+                                    color: 'success',
+                                    operate(v) {}
+                                }]
+                            },
                             label: '用户名',
                             name: 'account',
                             widget: 'input',
@@ -66,6 +182,21 @@
                             },
                             validate: {
                                 required: true
+                            }
+                        }, {
+                            text: '新增类型',
+                            widget: 'button',
+                            dom: '<div style="width:100px;height:20px;background:red;"></div>',
+                            style: 'width:60%;margin-left:10%;',
+                            type: 'ghost',
+                            operate: (model, ev) => {
+                                this.options.fields.unshift({
+                                    text: '新增类型2',
+                                    widget: 'button',
+                                    style: 'width:60%;margin-left:10%;',
+                                    type: 'ghost',
+                                    operate: eval('(' + 'function(model, ev){alert(model.age)}' + ')')
+                                });
                             }
                         }, {
                             label: '输入框组组23',
@@ -237,6 +368,40 @@
                                 return generateCascaderData();
                             },
                             disabled: false
+                        }, {
+                            label: '输入查询',
+                            name: 'searchinput',
+                            widget: 'searchinput',
+                            placeholder: "不能为空",
+                            default () {
+                                return new Promise(resolve => {
+                                    setTimeout(() => {
+                                        resolve('4,6');
+                                    }, 200)
+                                })
+                            },
+                            delay: 0,
+                            multi: true,
+                            check(v) {
+                                if (v.length > 10) {
+                                    return false;
+                                }
+                            },
+                            popStyle: 'width:150px',
+                            all() {
+                                return items;
+                            },
+                            onSelected(v) {},
+                            search(keyword) {
+                                return items;
+                            },
+                            format(item) {
+                                return item.name
+                            },
+                            // all: items,
+                            validate: {
+                                required: true
+                            }
                         }, {
                             label: '文本域',
                             name: 'textarea',

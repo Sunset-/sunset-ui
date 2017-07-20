@@ -82,6 +82,9 @@
 			value(v) {
 				this.watchedValue(v);
 			}
+		},
+		ready() {
+			this.init();
 		}
 	};
 </script>

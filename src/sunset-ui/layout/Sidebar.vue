@@ -309,22 +309,29 @@
 			},
 			init() {
 				var path = this.$route.path;
-				this.menus.forEach((menu, index) => {
-					if (menu.path === path) {
-						this.toggleMenu(menu, index);
-					} else if (menu.subMenus) {
-						menu.subMenus.forEach((subMenu) => {
-							if (subMenu.path == path) {
-								this.toggleMenu(menu, index);
-								this.activeSubMenu(subMenu);
-							}
-						});
-					}
-				});
+				if (this.menus && this.menus.length > 0) {
+					this.menus.forEach((menu, index) => {
+						if (menu.path === path) {
+							this.toggleMenu(menu, index);
+						} else if (menu.subMenus) {
+							menu.subMenus.forEach((subMenu) => {
+								if (subMenu.path == path) {
+									this.toggleMenu(menu, index);
+									this.activeSubMenu(subMenu);
+								}
+							});
+						}
+					});
+				}
 			},
 			toggleMenuType() {
 				this.theme = this.theme == 'normal' ? 'mini' : 'normal';
 				this.$emit('change', this.leftWidth[this.theme]);
+			}
+		},
+		watch: {
+			menus() {
+				this.init();
 			}
 		},
 		ready() {

@@ -5,7 +5,6 @@
 
 	.switch-group-wrap .ivu-switch {
 		position: relative;
-		top: 5px;
 	}
 </style>
 <template>

@@ -100,6 +100,10 @@
                         placeholder: '日期区间',
                         widget: 'date',
                         type: 'daterange'
+                    }, {
+                        label: '',
+                        name: 'search',
+                        widget: 'search',
                     }],
                     format: (model) => {
                         model.attach = 'abcd';

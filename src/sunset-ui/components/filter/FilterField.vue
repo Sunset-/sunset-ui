@@ -10,6 +10,7 @@
 		.sunset-field-wrap {
 			width: 100%;
 			display: inline-table;
+			font-size: 12px;
 			.sunset-field-label {
 				display: table-cell;
 				padding: 0px 10px;

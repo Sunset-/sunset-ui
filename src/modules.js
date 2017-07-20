@@ -6,6 +6,8 @@ import Table from './demo/bootstrap/Table';
 import Tree from './demo/bootstrap/Tree.vue';
 import Modal from './demo/bootstrap/Modal.vue';
 import Crud from './demo/bootstrap/Crud.vue';
+import SuperView from './demo/bootstrap/SuperView.vue';
+import SerializeForm from './demo/bootstrap/SerializeForm.vue';
 
 
 let modules = [{
@@ -40,6 +42,14 @@ let modules = [{
     name: 'Crud',
     title: '增删改查',
     component: Crud
+}, {
+    name: 'SuperView',
+    title: '超级视图',
+    component: SuperView
+}, {
+    name: 'SerializeForm',
+    title: '表单序列化',
+    component: SerializeForm
 }];
 
 

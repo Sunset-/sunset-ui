@@ -7,9 +7,6 @@
 		.ivu-alert {
 			margin-bottom: 0px;
 		}
-		.sunset-toolbar {
-			display: block;
-		}
 		&.sunset-form-show-warning {
 			.sunset-field-wraning-pop-wrap {
 				display: block;
@@ -23,7 +20,9 @@
 			<template v-for="field in fields" v-ref:fields>
 				{{{newline(field)}}}
 				<div v-if="field.group" :class="'ivu-col ivu-col-span-24'">
-					<div class="group-title">{{field.group}}</div>
+					<div class="group-title">{{field.group}}
+						<sunset-toolbar v-if="field.groupToolbar" :options="field.groupToolbar" :ctx="model" @signal="operateSignal"></sunset-toolbar>
+					</div>
 				</div>
 				<i-col :span="computedFieldClass(field)">
 					<sunset-field v-ref:field :options="field" :form-options="options" :value.sync="model[field.name]" :model="model" @ready="promiseWidgetReady"
@@ -34,8 +33,10 @@
 		<Alert v-if="options.tip" :type="tip.color">
 			{{{tip.text}}}
 		</Alert>
-		<button style="display:none;" type="submit"></button>
-		<sunset-toolbar v-if="options.tools!==false" :options="tools" @signal="operateSignal" style="text-align:center;"></sunset-toolbar>
+		<button style="display:none;" type="button"></button>
+		<div v-if="options.tools!==false" style="text-align:center;">
+			<sunset-toolbar :options="tools" :ctx="model" @signal="operateSignal"></sunset-toolbar>
+		</div>
 	</form>
 </template>
 <script>
@@ -70,7 +71,7 @@
 					fields = this.options && this.options.fields || [],
 					record = this.record,
 					fieldsRefresher = this.fieldsRefresher;
-				fields = fields.filter(field => !!field.name && (field.premise ? field.premise(model) : true));
+				fields = fields.filter(field => (field.premise ? field.premise(model) : true));
 				//初始化
 				if (record) {
 					fields = fields.map(f => {
@@ -118,13 +119,15 @@
 					defaultValueFields = [],
 					prall = [];
 				fields.forEach(field => {
-					this.$set(`model.${field.name}`, this.defaultValueMap[field.name]);
-					var defaulValue = field.default || field.defaultValue;
-					if (defaulValue) {
-						defaultValueFields.push(field);
-						prall.push(Promise.resolve().then(() => {
-							return Sunset.isFunction(defaulValue) ? defaulValue() : defaulValue;
-						}));
+					if (field.name) {
+						this.$set(`model.${field.name}`, this.defaultValueMap[field.name]);
+						var defaulValue = field.default || field.defaultValue;
+						if (defaulValue) {
+							defaultValueFields.push(field);
+							prall.push(Promise.resolve().then(() => {
+								return Sunset.isFunction(defaulValue) ? defaulValue() : defaulValue;
+							}));
+						}
 					}
 				});
 				Promise.all(prall).then((res) => {
@@ -147,13 +150,15 @@
 					return FULL_COLS / this.cols;
 				}
 			},
+			getModel(origin) {
+				return origin ? this.model : Sunset.clone(this.model);
+			},
 			generateModel() {
 				return Promise.resolve().then(() => {
 					//校验
 					if (!this.formValid) {
 						this.showWarning = true;
 						throw new Error();
-						return;
 					}
 					var model = Sunset.clone(this.model);
 					if (model) {
@@ -193,7 +198,12 @@
 			submit() {
 				this.generateModel().then(model => {
 					if (Sunset.isFunction(this.options.submit)) {
-						this.options.submit(model);
+						Promise.resolve(this.options.submit(model)).then(res => {
+							this.$emit('signal', 'SAVED', res, model);
+						}).catch(e => {
+							console.error(e);
+							this.$emit('signal', 'SAVE-ERROR', e);
+						});
 					} else if (this.options.store) {
 						this.options.store[this.options.method || 'save'](model).then(res => {
 							Sunset.tip(this.options.successTip || '保存成功', 'success');
@@ -212,18 +222,20 @@
 				});
 			},
 			reset(record) {
-				this.hasModel = !!record;
-				this.record = Sunset.clone(record);
-				var model = this.cast(Sunset.clone(record) || {});
-				if (Sunset.isFunction(this.options.cast)) {
-					model = this.options.cast(model) || model;
-				}
-				this.fieldsRefresher++;
-				this.$nextTick(() => {
-					this.model = model;
-					if (!this.hasModel) {
-						this.init();
+				Promise.resolve(this.rebuild(record)).then(() => {
+					this.hasModel = !!record;
+					this.record = Sunset.clone(record);
+					var model = this.cast(Sunset.clone(record) || {});
+					if (Sunset.isFunction(this.options.cast)) {
+						model = this.options.cast(model) || model;
 					}
+					this.fieldsRefresher++;
+					this.$nextTick(() => {
+						this.model = model;
+						if (!this.hasModel) {
+							this.init();
+						}
+					});
 				});
 			},
 			cast(model) {
@@ -242,6 +254,11 @@
 			},
 			newline(field) {
 				return field.newline ? `</div><div style="z-index:-1;" class="ivu-row">` : '';
+			},
+			rebuild(model) {
+				if (this.options.rebuild) {
+					this.options = this.options.rebuild.call(null, model, this.options) || this.options;
+				}
 			}
 		},
 		ready() {

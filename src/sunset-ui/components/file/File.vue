@@ -67,6 +67,9 @@
 				border-color: #f23000;
 			}
 		}
+		.webuploader-element-invisible {
+			display: none;
+		}
 	}
 </style>
 <template>
@@ -123,7 +126,7 @@
 		},
 		methods: {
 			init() {
-				var uploader = this.uploader = WebUploader.create({
+				var uploader = this.uploader = WebUploader.create(Object.assign({
 					// swf文件路径
 					swf: '../../vendor/webuploader/Uploader.swf',
 					// 文件接收服务端。
@@ -134,8 +137,9 @@
 					// 不压缩image, 默认如果是jpeg，文件上传前会压缩一把再上传！
 					fileVal: this.options.filename || 'file',
 					resize: false,
+					chunked: !!this.options.chunked,
 					duplicate: true
-				});
+				}, this.options.uploaderOptions));
 				//选择文件
 				uploader.on('filesQueued', files => {
 					if (!files || files[0].size == 0) {
@@ -228,7 +232,7 @@
 					});
 					progress = progress / queue.length;
 					this.options.progress && this.options.progress(progress);
-					this.$emit('progress', progress);
+					this.$emit('progress', progress, this.ctx);
 				});
 				//上传失败
 				uploader.on('uploadError', (file) => {
@@ -245,18 +249,23 @@
 						item.result = response._raw;
 					}
 					$(`#${this.id} input`).val('');
+					this.$emit('single-success', {
+						status: 'FINISH',
+						result: response._raw,
+						file: file
+					}, this.ctx);
 				});
 				//上传完成
 				uploader.on('uploadFinished', () => {
 					this.options.success && this.options.success(this.queue);
-					this.$emit('success', this.queue);
+					this.$emit('success', this.queue, this.ctx);
 				});
 			}
 		},
 		watch: {
 			queue(queue) {
 				this.options.queue && this.options.queue(this.queue);
-				this.$emit('queue', queue);
+				this.$emit('queue', queue, this.ctx);
 			}
 		},
 		ready() {}

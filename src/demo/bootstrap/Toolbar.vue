@@ -39,6 +39,11 @@
     <div>
         <sunset-chart v-ref:chart style="width:400px;height:200px;" :options="echartsOptions" @chart-click="chartClick"></sunset-chart>
     </div>
+    <h2>Coder</h2>
+    <div class="component-wrap">
+        <sunset-coder :value.sync="coderV" :readonly="false" style="height:100px;"></sunset-coder>
+    </div>
+    {{coderV}}
 </template>
 <script>
     export default {
@@ -53,6 +58,7 @@
         ready() {},
         data() {
             return {
+                coderV: '123',
                 switchValue: false,
                 echartsOptions: {
                     title: {
