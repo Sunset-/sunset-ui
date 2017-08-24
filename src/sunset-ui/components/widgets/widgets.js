@@ -16,8 +16,9 @@ const widgets = {
 	'Treeselect': 'Treeselect',
 	'Table': 'Table',
 	'Icon': 'Icon',
-	'Button' : 'Button',
-	'Coder' : 'Coder'
+	'Button': 'Button',
+	'Coder': 'Coder',
+	'Widgetgroup': 'Widgetgroup'
 }
 
 

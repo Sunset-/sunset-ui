@@ -71,6 +71,7 @@ exports.install = function install(Vue, options) {
             Vue.prototype.$Modal.remove();
         }
     };
+    require('./common/prompt')(Sunset, Vue);
 }
 
 //全局配置

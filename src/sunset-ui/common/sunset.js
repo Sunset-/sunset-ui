@@ -26,6 +26,9 @@ window.Sunset = {
     isFunction: function (value) {
         return typeof value === 'function';
     },
+    isRegExp: function (value) {
+        return value instanceof RegExp;
+    },
     //正则
     REGEX: {
         PHONE: /^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/
@@ -416,16 +419,17 @@ window.Sunset = {
         if (r != null) return unescape(r[2]);
         return null;
     },
-    wait: function (promiseFactory, cacheHolder) {
+    wait: function (promiseFactory, cacheHolder, cacheKey) {
         var lock = false,
-            resolveStack = [];
+            resolveStack = [],
+            cacheKey = cacheKey || 'cache';
         cacheHolder = cacheHolder || {};
         return function (force) {
             var self = this,
                 args = [].slice.call(arguments);
             return new Promise((resolve, reject) => {
-                if (!force && cacheHolder.cache) {
-                    resolve(cacheHolder.cache);
+                if (!force && cacheHolder[cacheKey]) {
+                    resolve(cacheHolder[cacheKey]);
                 } else {
                     resolveStack.push({
                         resolve: resolve,
@@ -434,7 +438,7 @@ window.Sunset = {
                     if (!lock) {
                         lock = true;
                         promiseFactory.apply(self, args).then(res => {
-                            cacheHolder.cache = res;
+                            cacheHolder[cacheKey] = res;
                             lock = false;
                             while (resolveStack.length) {
                                 resolveStack.shift().resolve(res);

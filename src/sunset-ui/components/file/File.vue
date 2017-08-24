@@ -154,28 +154,30 @@
 						uploader.reset();
 						this.queue.length = 0;
 						var file = files[0];
-						queue.push({
+						queue.push(Object.assign({
 							id: file.id,
 							name: file.name,
 							thumbnail: null,
 							file: file,
 							progress: 0,
 							result: null,
-							status: 'READY'
-						});
+							status: 'READY',
+							time: Date.now()
+						}, (Sunset.isFunction(this.options.attachData) ? this.options.attachData.call(file) : this.options.attachData)));
 					} else {
 						//多图
 						files.forEach(file => {
 							if (queue.length < max) {
-								queue.push({
+								queue.push(Object.assign({
 									id: file.id,
 									name: file.name,
 									thumbnail: null,
 									file: file,
 									progress: 0,
 									result: null,
-									status: 'READY'
-								});
+									status: 'READY',
+									time: Date.now()
+								}, (Sunset.isFunction(this.options.attachData) ? this.options.attachData.call(file) : this.options.attachData)));
 							} else {
 								uploader.removeFile(file);
 								overflow = true;

@@ -1,5 +1,7 @@
 const widgets = {
 	'Input': ['Input', 'Password'],
+	'Searchinput': ['Searchinput'],
+	'Inputgroup': 'Inputgroup',
 	'Radio': 'Radio',
 	'Checkbox': 'Checkbox',
 	'Select': 'Select',
@@ -12,7 +14,9 @@ const widgets = {
 	'Editor': 'Editor',
 	'Tableselect': 'Tableselect',
 	'Treeselect': 'Treeselect',
-	'Icon': 'Icon'
+	'Icon': 'Icon',
+	'Button': 'Button',
+	'Coder': 'Coder',
 }
 
 

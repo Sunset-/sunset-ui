@@ -331,7 +331,7 @@ store : 存储
 		},
 		methods: {
 			search(filter, localFilter, force) {
-				this.filter = Object.assign(this.filter, filter || {});
+				this.filter = filter || {};
 				this.localFilter = localFilter;
 				this.refresh(1, force);
 			},
@@ -490,6 +490,9 @@ store : 存储
 			},
 			operateRecord(signal, record) {
 				this.$emit.apply(this, ['signal'].concat([].slice.call(arguments)));
+			},
+			getRecords() {
+				return this.list && this.list.map(item => item.self) || [];
 			}
 		},
 		ready() {

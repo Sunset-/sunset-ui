@@ -11,7 +11,7 @@
 			</div>
 		</template>
 		<template v-if="!options.dom">
-			<i-button :style="options.style" :type="options.type" :loading="options.loading" :size="size" :type="options.color||'primary'"
+			<i-button :style="options.style" :type="options.color||options.type||'primary'" :loading="options.loading" :size="options.size" :shape="options.shape"
 			    :icon="options.icon" @click="operate()">{{options.text}}</i-button>
 		</template>
 

@@ -1,7 +1,7 @@
 <template>
 	<div class="sunset-field">
 		<i-select :model.sync="widgetValue" :placeholder="options.placeholder" :clearable="options.clearable" :multiple="options.multiple"
-		    :filterable="options.filterable">
+		    :filterable="options.filterable" :size="options.size">
 			<template v-if="groupable">
 				<Option-group v-for="group in items" :label="group.group">
 					<i-option v-for="item in group.items" :value="item.value">{{ item.text }}</i-option>
@@ -70,7 +70,7 @@
 						} else {
 							this.items = items;
 						}
-						if (this.options.defaultFirst && (this.value === void 0 || this.value.length == 0)) {
+						if (this.options.defaultFirst && (this.value === void 0 || this.value.length == 0) && this.items.length) {
 							this.value = this.items[0].group ? this.items[0].items[0].value : this.items[0].value;
 						}
 						this.refreshWidgetValue(this.value || '');

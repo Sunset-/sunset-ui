@@ -1,5 +1,8 @@
 <style lang="sass">
 	.sunset-form {
+		.ivu-col {
+			position: relative;
+		}
 		.group-title {
 			font-size: 16px;
 			padding: 5px 15px;
@@ -19,12 +22,12 @@
 		<Row>
 			<template v-for="field in fields" v-ref:fields>
 				{{{newline(field)}}}
-				<div v-if="field.group" :class="'ivu-col ivu-col-span-24'">
-					<div class="group-title">{{field.group}}
+				<div v-if="field.group" :class="'ivu-col ivu-col-span-24'" :style="field.groupStyle">
+					<div class="group-title">{{{field.group}}}
 						<sunset-toolbar v-if="field.groupToolbar" :options="field.groupToolbar" :ctx="model" @signal="operateSignal"></sunset-toolbar>
 					</div>
 				</div>
-				<i-col :span="computedFieldClass(field)">
+				<i-col :span="computedFieldClass(field)" :style="field.fieldStyle">
 					<sunset-field v-ref:field :options="field" :form-options="options" :value.sync="model[field.name]" :model="model" @ready="promiseWidgetReady"
 					    @change="fieldValueChange"></sunset-field>
 				</i-col>
@@ -257,7 +260,7 @@
 			},
 			rebuild(model) {
 				if (this.options.rebuild) {
-					this.options = this.options.rebuild.call(null, model, this.options) || this.options;
+					return this.options.rebuild.call(null, model, this.options);
 				}
 			}
 		},

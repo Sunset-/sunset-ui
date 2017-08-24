@@ -45,7 +45,7 @@
                             '1': '男',
                             '2': '女'
                         }
-                    },{
+                    }, {
                         name: 'keyword',
                         placeholder: '关键字',
                         widget: 'input'
@@ -58,7 +58,7 @@
                             width: '100px'
                         },
                         changeFilter: true,
-                        // defaultFirst:true,
+                        // defaultFirst: true,
                         default: '2',
                         data: {
                             '1': '男',
@@ -88,11 +88,18 @@
                         placeholder: '职业',
                         widget: 'radio',
                         type: 'button',
+                        // defaultFirst: true,
                         changeFilter: true,
-                        default: '2',
+                        default(){
+                            return new Promise(resolve=>{
+                                setTimeout(()=>{
+                                    resolve('2')
+                                },1000)
+                            })
+                        },
                         data: {
-                            '1': '男',
-                            '2': '女'
+                            '1': '男1',
+                            '2': '女2'
                         }
                     }, {
                         label: '',

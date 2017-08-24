@@ -12,7 +12,7 @@
 </style>
 <template>
     <div :class="['sunset-field radio-group-wrap',options.type=='button'?'':'radio-pd']">
-        <Radio-group :type="options.type" :size="options.size" :model.sync="widgetValue">
+        <Radio-group :type="options.type" :size="options.size" :model.sync="value">
             <Radio v-for="item in items" :value="item.value" :disabled="item.disabled">
                 <span>{{item.text}}</span>
             </Radio>
@@ -44,46 +44,40 @@
         },
         methods: {
             init() {
+                var v = this.value;
                 Utils.generateItems(this.options).then(items => {
                     this.items = items;
                     if (this.options.defaultFirst && (this.value === void 0 || this.value.length == 0)) {
                         this.value = this.items[0].value;
                     }
-                    var initValue = this.value;
-                    this.refreshWidgetValue(initValue);
-                    this.$emit('ready', this.options.name, initValue);
+                    this.$emit('ready', this.options.name, this.value);
                 });
             },
-            refreshValue(v) {
-                this.value = void 0;
-                this.$nextTick(() => {
-                    this.value = v;
-                });
-            },
-            refreshWidgetValue(v) {
-                this.widgetLock = true;
-                this.widgetValue = void 0;
-                this.$nextTick(() => {
-                    this.widgetValue = v;
-                    this.widgetLock = false;
-                });
-            }
+            // ,
+            // refreshWidgetValue(v) {
+            //     this.widgetLock = true;
+            //     this.widgetValue = void 0;
+            //     this.$nextTick(() => {
+            //         this.widgetValue = v;
+            //         this.widgetLock = false;
+            //     });
+            // }
         },
         watch: {
-            widgetValue(v) {
-                if (!this.widgetLock) {
-                    this.lock = true;
-                    this.value = v;
-                    this.$nextTick(() => {
-                        this.lock = false;
-                    });
-                }
-            },
-            value(v) {
-                if (!this.lock) {
-                    this.refreshWidgetValue(v);
-                }
-            }
+            // widgetValue(v) {
+            //     if (!this.widgetLock) {
+            //         this.lock = true;
+            //         this.value = v;
+            //         this.$nextTick(() => {
+            //             this.lock = false;
+            //         });
+            //     }
+            // },
+            // value(v) {
+            //     if (!this.lock) {
+            //         this.refreshWidgetValue(v);
+            //     }
+            // }
         },
         ready() {
             this.init();

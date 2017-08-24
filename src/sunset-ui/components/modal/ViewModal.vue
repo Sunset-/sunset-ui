@@ -1,8 +1,5 @@
 <style lang="sass">
     .sunset-view-modal {
-        .ivu-select-dropdown {
-            position: absolute !important;
-        }
         &.hide-footer {
             .ivu-modal-footer {
                 display: none;

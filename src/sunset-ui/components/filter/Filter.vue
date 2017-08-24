@@ -28,7 +28,7 @@
 	<div :class="['sunset-search-form-container',right?'pull-right':'']">
 		<form :class="['sunset-search-form form-inline form-horizontal',right?'pull-right':'']" onsubmit="return false">
 			<filter-field v-for="field in fields" :options="field" :filter="filter" :value.sync="filter[field.name]" @search="fieldTriggerSearch"
-							@ready="fieldReady"></filter-field>
+			    @ready="fieldReady"></filter-field>
 			<i-button v-if="searchButton" :type="searchButton.color||'primary'" :icon="searchButton.icon" @click="search">{{searchButton.label}}</i-button>
 			<sunset-toolbar v-if="options.toolbar" :options="options.toolbar"></sunset-toolbar>
 		</form>
@@ -64,6 +64,7 @@
 			return {
 				inited: false,
 				lock: false,
+				readySearch: false,
 				filter: {},
 				waitReadyWidgetCounter: 0,
 				waitReadyWidgetMap: {}
@@ -138,11 +139,14 @@
 				};
 			},
 			fieldTriggerSearch() {
-				if (this.waitReadyWidgetCounter == 0) {
+				if (this.readySearch && this.waitReadyWidgetCounter == 0) {
 					this.search();
 				}
 			},
-			search() {
+			search(from) {
+				this.$nextTick(() => {
+					this.readySearch = true;
+				})
 				if (!this.fields) {
 					return;
 				}

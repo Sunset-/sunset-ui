@@ -46,6 +46,23 @@
             padding: 0 4px 0 4px;
             min-width: 20px;
         }
+         :-moz-placeholder {
+            color: #c3cbd6;
+            opacity: 1;
+        }
+         ::-moz-placeholder {
+            color: #c3cbd6;
+            opacity: 1;
+        }
+        input:-ms-input-placeholder {
+            color: #c3cbd6;
+            opacity: 1;
+        }
+
+        input::-webkit-input-placeholder {
+            color: #c3cbd6;
+            opacity: 1;
+        }
         .sunset-searchinput-result {
             display: inline-block;
             height: 22px;
@@ -174,10 +191,10 @@
 <template>
     <div :class="['sunset-searchinput',all?'have-all':'',size,!multi?'no-multi':'']" @click="focus">
         <span class="sunset-searchinput-result" v-for="r in results" track-by="$index">
-            {{r}}
+            {{formatTemplate(r)}}
            <i class="ivu-icon ivu-icon-ios-close-empty" @click="remove(r)"></i>
         </span>
-        <input @input="inputSearch" @keydown.stop="toSelect" v-model="inputValue" type="text" />
+        <input @input="inputSearch" @keydown.stop="toSelect" :placeholder="placeholder" v-model="inputValue" type="text" />
         <div :style="popStyle" v-show="searchResults.length" class="sunset-searchinput-searchresults">
             <div :class="['sunset-searchinput-searchresult',activeSelectItem==sr?'active':'',isSelected(sr)?'selected':'']" v-for="sr in searchResults"
                 @click.stop="select(sr,true,true)" track-by="$index">
@@ -230,17 +247,29 @@
             spliter() {
                 return this.options && this.options.spliter || ',';
             },
+            placeholder() {
+                return this.options && this.results.length == 0 && this.options.placeholder;
+            },
             all() {
                 return this.options && this.options.all;
             },
+            inputable() {
+                return this.options.input !== false;
+            },
             template() {
-                return Sunset.isFunction(this.options && this.options.template) ? this.options && this.options.template :
+                return Sunset.isFunction(this.options && this.options.template) ? this.options.template :
                     function (v) {
                         return v
                     };
             },
             format() {
-                return Sunset.isFunction(this.options && this.options.format) ? this.options && this.options.format :
+                return Sunset.isFunction(this.options && this.options.format) ? this.options.format :
+                    function (v) {
+                        return v
+                    };
+            },
+            formatTemplate() {
+                return Sunset.isFunction(this.options && this.options.formatTemplate) ? this.options.formatTemplate :
                     function (v) {
                         return v
                     };
@@ -268,7 +297,7 @@
                             if (!this.multi) {
                                 this.activeSelectItem = null;
                             }
-                        } else if (this.multi && this.inputValue.trim() != '') {
+                        } else if (this.inputable && this.multi && this.inputValue.trim() != '') {
                             this.select(this.inputValue);
                         }
                         break;

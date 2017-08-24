@@ -14,9 +14,6 @@
                 display: none;
             }
         }
-        .ivu-select-dropdown {
-            position: absolute !important;
-        }
         .table-modal-selected-wrap {
             padding-bottom: 10px;
             .table-modal-selected-item {

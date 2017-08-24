@@ -15,6 +15,7 @@
         border: 1px solid $color;
         color: #FFF;
         border-radius: 3px;
+        font-size: 12px;
         &:before {
             position: absolute;
             right: 20px;

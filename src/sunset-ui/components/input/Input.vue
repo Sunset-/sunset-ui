@@ -144,14 +144,14 @@
                     }
                     if (this.prependSelect && ~v.indexOf(this.prependSpliter)) {
                         this.prependValue = v.substring(0, v.indexOf(this.prependSpliter));
-                        v = v.substring(v.indexOf(this.prependSpliter) + 1, v.length);
+                        v = v.substring(v.indexOf(this.prependSpliter) + this.prependSpliter.length, v.length);
                     }
                     //拆出后缀
                     if (this.defaultAppendValue != null) {
                         this.appendValue = this.defaultAppendValue;
                     }
                     if (this.appendSelect && ~v.indexOf(this.appendSpliter)) {
-                        this.appendValue = v.substring(v.indexOf(this.appendSpliter) + 1, v.length);
+                        this.appendValue = v.substring(v.indexOf(this.appendSpliter) + this.prependSpliter.length, v.length);
                         v = v.substring(0, v.indexOf(this.appendSpliter));
                     }
                     this.inputValue = v;

@@ -2,6 +2,10 @@
 
 </style>
 <template>
+    <h2>自定义样式FORM</h2>
+    <div class="component-wrap">
+        <sunset-form :options="styleFormOptions"></sunset-form>
+    </div>
     <h2>SearchInput</h2>
     <div class="component-wrap">
         <input v-model="inputValue" /> {{inputValue}}
@@ -94,6 +98,83 @@
         },
         data() {
             return {
+                styleFormOptions: {
+                    fields: [{
+                        cols: 16,
+                        name: 'checkmethod',
+                        widget: 'widgetgroup',
+                        widgets: [{
+                            widget: 'select',
+                            name: 'checkmethod',
+                            wrapstyle: 'width:50%;padding-right:5px;box-sizing:border-box;',
+                            cols: 2,
+                            placeholder: '检查方法',
+                            data: {
+                                '1': 'aaa',
+                                '2': 'bbb'
+                            }
+                        }, {
+                            widget: 'input',
+                            name: 'checkpoint',
+                            wrapstyle: 'width:25%;padding-right:5px;box-sizing:border-box;',
+                            cols: 2,
+                            placeholder: '部位'
+                        }, {
+                            widget: 'input',
+                            name: 'checktarget',
+                            wrapstyle: 'width:25%;padding-right:5px;box-sizing:border-box;',
+                            cols: 2,
+                            placeholder: '检查目的'
+                        }]
+                    }, {
+                        widget: 'button',
+                        size: 'small',
+                        cols: 1,
+                        text: '添加',
+                        color: 'success',
+                        operate(model, options, formOptions) {
+                            formOptions.fields.splice(formOptions.fields.length - 1, 0, {
+                                cols: 16,
+                                name: 'checkmethod',
+                                widget: 'widgetgroup',
+                                widgets: [{
+                                    widget: 'select',
+                                    name: 'checkmethod',
+                                    wrapstyle: 'width:50%;padding-right:5px;box-sizing:border-box;',
+                                    cols: 2,
+                                    placeholder: '检查方法',
+                                    data: {
+                                        '1': 'aaa',
+                                        '2': 'bbb'
+                                    }
+                                }, {
+                                    widget: 'input',
+                                    name: 'checkpoint',
+                                    wrapstyle: 'width:25%;padding-right:5px;box-sizing:border-box;',
+                                    cols: 2,
+                                    placeholder: '部位'
+                                }, {
+                                    widget: 'input',
+                                    name: 'checktarget',
+                                    wrapstyle: 'width:25%;padding-right:5px;box-sizing:border-box;',
+                                    cols: 2,
+                                    placeholder: '检查目的'
+                                }]
+                            });
+                            formOptions.fields.splice(formOptions.fields.length - 1, 0, {
+                                widget: 'button',
+                                size: 'small',
+                                text: '删除',
+                                cols: 1,
+                                color: 'error',
+                                operate(model, options, formOptions) {
+                                    formOptions.fields.splice(formOptions.fields.indexOf(options) - 1,
+                                        2);
+                                }
+                            });
+                        }
+                    }]
+                },
                 inputValue: '',
                 inputOptions: {
                     placeholder: "不能为空",
@@ -128,7 +209,12 @@
                 },
                 searchInputValue: '1,2,3',
                 searchInputOptions: {
+                    input: true,
                     multi: true,
+                    placeholder: '请输入',
+                    formatTemplate(b) {
+                        return b + '--'
+                    },
                     check(v) {
                         if (v.length > 10) {
                             return false;
@@ -183,10 +269,11 @@
                             validate: {
                                 required: true
                             }
-                        }, {
+                        },
+                        /*{
                             text: '新增类型',
                             widget: 'button',
-                            dom: '<div style="width:100px;height:20px;background:red;"></div>',
+                            // dom: '<div style="width:100px;height:20px;background:red;"></div>',
                             style: 'width:60%;margin-left:10%;',
                             type: 'ghost',
                             operate: (model, ev) => {
@@ -198,11 +285,12 @@
                                     operate: eval('(' + 'function(model, ev){alert(model.age)}' + ')')
                                 });
                             }
-                        }, {
+                        },*/
+                        {
                             label: '输入框组组23',
                             name: 'inputgroup',
                             widget: 'inputgroup',
-                            newline: true,
+                            newline: false,
                             spliter: ';',
                             items: [{
                                 placeholder: '左眼视力',
@@ -257,7 +345,11 @@
                             widget: 'radio',
                             // defaultFirst: true,
                             default: '2',
-                            enum: 'SEX'
+                            type : 'button',
+                            enum: 'SEX',
+                            validate: {
+                                required: true
+                            }
                         }, {
                             label: '多选',
                             name: 'sex1',
@@ -270,8 +362,11 @@
                             name: 'select1',
                             widget: 'select',
                             default: '2',
+                            size: 'small',
+                            fieldStyle: 'float:right;margin-top:-100px;',
                             defaultFirst: true,
-                            enum: 'ACCOUNT_TYPE'
+                            enum: 'ACCOUNT_TYPE',
+                            onChange(v, m, form) {}
                         }, {
                             label: '下拉框2',
                             name: 'select2',

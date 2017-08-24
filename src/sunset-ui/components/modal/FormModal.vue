@@ -6,9 +6,7 @@
 				padding: 10px;
 			}
 		}
-		.ivu-select-dropdown {
-			position: absolute !important;
-		}
+
 		&.nofoot {
 			.ivu-modal-footer {
 				display: none;

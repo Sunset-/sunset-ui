@@ -63,6 +63,9 @@
                 this.localFilter = localFilter;
                 this.refresh(1, true);
             },
+            search(filter, localFilter) {
+                this.setFilter(filter, localFilter);
+            },
             //刷新数据
             refresh(pageNumber, force) {
                 pageNumber = pageNumber == void 0 ? this.pageNumber : pageNumber;
