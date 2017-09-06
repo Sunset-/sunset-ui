@@ -148,10 +148,10 @@ store : 存储
 					</thead>
 					<tbody>
 						<tr v-for="item in list">
-							<th v-if="options.multiCheck" class="text-center">
-								<input type="checkbox" :value="item.self[idKey]" :checked="computedCheck(item.self)" @change="checkRecord(item.self,$event.currentTarget.checked)"
+							<td v-if="options.multiCheck" class="text-center">
+								<input type="checkbox" v-if="canCheck(item.self)" :value="item.self[idKey]" :checked="computedCheck(item.self)" @change="checkRecord(item.self,$event.currentTarget.checked)"
 								/>
-							</th>
+							</td>
 							<td v-if="options.showIndex" class="text-center">{{(pageNumber-1)*pageSize+ $index+1}}</td>
 							<td v-for="col in showColumns" :style="col.style||{'text-align':col.align}">{{{ item.__sunset_col_texts[col.__sunset_col_index]}}}</td>
 							<td v-if="recordTools" class="sunset-table-record-tools" class="text-center">
@@ -333,7 +333,7 @@ store : 存储
 			search(filter, localFilter, force) {
 				this.filter = filter || {};
 				this.localFilter = localFilter;
-				this.refresh(1, force);
+				this.refresh(1, true);
 			},
 			refresh(pageNumber, force) {
 				pageNumber = pageNumber == void 0 ? this.pageNumber : pageNumber;
@@ -344,22 +344,26 @@ store : 存储
 					pageNumber;
 				filter[this.format['pageSize'] || 'pageSize'] = this.pageSize;
 				filter = this.formatFilter && this.formatFilter(filter) || filter;
-				Promise.resolve((() => {
-					var datasource = this.datasource || this.store && this.store[this.options.method || 'list'].bind(this.store);
-					if (datasource) {
-						this.refreshLoader(true);
-						return Sunset.isFunction(datasource) ? datasource(filter) : datasource;
-					} else {
-						throw new Error('table load data need datasource or store');
-					}
-				})()).then(res => {
-					this.refreshLoader(false);
-					this.setData(res);
-				}).catch(e => {
-					console.error(e);
-					this.$emit('load-error', e);
-					this.refreshLoader(false);
-				});
+				if (force || !this.isLocalPage || !this.data) {
+					//服务器分页
+					Promise.resolve((() => {
+						var datasource = this.datasource || this.store && this.store[this.options.method || 'list'].bind(this.store);
+						if (datasource) {
+							this.refreshLoader(true);
+							return Sunset.isFunction(datasource) ? datasource(filter) : datasource;
+						} else {
+							throw new Error('table load data need datasource or store');
+						}
+					})()).then(res => {
+						this.refreshLoader(false);
+						this.setData(res);
+					}).catch(e => {
+						console.error(e);
+						this.$emit('load-error', e);
+						this.refreshLoader(false);
+					});
+				}
+
 			},
 			refreshLoader(flag) {
 				if (!this.slientLoading) {
@@ -408,6 +412,13 @@ store : 存储
 				return this.recordTools = tools || [];
 			},
 			//勾选
+			canCheck(item) {
+				if (Sunset.isFunction(this.options.multiCheck)) {
+					return !!this.options.multiCheck(item);
+				} else {
+					return true;
+				}
+			},
 			checkAll(isToCheck) {
 				this.list.forEach(item => {
 					this.checkRecord(item.self, isToCheck);
@@ -415,6 +426,9 @@ store : 存储
 				this.isAllCheck = isToCheck;
 			},
 			checkRecord(item, isToCheck) {
+				if (!this.canCheck(item)) {
+					return;
+				}
 				var idKey = this.idKey,
 					id = item[idKey];
 				if (isToCheck) {

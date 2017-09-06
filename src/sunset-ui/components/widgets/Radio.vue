@@ -44,13 +44,22 @@
         },
         methods: {
             init() {
-                var v = this.value;
+                this.$emit('pending');
                 Utils.generateItems(this.options).then(items => {
                     this.items = items;
                     if (this.options.defaultFirst && (this.value === void 0 || this.value.length == 0)) {
                         this.value = this.items[0].value;
                     }
-                    this.$emit('ready', this.options.name, this.value);
+                    this.$nextTick(() => {
+                        var v = this.value;
+                        this.value = void 0;
+                        this.$nextTick(() => {
+                            this.value = v;
+                            this.$nextTick(() => {
+                                this.$emit('ready', this.options.name, this.value);
+                            });
+                        });
+                    });
                 });
             },
             // ,
@@ -73,11 +82,9 @@
             //         });
             //     }
             // },
-            // value(v) {
-            //     if (!this.lock) {
-            //         this.refreshWidgetValue(v);
-            //     }
-            // }
+            value(v) {
+                this.value = v;
+            }
         },
         ready() {
             this.init();

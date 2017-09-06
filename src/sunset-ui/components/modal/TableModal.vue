@@ -130,12 +130,13 @@
             },
             removeAll() {
                 this.$refs.table.checkAll(false);
+                this.checkeds.length = 0;
             },
             refreshTableOptions() {
                 var tableOptions = this.options.tableOptions;
                 //多选
-                if (this.multi) {
-                    tableOptions.multiCheck = true;
+                if (!!this.multi) {
+                    tableOptions.multiCheck = this.multi;
                     tableOptions.recordTools = tableOptions.__modalCacheRecordTools || tableOptions.recordTools;
                 } else if (this.options.checked !== false) {
                     tableOptions.multiCheck = false;

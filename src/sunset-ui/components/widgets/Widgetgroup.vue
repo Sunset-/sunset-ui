@@ -50,7 +50,9 @@
                 try {
                     var json = JSON.parse(v);
                     this.inputValues = json;
-                } catch (e) {} finally {
+                } catch (e) {
+                    this.inputValues = {};
+                } finally {
                     this.$nextTick(() => {
                         this.lock = false;
                     });

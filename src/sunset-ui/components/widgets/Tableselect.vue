@@ -1,7 +1,7 @@
 <template>
 	<div class="sunset-field">
-		<i-input :value="text" @click="select" :placeholder="options.placeholder" :readonly="true">
-			<i-button @click.stop="select" slot="append">选择</i-button>
+		<i-input :value.sync="text" @click="select(true)" :placeholder="options.placeholder" @on-blur="blur" :readonly="!inputable">
+			<i-button @click.stop="select()" slot="append">选择</i-button>
 		</i-input>
 		<sunset-table-modal v-if="inited" @submit="tableSelected" v-ref:tablemodal :options="options.modalOptions"></sunset-table-modal>
 	</div>
@@ -30,13 +30,19 @@
 			},
 			spliter() {
 				return this.options.spliter || ',';
+			},
+			inputable() {
+				return !!this.options.inputable;
 			}
 		},
 		methods: {
 			init() {
 				this.watchedValue(this.value);
 			},
-			select() {
+			select(isFromInput) {
+				if (this.inputable && isFromInput) {
+					return;
+				}
 				Promise.resolve().then(() => {
 					if (this.value) {
 						var texts = this.text.split(',');
@@ -87,6 +93,15 @@
 					} else {
 						this.text = '';
 					}
+				}
+			},
+			blur() {
+				if (this.inputable) {
+					this.lock = true;
+					this.value = this.text;
+					this.$nextTick(() => {
+						this.lock = false;
+					});
 				}
 			}
 		},

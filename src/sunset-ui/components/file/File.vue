@@ -142,81 +142,106 @@
 				}, this.options.uploaderOptions));
 				//选择文件
 				uploader.on('filesQueued', files => {
-					if (!files || files[0].size == 0) {
+					if (!files || !files[0] || files[0].size == 0) {
 						return;
 					}
-					var queue = this.queue,
-						max = this.max === true ? 9999999 : this.max,
-						map = {},
-						overflow = false;
-					//单图
-					if (this.max == 1) {
-						uploader.reset();
-						this.queue.length = 0;
-						var file = files[0];
-						queue.push(Object.assign({
-							id: file.id,
-							name: file.name,
-							thumbnail: null,
-							file: file,
-							progress: 0,
-							result: null,
-							status: 'READY',
-							time: Date.now()
-						}, (Sunset.isFunction(this.options.attachData) ? this.options.attachData.call(file) : this.options.attachData)));
-					} else {
-						//多图
-						files.forEach(file => {
-							if (queue.length < max) {
-								queue.push(Object.assign({
-									id: file.id,
-									name: file.name,
-									thumbnail: null,
-									file: file,
-									progress: 0,
-									result: null,
-									status: 'READY',
-									time: Date.now()
-								}, (Sunset.isFunction(this.options.attachData) ? this.options.attachData.call(file) : this.options.attachData)));
-							} else {
-								uploader.removeFile(file);
-								overflow = true;
+					Promise.resolve().then(() => {
+						if (Sunset.isFunction(this.options.filter)) {
+							return Promise.all(files.map(file => {
+								return this.options.filter(file);
+							})).then(res => {
+								var checkedFiles = [];
+								files.forEach((file, index) => {
+									if (res[index]) {
+										checkedFiles.push(file);
+									} else {
+										uploader.removeFile(file);
+									}
+								});
+								return checkedFiles;
+							});
+						} else {
+							return files;
+						}
+					}).then(files => {
+						if (files.length == 0) {
+							uploader.reset();
+							return;
+						}
+						var queue = this.queue,
+							max = this.max === true ? 9999999 : this.max,
+							map = {},
+							overflow = false;
+						//单图
+						if (this.max == 1) {
+							uploader.reset();
+							this.queue.length = 0;
+							var file = files[0];
+							queue.push(Object.assign({
+								id: file.id,
+								name: file.name,
+								thumbnail: null,
+								file: file,
+								progress: 0,
+								result: null,
+								status: 'READY',
+								time: Date.now()
+							}, (Sunset.isFunction(this.options.attachData) ? this.options.attachData.call(file) : this.options.attachData)));
+						} else {
+							//多图
+							files.forEach(file => {
+								if (queue.length < max) {
+									queue.push(Object.assign({
+										id: file.id,
+										name: file.name,
+										thumbnail: null,
+										file: file,
+										progress: 0,
+										result: null,
+										status: 'READY',
+										time: Date.now()
+									}, (Sunset.isFunction(this.options.attachData) ? this.options.attachData.call(file) : this.options.attachData)));
+								} else {
+									uploader.removeFile(file);
+									overflow = true;
+								}
+							});
+						}
+						queue.forEach(item => {
+							if (item.id) {
+								map[item.id] = item;
+								//缩略图
+								if (this.options.thumbnail) {
+									item.thumbnail = Sunset.isFunction(this.options.thumbnail) ? this.options.thumbnail(item.value, item.file) :
+										this.options
+										.thumbnail;
+								}
+								if (!item.thumbnail) {
+									var thumbnailSize = this.options.thumbnailSize || {};
+									item.thumbnail || uploader.makeThumb(item.file, (error, src) => {
+										if (error) {
+											return;
+										}
+										item.thumbnail = src;
+									}, thumbnailSize.width || 100, thumbnailSize.height || 100);
+								}
 							}
 						});
-					}
-					queue.forEach(item => {
-						if (item.id) {
-							map[item.id] = item;
-							//缩略图
-							if (this.options.thumbnail) {
-								item.thumbnail = Sunset.isFunction(this.options.thumbnail) ? this.options.thumbnail(item.value, item.file) :
-									this.options
-									.thumbnail;
-							}
-							if (!item.thumbnail) {
-								var thumbnailSize = this.options.thumbnailSize || {};
-								item.thumbnail || uploader.makeThumb(item.file, (error, src) => {
-									if (error) {
-										return;
-									}
-									item.thumbnail = src;
-								}, thumbnailSize.width || 100, thumbnailSize.height || 100);
-							}
+						this.map = map;
+						//提示
+						if (overflow) {
+							Sunset.tip(`最多上传${max}张图片`);
 						}
-					});
-					this.map = map;
-					//提示
-					if (overflow) {
-						Sunset.tip(`最多上传${max}张图片`);
-					}
-					//上传
-					Promise.resolve().then(() => {
-						if (this.options.formData) {
-							return Sunset.isFunction(this.options.formData) ? this.options.formData(this.ctx) : this.options.formData;
-						}
-					}).then(formData => {
-						uploader.option('formData', formData);
-						uploader.upload();
+						//上传
+						Promise.resolve().then(() => {
+							if (this.options.formData) {
+								return Sunset.isFunction(this.options.formData) ? this.options.formData(this.ctx) : this.options.formData;
+							}
+						}).then(formData => {
+							uploader.option('formData', formData);
+							uploader.upload();
+                			this.$emit('start-upload');
+						});
 					});
 				});
 				//上传进度
@@ -261,6 +286,7 @@
 				uploader.on('uploadFinished', () => {
 					this.options.success && this.options.success(this.queue);
 					this.$emit('success', this.queue, this.ctx);
+					this.$emit('finish', this.queue, this.ctx);
 				});
 			}
 		},

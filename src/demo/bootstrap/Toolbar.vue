@@ -108,6 +108,9 @@
                         type: 'file',
                         url: '/service/system/file/upload',
                         className: 'my-uploader-trigger',
+                        filter(f) {
+                            return ~f.type.indexOf('image');
+                        },
                         formData(record) {
                             return {
                                 sunset: record.name

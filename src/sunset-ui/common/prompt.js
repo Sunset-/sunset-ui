@@ -78,13 +78,17 @@ module.exports = function (Sunset, Vue) {
                     this.remove();
                 },
                 ok(v) {
-                    if (this.loading) {
-                        this.buttonLoading = true;
-                    } else {
+                    Promise.resolve().then(() => {
+                        if (this.loading) {
+                            this.buttonLoading = true;
+                        }
+                        return this.onOk(this.msg)
+                    }).then(() => {
                         this.visible = false;
                         this.remove();
-                    }
-                    this.onOk(this.msg);
+                    }).catch(e => {
+                        this.buttonLoading = false;
+                    });
                 },
                 remove() {
                     setTimeout(() => {

@@ -29,7 +29,7 @@
 				</div>
 				<i-col :span="computedFieldClass(field)" :style="field.fieldStyle">
 					<sunset-field v-ref:field :options="field" :form-options="options" :value.sync="model[field.name]" :model="model" @ready="promiseWidgetReady"
-					    @change="fieldValueChange"></sunset-field>
+					    @change="fieldValueChange" @remove="removeField(field)"></sunset-field>
 				</i-col>
 			</template>
 		</Row>
@@ -152,6 +152,11 @@
 				} else {
 					return FULL_COLS / this.cols;
 				}
+			},
+			removeField(field) {
+				var model = this.model;
+				this.options.fields.splice(this.options.fields.indexOf(field), 1);
+				delete this.model[field.name];
 			},
 			getModel(origin) {
 				return origin ? this.model : Sunset.clone(this.model);

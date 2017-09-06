@@ -41,7 +41,7 @@
 	<div v-show="!options.hide" :style="options.style" class="sunset-filter-field">
 		<div class="sunset-field-wrap">
 			<label v-if="options.label" class="sunset-field-label">{{options.label}}</label>
-			<div :is="widget" :options="options" :value.sync="value" @search="fieldSearch" @ready="widgetReady"></div>
+			<div :is="widget" :options="options" :value.sync="value" @search="fieldSearch" @pending="widgetPending" @ready="widgetReady"></div>
 		</div>
 	</div>
 </template>
@@ -62,7 +62,9 @@
 			}
 		},
 		data() {
-			return {};
+			return {
+				pending: false
+			};
 		},
 		computed: {
 			widget() {
@@ -70,10 +72,14 @@
 			}
 		},
 		methods: {
+			widgetPending() {
+				this.pending = true;
+			},
 			fieldSearch() {
 				this.$emit('search');
 			},
 			widgetReady(name, defaultValue) {
+				this.pending = false;
 				this.$emit('ready', name, defaultValue);
 			},
 			generateWatchDependent(watchs) {
@@ -102,8 +108,10 @@
 					if (oldv === void 0 && v === '') {
 						return;
 					}
-					this.options.onChange && this.options.onChange(v);
-					this.options.changeFilter && this.$emit('search');
+					if (!this.pending) {
+						this.options.onChange && this.options.onChange(v);
+						this.options.changeFilter && this.$emit('search');
+					}
 				});
 			}
 

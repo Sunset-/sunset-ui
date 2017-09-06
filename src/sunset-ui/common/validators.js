@@ -28,7 +28,7 @@
 		Vue.validator('phone', {
 			message: '手机号码格式不合法',
 			check: function (val) {
-				return (val.trim() == '') || /^1(3[0-9]|4[57]|5[0-35-9]|8[0-9]|70)\d{8}$/.test(val);
+				return (val.trim() == '') || /^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/.test(val);
 			}
 		});
 
@@ -47,4 +47,8 @@
 				return /^-?\d+$/.test(val);
 			}
 		});
+
+		Sunset.registValidator = function (key, opts) {
+			Vue.validator(key, opts);
+		}
 	}

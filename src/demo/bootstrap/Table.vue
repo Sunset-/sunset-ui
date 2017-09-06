@@ -1,4 +1,5 @@
 <style lang="sass">
+
 </style>
 <template>
     <h2>Table</h2>
@@ -38,7 +39,10 @@
                     }
                 },
                 options: {
-                    store: BootstrapStore,
+                    datasource(filter) {
+                        console.log('load')
+                        return BootstrapStore.list(filter);
+                    },
                     columns: [{
                         title: '昵称',
                         name: 'nickname'
@@ -55,10 +59,12 @@
                         enum: 'ACCOUNT_TYPE'
                     }],
                     showIndex: true,
-                    pageSize: 10,
+                    pageSize: 2,
                     localPage: false,
                     sortable: true,
-                    multiCheck: true,
+                    multiCheck(item) {
+                        return item.type != '1';
+                    },
                     format: {
                         list: 'rows',
                         count: 'count',

@@ -41,7 +41,9 @@
                 inputValue: (void 0),
                 prependValue: (void 0),
                 appendValue: (void 0),
-                lock: false
+                lock: false,
+                valueLock: false,
+                inited: false
             };
         },
         computed: {
@@ -98,6 +100,7 @@
                 }
             },
             init() {
+                this.inited = false;
                 if (this.prependSelect) {
                     Utils.generateItems(this.prependSelect).then(items => {
                         this.prependItems = items;
@@ -117,6 +120,7 @@
                     });
                 }
                 this.valueToInputValue(this.value);
+                this.inited = true;
             },
             slientRefreshValue() {
                 this.$nextTick(() => {
@@ -131,12 +135,45 @@
             },
             blur() {
                 if (this.isNumber) {
-                    this.inputValue = Sunset.Numbers.fixed(this.inputValue, this.digits) + '';
+                    if (this.inputValue === "" || this.inputValue === null || this.inputValue === void 0) {
+                        this.inputValue = "";
+                    } else {
+                        this.inputValue = Sunset.Numbers.fixed(this.inputValue, this.digits) + '';
+                        if (!isNaN(this.inputValue)) {
+                            if (!isNaN(this.options.min) && ((+this.inputValue) < (+this.options.min))) {
+                                this.inputValue = Sunset.Numbers.fixed(this.options.min, this.digits) + '';
+                            }
+                            if (!isNaN(this.options.max) && ((+this.inputValue) > (+this.options.max))) {
+                                this.inputValue = Sunset.Numbers.fixed(this.options.max, this.digits) + '';
+                            }
+                        }
+                    }
+                }
+            },
+            changePrepend(v) {
+                if (!this.valueLock) {
+                    var change = this.prependSelect && this.prependSelect.onChange;
+                    if (change === 'CLEAR') {
+                        this.inputValue = '';
+                    } else if (Sunset.isFunction(change)) {
+                        change.apply(null, [v, this.value]);
+                    }
+                }
+            },
+            changeAppend(v) {
+                if (!this.valueLock) {
+                    var change = this.appendSelect && this.appendSelect.onChange;
+                    if (change === 'CLEAR') {
+                        this.inputValue = '';
+                    } else if (Sunset.isFunction(change)) {
+                        change.apply(null, [v, this.value]);
+                    }
                 }
             },
             valueToInputValue(v) {
                 v = (v === void 0 || v === null) ? '' : (v + '');
                 if (!this.lock) {
+                    this.valueLock = true;
                     //拆出前缀
                     if (this.defaultPrependValue != null) {
 
@@ -155,6 +192,9 @@
                         v = v.substring(0, v.indexOf(this.appendSpliter));
                     }
                     this.inputValue = v;
+                    this.$nextTick(() => {
+                        this.valueLock = false;
+                    });
                 }
             }
         },
@@ -165,10 +205,12 @@
             inputValue(v) {
                 this.slientRefreshValue();
             },
-            prependValue(v) {
+            prependValue(v, oldv) {
+                this.changePrepend(v);
                 this.slientRefreshValue();
             },
-            appendValue(v) {
+            appendValue(v, oldv) {
+                this.changeAppend(v);
                 this.slientRefreshValue();
             },
             value(v) {

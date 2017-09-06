@@ -190,7 +190,7 @@
                         }],
                         default: 'w'
                     },
-                    defaultAppend: 'day',
+                    defaultAppend: 'month',
                     defaultPrepend: 'w',
                     append: {
                         style: 'width:50px',
@@ -204,7 +204,8 @@
                             text: '日',
                             value: 'day'
                         }],
-                        default: 'day'
+                        default: 'month',
+                        // onChange : 'CLEAR'
                     }
                 },
                 searchInputValue: '1,2,3',
@@ -239,6 +240,7 @@
                     },
                     fields: [{
                             group: '基本组件',
+                            removeable: true,
                             groupToolbar: {
                                 style: {
                                     'margin-left': '30px'
@@ -287,6 +289,38 @@
                             }
                         },*/
                         {
+                            label: 'aaa',
+                            placeholder: "不能为空",
+                            name: 'ssssss',
+                            default: 'w,5,day',
+                            widget: 'input',
+                            prepend: {
+                                style: 'width:50px',
+                                data: [{
+                                    text: '男',
+                                    value: 'm'
+                                }, {
+                                    text: '女',
+                                    value: 'w'
+                                }],
+                                default: 'm'
+                            },
+                            append: {
+                                style: 'width:50px',
+                                data: [{
+                                    text: '岁',
+                                    value: 'year'
+                                }, {
+                                    text: '月',
+                                    value: 'month'
+                                }, {
+                                    text: '日',
+                                    value: 'day'
+                                }],
+                                default: 'month',
+                                onChange: 'CLEAR'
+                            }
+                        }, {
                             label: '输入框组组23',
                             name: 'inputgroup',
                             widget: 'inputgroup',
@@ -345,7 +379,7 @@
                             widget: 'radio',
                             // defaultFirst: true,
                             default: '2',
-                            type : 'button',
+                            type: 'button',
                             enum: 'SEX',
                             validate: {
                                 required: true
@@ -515,6 +549,7 @@
                             widget: 'tableselect',
                             nameKey: 'nickname',
                             default: '1,2,7',
+                            inputable: false,
                             transcode(v) {
                                 if (v) {
                                     return BootstrapStore.list().then(res => {

@@ -29,6 +29,16 @@
 			top: 8px;
 			right: 0px;
 		}
+		.sunset-form-field-remove {
+			position: absolute;
+			font-size: 12px;
+			top: -1px;
+			right: 18px;
+			z-index: 5;
+			&:hover {
+				color: orange;
+			}
+		}
 		&.required-field {
 			.sunset-field-label:before {
 				content: '*';
@@ -74,6 +84,7 @@
 			<input type="hidden" :maxlength="maxlength" field="field" v-model="value" v-validate="options.validate" />
 			<div v-show="invalid" class="sunset-field-wraning-pop-wrap">{{invalid}}</div>
 			<i v-show="invalid" class="field-invalid-tip ivu-icon ivu-icon-information-circled text-warning sunset-pop" :data-content="invalid"></i>
+			<i v-if="options.removeable" :style="options.removeStyle" @click="removeSelf" class="sunset-form-field-remove ivu-icon ivu-icon-close-circled text-danger"></i>
 		</validator>
 	</div>
 </template>
@@ -143,6 +154,10 @@
 						.field.errors[0].message;
 				}
 				return null;
+			},
+			removeable() {
+				return Sunset.isFunction(this.options.removeable) ? this.options.removeable.call(this.options, this.value, this.model) :
+					this.options.removeable;
 			}
 		},
 		methods: {
@@ -163,6 +178,9 @@
 				}).then(res => {
 					this.$children[0].init && this.$children[0].init();
 				});
+			},
+			removeSelf() {
+				this.$emit('remove');
 			}
 		},
 		ready() {
