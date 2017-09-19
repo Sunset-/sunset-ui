@@ -7,6 +7,7 @@ module.exports = {
     inline: true,
     host: '0.0.0.0',
     port: 3003,
+    disableHostCheck: true,
     proxy: {
         '/service/*': {
             target: 'http://localhost:9090/',
@@ -21,6 +22,14 @@ module.exports = {
             secure: false,
             changeOrigin: true
 
+        },
+        '/test-upload/*': {
+            target: 'http://192.168.0.114:9120/',
+            secure: false,
+            changeOrigin: true,
+            pathRewrite: {
+                '^/test-upload': '/'
+            }
         }
     },
     outputPath: path.resolve(__dirname, './build'),

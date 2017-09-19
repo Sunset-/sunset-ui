@@ -68,6 +68,9 @@
             },
             //刷新数据
             refresh(pageNumber, force) {
+                if (!this.format) {
+                    return;
+                }
                 pageNumber = pageNumber == void 0 ? this.pageNumber : pageNumber;
                 this.pageNumber = pageNumber;
                 var filter;
@@ -111,23 +114,25 @@
             output() {
                 var list,
                     count = 0;
-                //列表数据
-                if (this.format && this.format['list'] == '') {
-                    list = this.data || [];
-                } else {
-                    list = this.data && Sunset.getAttribute(this.data, this.format['list'] || 'list', []);
+                if (this.format) {
+                    //列表数据
+                    if (this.format && this.format['list'] == '') {
+                        list = this.data || [];
+                    } else {
+                        list = this.data && Sunset.getAttribute(this.data, this.format['list'] || 'list', []);
+                    }
+                    if (this.isLocalPage) {
+                        //本地分页
+                        var start = (this.pageNumber - 1) * this.pageSize,
+                            localFilter = this.localFilter;
+                        list = localFilter && list.filter(localFilter) || list || [];
+                        count = list.length;
+                        list = list.slice(start, start + this.pageSize);
+                    } else {
+                        count = this.data && Sunset.getAttribute(this.data, this.format['count'] || 'count', 0);
+                    }
+                    this.$emit('refresh', list, this.count = count);
                 }
-                if (this.isLocalPage) {
-                    //本地分页
-                    var start = (this.pageNumber - 1) * this.pageSize,
-                        localFilter = this.localFilter;
-                    list = localFilter && list.filter(localFilter) || list || [];
-                    count = list.length;
-                    list = list.slice(start, start + this.pageSize);
-                } else {
-                    count = this.data && Sunset.getAttribute(this.data, this.format['count'] || 'count', 0);
-                }
-                this.$emit('refresh', list, this.count = count);
             }
         },
         ready() {

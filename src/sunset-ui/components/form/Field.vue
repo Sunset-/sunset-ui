@@ -78,7 +78,7 @@
 <template>
 	<div :class="['sunset-form-field',options.validate&&options.validate.required?'required-field':'']">
 		<validator name="validation">
-			<label v-if="options.label" :style="labelStyle" class="sunset-field-label">{{options.label}}</label>
+			<label v-if="options.label" :style="labelStyle" class="sunset-field-label">{{{options.label}}}</label>
 			<component :is="widget" :ref="widget" :options="options" :form-options="formOptions" :value.sync="value" :model="model" :invalid="invalid"
 			    @ready="widgetReady"></component>
 			<input type="hidden" :maxlength="maxlength" field="field" v-model="value" v-validate="options.validate" />

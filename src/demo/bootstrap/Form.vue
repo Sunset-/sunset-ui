@@ -214,7 +214,7 @@
                     multi: true,
                     placeholder: '请输入',
                     formatTemplate(b) {
-                        return b + '--'
+                        return b 
                     },
                     check(v) {
                         if (v.length > 10) {
@@ -222,7 +222,13 @@
                         }
                     },
                     search(keyword) {
-                        return items.filter(item => item >= (+keyword));
+                        return items.filter(item => ~item.name.indexOf(keyword));
+                    },
+                    format(item){
+                        return item.name
+                    },
+                    template(item){
+                        return item.name
                     }
                 },
                 options: {

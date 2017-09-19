@@ -7,6 +7,7 @@ module.exports = function (Sunset, Vue) {
 
     let modalInstance;
     let newInstance = properties => {
+
         const _props = properties || {};
 
         let props = '';
@@ -28,7 +29,7 @@ module.exports = function (Sunset, Vue) {
                 <div class="${prefixCls}-body">
                      <div :class="iconTypeCls" ><i :class="iconNameCls"></i></div>
                     {{{ body }}}
-                    <i-input type="text" :value.sync="msg"></i-input>
+                    <i-input type="text" :maxlength="maxlength" :placeholder="placeholder" :value.sync="msg"></i-input>
                 </div>
                 
                 <div class="${prefixCls}-footer">
@@ -44,6 +45,8 @@ module.exports = function (Sunset, Vue) {
             el: div,
             data: Object.assign(_props, {
                 visible: false,
+                maxlength: 999,
+                placeholder: '',
                 width: 416,
                 title: '',
                 body: '',
@@ -102,7 +105,12 @@ module.exports = function (Sunset, Vue) {
                 },
                 onOk() {},
                 onCancel() {},
-                onRemove() {}
+                onRemove() {},
+                open(options) {
+                    this.maxlength = options.maxlength || 999;
+                    this.placeholder = options.placeholder || '';
+                    this.visible = true;
+                }
             }
         }).$children[0];
 
@@ -165,8 +173,7 @@ module.exports = function (Sunset, Vue) {
 
                 // notice when component destroy
                 modal.$parent.onRemove = props.onRemove;
-
-                modal.visible = true;
+                modal.$parent.open(props);
             },
             remove() {
                 modal.visible = false;

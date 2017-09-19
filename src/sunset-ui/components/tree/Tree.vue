@@ -234,7 +234,7 @@
 			refresh(nodes) {
 				this.cacheInitNodes = null;
 				this.nodes = nodes || [];
-				this.ztreeObj.destroy();
+				this.ztreeObj && this.ztreeObj.destroy();
 				this.init();
 			}
 		},

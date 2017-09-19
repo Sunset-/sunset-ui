@@ -148,6 +148,10 @@
                         tools: [{
                             label: '选择',
                             color: 'info',
+                            premise: (record) => {
+                                return Sunset.isFunction(this.checked.premise) ? this.checked.premise(
+                                    record) : true;
+                            },
                             operate: (record) => {
                                 this.checkeds = [record];
                                 this.ok();

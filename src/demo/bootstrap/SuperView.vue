@@ -69,9 +69,10 @@
         methods: {
             viewVideo() {
                 var v = Sunset.ViewVideo({
-                    src: 'http://192.168.0.163:3000/video/6415ad7b0d47621b9520b02621a55de5.mp4',//'http://vjs.zencdn.net/v/oceans.mp4', //'http://mdds.peaimage.com/upload/api/1.0.0/file/acquisition/ee71d95e70934b9637be2af4859bbcf2',
+                    src: 'http://vjs.zencdn.net/v/oceans.mp4', //'http://vjs.zencdn.net/v/oceans.mp4', //'http://mdds.peaimage.com/upload/api/1.0.0/file/acquisition/ee71d95e70934b9637be2af4859bbcf2',
                     type: 'video/mp4',
                     style: 'max-width:30%;max-height:30%;',
+                    remainingTimeDisplay: false,
                     autoplay: false
                 });
 

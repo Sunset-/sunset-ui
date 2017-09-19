@@ -58,24 +58,29 @@
                 return this.options.digits || 0;
             },
             maxlength() {
-                return this.options.maxlength || this.options.validate && this.options.validate.maxlength && this.options
-                    .validate.maxlength
-                    .rule;
+                return this.options.maxlength || this.options.validate && (Sunset.isNumber(this.options.validate.maxlength) ?
+                    this.options.validate.maxlength : (this.options
+                        .validate.maxlength && this.options
+                        .validate.maxlength.rule));
             },
             prependText() {
-                return (this.options.prepend && Sunset.isString(this.options.prepend)) ? this.options.prepend : false;
+                return (this.options.prepend && Sunset.isString(this.options.prepend)) ? this.options.prepend :
+                    false;
             },
             prependSelect() {
-                return (this.options.prepend && Sunset.isObject(this.options.prepend)) ? this.options.prepend : false;
+                return (this.options.prepend && Sunset.isObject(this.options.prepend)) ? this.options.prepend :
+                    false;
             },
             prependSpliter() {
                 return this.prependSelect && this.prependSelect.spliter || ',';
             },
             appendText() {
-                return (this.options.append && Sunset.isString(this.options.append)) ? this.options.append : false;
+                return (this.options.append && Sunset.isString(this.options.append)) ? this.options.append :
+                    false;
             },
             appendSelect() {
-                return (this.options.append && Sunset.isObject(this.options.append)) ? this.options.append : false;
+                return (this.options.append && Sunset.isObject(this.options.append)) ? this.options.append :
+                    false;
             },
             appendSpliter() {
                 return this.appendSelect && this.appendSelect.spliter || ',';
@@ -105,7 +110,8 @@
                     Utils.generateItems(this.prependSelect).then(items => {
                         this.prependItems = items;
                         if (!this.value) {
-                            this.prependValue = this.defaultPrependValue == null ? (items.length ? items[0].value :
+                            this.prependValue = this.defaultPrependValue == null ? (items.length ? items[0]
+                                .value :
                                 null) : this.defaultPrependValue;
                         }
                     });
@@ -188,7 +194,8 @@
                         this.appendValue = this.defaultAppendValue;
                     }
                     if (this.appendSelect && ~v.indexOf(this.appendSpliter)) {
-                        this.appendValue = v.substring(v.indexOf(this.appendSpliter) + this.prependSpliter.length, v.length);
+                        this.appendValue = v.substring(v.indexOf(this.appendSpliter) + this.prependSpliter.length,
+                            v.length);
                         v = v.substring(0, v.indexOf(this.appendSpliter));
                     }
                     this.inputValue = v;

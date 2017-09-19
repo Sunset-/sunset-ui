@@ -18,6 +18,12 @@
     }
 </style>
 <template>
+    <h2>批量上传测试</h2>
+    <div class="component-wrap">
+        <sunset-file :options="testUploadImageOptions" @finish="testUploadFinish">
+            <i-button style="vertical-align: top;" type="success" :size="options.size||size" icon="ios-home" >批量上传</i-button>
+        </sunset-file>
+    </div>
     <h2>Dropdown</h2>
     <div class="component-wrap">
         <sunset-dropdown :options="options.tools[3]"></sunset-dropdown>
@@ -48,6 +54,24 @@
 <script>
     export default {
         methods: {
+            getTaskToken(){
+                $.ajax({
+                    url : '/test-upload/screeningOm/receiveTaskToken'
+                }).then(res=>{
+                    this.testUploadUploadToken = res;
+                });
+            },
+            testUploadFinish(){
+                $.ajax({
+                    url : '/test-upload/screeningOm/receiveEnd',
+                    type : 'POST',
+                    data : {
+                        taskToken : this.testUploadUploadToken
+                    }
+                }).then(res=>{
+                    this.getTaskToken();
+                });
+            },
             chartClick(params) {},
             progress(dd) {},
             queue(quene) {},
@@ -55,9 +79,32 @@
                 alert(v)
             }
         },
-        ready() {},
+        ready() {
+            this.getTaskToken();
+        },
         data() {
             return {
+                testUploadUploadToken : null,
+                testUploadImageOptions: {
+                    label: '文件选择',
+                    icon: 'ios-cloud-upload',
+                    disabled: true,
+                    color: 'success',
+                    type: 'file',
+                    url: '/test-upload/screeningOm/receive',
+                    className: 'my-uploader-trigger',
+                    filter(f) {
+                        return ~f.type.indexOf('image');
+                    },
+                    formData :(record)=> {
+                        return {
+                            taskToken: this.testUploadUploadToken
+                        }
+                    },
+                    progress(v) {
+                        console.log(v)
+                    }
+                },
                 coderV: '123',
                 switchValue: false,
                 echartsOptions: {
@@ -87,6 +134,11 @@
                             // var op = Sunset.clone(this.echartsOptions)
                             this.echartsOptions.series[0].data[0] = 15;
                             this.$refs.chart.refresh();
+                            Sunset.prompt({
+                                title: '处方名称',
+                                maxlength: 5,
+                                placeholder: '123'
+                            })
                             // this.echartsOptions = op;
                         }
                     }, {

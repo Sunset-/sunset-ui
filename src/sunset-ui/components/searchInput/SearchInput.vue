@@ -194,7 +194,8 @@
             {{formatTemplate(r)}}
            <i class="ivu-icon ivu-icon-ios-close-empty" @click="remove(r)"></i>
         </span>
-        <input @input="inputSearch" @keydown.stop="toSelect" :placeholder="placeholder" v-model="inputValue" type="text" />
+        <input @input="inputSearch" @keydown.stop="toSelect" @blur="blur" :placeholder="placeholder" :maxlength="maxlength" v-model="inputValue"
+            type="text" />
         <div :style="popStyle" v-show="searchResults.length" class="sunset-searchinput-searchresults">
             <div :class="['sunset-searchinput-searchresult',activeSelectItem==sr?'active':'',isSelected(sr)?'selected':'']" v-for="sr in searchResults"
                 @click.stop="select(sr,true,true)" track-by="$index">
@@ -228,10 +229,17 @@
                         this.searchResults = [];
                     }
                 },
-                lock: false
+                lock: false,
+                selecting: false
             }
         },
         computed: {
+            maxlength() {
+                return this.options.maxlength || this.options.validate && (Sunset.isNumber(this.options.validate.maxlength) ?
+                    this.options.validate.maxlength : (this.options
+                        .validate.maxlength && this.options
+                        .validate.maxlength.rule));
+            },
             delay() {
                 return Sunset.isNumber(this.options && this.options.delay) ? this.options.delay : 100;
             },
@@ -254,7 +262,7 @@
                 return this.options && this.options.all;
             },
             inputable() {
-                return this.options.input !== false;
+                return !(this.options.input === false || this.options.inputable === false);
             },
             template() {
                 return Sunset.isFunction(this.options && this.options.template) ? this.options.template :
@@ -353,6 +361,7 @@
                 if (this.check && (this.check.call(null, v) === false)) {
                     return;
                 }
+                this.selecting = true;
                 var text = v;
                 if (fromSearchResult) {
                     this.$emit('selected', v);
@@ -372,6 +381,9 @@
                     this.inputValue = text;
                     this.searchResults = [];
                 }
+                this.$nextTick(() => {
+                    this.selecting = false;
+                });
             },
             remove(item) {
                 this.results.splice(this.results.indexOf(item), 1);
@@ -422,6 +434,17 @@
             focus() {
                 this.openAll();
                 $('input', this.$el).focus();
+            },
+            blur() {
+                if (this.inputable) {
+                    setTimeout(() => {
+                        if (!this.selecting) {
+                            this.toSelect({
+                                keyCode: 13
+                            });
+                        }
+                    }, 200)
+                }
             },
             setValue(v) {
                 this.lock = true;

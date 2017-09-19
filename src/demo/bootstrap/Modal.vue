@@ -4,7 +4,7 @@
         <i-button type="success" @click="test2">表格Modal</i-button>
         <i-button type="warning" @click="test3">树Modal</i-button>
         <sunset-form-modal v-ref:formmodal :options="{title : '表单modal', style : 'max-height:400px',formOptions : options.formOptions}"></sunset-form-modal>
-        <sunset-table-modal @submit="tableSelected" v-ref:tablemodal :options="{title : '表格modal',width:1000,validate:tableValidate,checked:false,tableOptions : options.tableOptions}"></sunset-table-modal>
+        <sunset-table-modal @submit="tableSelected" v-ref:tablemodal :options="{title : '表格modal',width:1000,validate:tableValidate,checked:checkedOptions,tableOptions : options.tableOptions}"></sunset-table-modal>
         <sunset-tree-modal @submit="treeSelected" v-ref:treemodal :options="options.treeModalOptions"></sunset-tree-modal>
     </div>
 </template>
@@ -44,6 +44,13 @@
         data() {
             return {
                 formModalVisible: false,
+                checkedOptions: {
+                    multi: false,
+                    premise: function (r) {
+                        debugger;
+                        return r.type != '1';
+                    }
+                },
                 options: {
                     title: '管理账户',
                     store: BootstrapStore,
@@ -191,50 +198,51 @@
                         cols: 2,
                         store: BootstrapStore,
                         fields: [{
-                            label: '登录名',
-                            name: 'account',
-                            widget: 'input',
-                            validate: {
-                                required: true,
-                                maxlength: 32
-                            }
-                        }, {
-                            label: '密码',
-                            name: 'password',
-                            widget: 'input',
-                            premise(model) {
-                                return !model.id;
+                                label: '登录名',
+                                name: 'account',
+                                widget: 'input',
+                                validate: {
+                                    required: true,
+                                    maxlength: 32
+                                }
+                            }, {
+                                label: '密码',
+                                name: 'password',
+                                widget: 'input',
+                                premise(model) {
+                                    return !model.id;
+                                },
+                                validate: {
+                                    required: true,
+                                    maxlength: 32
+                                }
+                            }, {
+                                label: '昵称',
+                                name: 'nickname',
+                                widget: 'input',
+                                validate: {
+                                    required: true,
+                                    maxlength: 32
+                                }
+                            }, {
+                                label: '类型',
+                                name: 'type',
+                                widget: 'select',
+                                enum: 'ACCOUNT_TYPE',
+                                dataType: String,
+                                validate: {
+                                    required: true
+                                }
                             },
-                            validate: {
-                                required: true,
-                                maxlength: 32
+                            {
+                                label: '富文本',
+                                name: 'editor',
+                                widget: 'editor',
+                                toolbar: 'bold,italic,superscript,subscript,spechars',
+                                readonly: false,
+                                monopolize: true
                             }
-                        }, {
-                            label: '昵称',
-                            name: 'nickname',
-                            widget: 'input',
-                            validate: {
-                                required: true,
-                                maxlength: 32
-                            }
-                        }, {
-                            label: '类型',
-                            name: 'type',
-                            widget: 'select',
-                            enum: 'ACCOUNT_TYPE',
-                            dataType: String,
-                            validate: {
-                                required: true
-                            }
-                        },
-                        {
-                            label : '富文本',
-                            name : 'editor',
-                            widget : 'editor',
-                            toolbar : 'bold,italic,superscript,subscript,spechars',
-                            readonly : false,
-                            monopolize : true
-                        }],
+                        ],
                         format: (model) => {
                             return model;
                         },

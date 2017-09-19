@@ -28,8 +28,10 @@
 				return this.value && this.value.length || 0;
 			},
 			maxlength() {
-				return this.options.maxlength || this.options.validate && this.options.validate.maxlength && this.options.validate.maxlength
-					.rule;
+                return this.options.maxlength || this.options.validate && (Sunset.isNumber(this.options.validate.maxlength) ?
+                    this.options.validate.maxlength : (this.options
+                        .validate.maxlength && this.options
+                        .validate.maxlength.rule));
 			}
 		}
 	};
