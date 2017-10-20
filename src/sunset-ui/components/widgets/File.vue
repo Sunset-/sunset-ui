@@ -109,6 +109,7 @@
                 {{{options.dom}}}
             </template>
         </sunset-file>
+        <sunset-toolbar v-if="options.toolbar" :options="options.toolbar" :ctx="model"></sunset-toolbar>
     </div>
 </template>
 <script>
@@ -124,6 +125,9 @@
                 type: Object
             },
             value: {
+
+            },
+            model: {
 
             }
         },

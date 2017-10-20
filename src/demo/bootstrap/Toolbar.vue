@@ -47,7 +47,7 @@
     </div>
     <h2>Coder</h2>
     <div class="component-wrap">
-        <sunset-coder :value.sync="coderV" :readonly="false" style="height:100px;"></sunset-coder>
+        <sunset-coder :value.sync="coderV" :readonly="false" style="height:150px;"></sunset-coder>
     </div>
     {{coderV}}
 </template>

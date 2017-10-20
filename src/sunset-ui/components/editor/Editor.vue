@@ -93,8 +93,19 @@
 						} else {
 							editor.setEnabled();
 						}
+						this.initWidgetValue(this.value);
 					});
 				});
+			},
+			initWidgetValue(v) {
+				if (!this.pending) {
+					if (this.ready) {
+						this.editor && this.editor.setContent(v || '');
+						this.editor && this.editor.focus(true);
+					} else {
+						this.waitValue = v;
+					}
+				}
 			},
 			setValueSilent(value) {
 				this.pending = true;
@@ -115,14 +126,7 @@
 		},
 		watch: {
 			value(v) {
-				if (!this.pending) {
-					if (this.ready) {
-						this.editor && this.editor.setContent(v || '');
-						this.editor && this.editor.focus(true);
-					} else {
-						this.waitValue = v;
-					}
-				}
+				this.initWidgetValue(v);
 			},
 			readonly(v) {
 				try {

@@ -48,6 +48,16 @@ class BootstrapStore extends Sunset.Service.Store {
 				nickname: '普通用户D',
 				id: '5',
 				type: '2'
+			}, {
+				account: 'admin_5',
+				nickname: '普通用户E',
+				id: '6',
+				type: '2'
+			}, {
+				account: 'admin_6',
+				nickname: '普通用户F',
+				id: '7',
+				type: '2'
 			}],
 			count: 5
 		})

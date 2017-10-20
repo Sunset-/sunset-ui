@@ -130,7 +130,7 @@
             },
             removeAll() {
                 this.$refs.table.checkAll(false);
-                this.checkeds.length = 0;
+                this.checkeds = [];
             },
             refreshTableOptions() {
                 var tableOptions = this.options.tableOptions;

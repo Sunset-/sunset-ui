@@ -12,6 +12,7 @@
 <template>
     <div class="sunset-field sunset-group-widget">
         <div v-for="widget in widgets" class="group-widget-wrap" :style="widget.wrapstyle">
+            {{{widget.label}}}
             <component :is="'widget-'+widget.widget" :options="widget" :value.sync="inputValues[widget.name]"></component>
         </div>
     </div>

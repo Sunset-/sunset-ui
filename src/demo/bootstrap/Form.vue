@@ -214,7 +214,7 @@
                     multi: true,
                     placeholder: '请输入',
                     formatTemplate(b) {
-                        return b 
+                        return b
                     },
                     check(v) {
                         if (v.length > 10) {
@@ -224,10 +224,10 @@
                     search(keyword) {
                         return items.filter(item => ~item.name.indexOf(keyword));
                     },
-                    format(item){
+                    format(item) {
                         return item.name
                     },
-                    template(item){
+                    template(item) {
                         return item.name
                     }
                 },
@@ -296,6 +296,7 @@
                         },*/
                         {
                             label: 'aaa',
+                            fieldClass: 'aaa-333',
                             placeholder: "不能为空",
                             name: 'ssssss',
                             default: 'w,5,day',
@@ -327,18 +328,25 @@
                                 onChange: 'CLEAR'
                             }
                         }, {
-                            label: '输入框组组23',
+                            label: '输入框',
+                            fieldClass: 'aaa-333',
                             name: 'inputgroup',
-                            widget: 'inputgroup',
+                            widget: 'widgetgroup',
                             newline: false,
                             spliter: ';',
-                            items: [{
+                            widgets: [{
+                                label: '左眼',
                                 placeholder: '左眼视力',
+                                name: 'left',
+                                widget: 'input',
                                 digits: 2,
-                                style: 'width:40%;margin-right:5px;'
+                                style: 'margin-right:5px;'
                             }, {
+                                label: '右眼',
                                 placeholder: '右眼视力',
-                                style: 'width:40%;margin-right:5px;'
+                                name: 'right',
+                                widget: 'input',
+                                style: 'margin-right:5px;'
                             }]
                         }, {
                             label: '年龄',
@@ -403,7 +411,7 @@
                             widget: 'select',
                             default: '2',
                             size: 'small',
-                            fieldStyle: 'float:right;margin-top:-100px;',
+                            fieldStyle: 'float:right;margin-top:-130px;',
                             defaultFirst: true,
                             enum: 'ACCOUNT_TYPE',
                             onChange(v, m, form) {}
@@ -644,7 +652,17 @@
                             format: (result) => {},
                             spliter: ';',
                             monopolize: true,
-                            disabled: false
+                            disabled: false,
+                            toolbar: {
+                                size: 'small',
+                                tools: [{
+                                    label: '转移',
+                                    operate: (v) => {
+                                        debugger;
+                                        v.file = '1;2;3';
+                                    }
+                                }]
+                            }
                         },
                         {
                             label: '富文本',

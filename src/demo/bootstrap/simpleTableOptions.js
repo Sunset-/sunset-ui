@@ -14,8 +14,8 @@ module.exports = {
         enum: 'ACCOUNT_TYPE'
     }],
     showIndex: true,
-    pageSize: 10,
-    localPage: false,
+    pageSize: 5,
+    localPage: true,
     sortable: true,
     multiCheck: true,
     lazy : true,

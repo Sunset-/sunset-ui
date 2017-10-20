@@ -65,7 +65,9 @@
 				hasModel: false,
 				fieldsRefresher: 0,
 				defaultValueMap: {},
-				showWarning: false
+				showWarning: false,
+				fieldValueDirty: {},
+				dirtyPending: false
 			}
 		},
 		computed: {
@@ -113,10 +115,14 @@
 			},
 			tip() {
 				return this.options.tip || {};
+			},
+			formDirty() {
+				return Object.keys(this.fieldValueDirty).length > 0;
 			}
 		},
 		methods: {
 			init() {
+				this.dirtyPending = true;
 				var model = this.model,
 					fields = this.options.fields || [],
 					defaultValueFields = [],
@@ -139,6 +145,10 @@
 							model[defaultValueFields[index].name] = dv;
 						});
 					}
+					setTimeout(() => {
+						this.fieldValueDirty = {};
+						this.dirtyPending = false;
+					}, 1000);
 				});
 			},
 			promiseWidgetReady(name, defaultValue) {
@@ -257,7 +267,11 @@
 				});
 				return model;
 			},
-			fieldValueChange() {
+			fieldValueChange(v, model, fieldOptions) {
+				if (!this.dirtyPending && fieldOptions && fieldOptions.name) {
+					this.$set(`fieldValueDirty.${fieldOptions.name}`, true);
+					this.$emit('signal', 'DIRTY');
+				}
 				this.showWarning = false;
 			},
 			newline(field) {

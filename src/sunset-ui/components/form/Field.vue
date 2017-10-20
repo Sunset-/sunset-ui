@@ -76,7 +76,7 @@
 	}
 </style>
 <template>
-	<div :class="['sunset-form-field',options.validate&&options.validate.required?'required-field':'']">
+	<div :class="['sunset-form-field',options.validate&&options.validate.required?'required-field':'',options.fieldClass]">
 		<validator name="validation">
 			<label v-if="options.label" :style="labelStyle" class="sunset-field-label">{{{options.label}}}</label>
 			<component :is="widget" :ref="widget" :options="options" :form-options="formOptions" :value.sync="value" :model="model" :invalid="invalid"
@@ -188,7 +188,7 @@
 			this.$watch('value', function (v, oldValue) {
 				this.options.onChange && this.options.onChange(v, this.model, this.$parent.$parent.$parent, this.options, this.formOptions,
 					oldValue);
-				this.$emit('change', v, this.model);
+				this.$emit('change', v, this.model, this.options);
 			});
 			if (this.options.watch) {
 				var watchs,
