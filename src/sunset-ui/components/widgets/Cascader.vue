@@ -1,6 +1,6 @@
 <template>
     <div class="sunset-field">
-        <Cascader :data="data" :value.sync="widgetValue"></Cascader>
+        <Cascader v-ref:cascader :data="data" :value.sync="widgetValue"></Cascader>
     </div>
 </template>
 <script>
@@ -57,10 +57,14 @@
                 if (!this.lock) {
                     var widgetValue = this.widgetValue;
                     while (widgetValue.pop()) {}
+                    // this.$refs.cascader.clearSelect();
+                    this.$refs.cascader.selected = [];
+                    this.$refs.cascader.tmpSelected = [];
+                    this.$refs.cascader.$broadcast('on-clear');
                     (Sunset.isArray(v) ? v : (v ? new String(v) : '').split(this.spliter)).forEach(item => {
                         widgetValue.push(item);
                     });
-                    $('input', this.$el).val(widgetValue.join(' / '));
+                    // $('input', this.$el).val(widgetValue.join(' / '));
                 }
             },
             watchedWidgetValue(v) {

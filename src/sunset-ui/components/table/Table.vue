@@ -166,6 +166,9 @@ store : 存储
 					<tfoot></tfoot>
 				</table>
 			</sunset-loading>
+			<div v-show="!loading&&(!count||count===0)">
+				<slot name="empty"></slot>
+			</div>
 		</div>
 		<!--分页-->
 		<div v-show="showPager" class="sunset-crud-table-footer">

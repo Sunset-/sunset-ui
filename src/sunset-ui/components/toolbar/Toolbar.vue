@@ -18,8 +18,8 @@
 		<template v-for="tool in showTools">
 			<div v-permission="tool.permission" class="sunset-toolbar-item">
 				<template v-if="!tool.type">
-					<i-button :disabled="checkDisabled(tool)" :loading="tool.loading" :size="size" :type="tool.color||tool.type||'primary'" :icon="tool.icon"  :shape="options.shape"
-					    @click="operate(tool)">{{tool.label}}</i-button>
+					<i-button :disabled="checkDisabled(tool)" :loading="tool.loading" :size="size" :type="tool.color||tool.type||'primary'" :icon="tool.icon"
+					    :shape="options.shape" @click="operate(tool)">{{tool.label}}</i-button>
 				</template>
 				<template v-if="tool.type=='file'">
 					<sunset-file :disabled="checkDisabled(tool)" :options="tool" :size="size" :ctx="ctx"></sunset-file>
@@ -29,6 +29,13 @@
 				</template>
 				<template v-if="tool.type=='switch'">
 					<sunset-switch :options="tool" :value="tool.default&&tool.default(ctx)" :disabled="checkDisabled(tool)" @change="switchOperate"></sunset-switch>
+				</template>
+				<template v-if="tool.type=='download'">
+					<a :class="['ivu-btn',size?('ivu-btn-'+size):'',tool.color||tool.type?('ivu-btn-'+tool.color||tool.type):'']" :href="tool.data&&tool.data(ctx)"
+					    :download="tool.name&&tool.name(ctx)" :disabled="checkDisabled(tool)">
+					<i v-if="tool.icon" :class="['ivu-icon',tool.icon?'ivu-icon-'+tool.icon:'']"></i>
+					{{tool.label}}
+					</a>
 				</template>
 			</div>
 		</template>

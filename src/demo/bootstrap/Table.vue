@@ -13,7 +13,9 @@
     <h2>Table</h2>
     <div class="component-wrap">
         <div v-for="c in checkeds">{{c.nickname}}</div>
-        <sunset-table v-ref:table :options="options" :checkeds="checkeds"></sunset-table>
+        <sunset-table v-ref:table :options="options" :checkeds="checkeds">
+            <div slot="empty">qwewqewqewq</div>
+        </sunset-table>
     </div>
 </template>
 <script>

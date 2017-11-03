@@ -3,13 +3,30 @@
         <i-button type="info" @click="test">表单Modal</i-button>
         <i-button type="success" @click="test2">表格Modal</i-button>
         <i-button type="warning" @click="test3">树Modal</i-button>
-        <sunset-form-modal v-ref:formmodal :options="{title : '表单modal', style : 'max-height:400px',formOptions : options.formOptions}"></sunset-form-modal>
-        <sunset-table-modal @submit="tableSelected" v-ref:tablemodal :options="{title : '表格modal',width:1000,validate:tableValidate,checked:checkedOptions,tableOptions : options.tableOptions}"></sunset-table-modal>
+        <sunset-form-modal v-ref:formmodal :options="{title : '表单modal', style : 'max-height:400px',formOptions : options.formOptions}" @cancel="cancel"></sunset-form-modal>
+        <sunset-table-modal @submit="tableSelected" v-ref:tablemodal :options="{title : '表格modal',width:1000,validate:tableValidate,checked:checkedOptions,tableOptions : options.tableOptions}">
+            <span slot="filter">123123213</span>
+        </sunset-table-modal>
         <sunset-tree-modal @submit="treeSelected" v-ref:treemodal :options="options.treeModalOptions"></sunset-tree-modal>
     </div>
 </template>
 <script>
     import BootstrapStore from './BootstrapStore';
+    import RegionData from '../../sunset-ui/components/data/regionJSON.js';
+
+    function generateCascaderData(list) {
+        return (list || RegionData).map(item => {
+            var children;
+            if (item.sub) {
+                children = generateCascaderData(item.sub);
+            }
+            return {
+                label: item.name,
+                value: item.name,
+                children: children
+            };
+        })
+    }
 
     const now = new Date().getTime();
 
@@ -22,8 +39,13 @@
                     }
                 });
             },
+            cancel(){
+                console.log('cancel');
+            },
             test() {
-                this.$refs.formmodal.open();
+                this.$refs.formmodal.open({
+                    region: '北京,崇文区'
+                });
             },
             test2() {
                 this.$refs.tablemodal.open();
@@ -47,7 +69,6 @@
                 checkedOptions: {
                     multi: false,
                     premise: function (r) {
-                        debugger;
                         return r.type != '1';
                     }
                 },
@@ -196,7 +217,10 @@
                     //表格表单
                     formOptions: {
                         cols: 2,
-                        store: BootstrapStore,
+                        // store: BootstrapStore,
+                        submit:(model)=>{
+                            return Promise.resolve(model);
+                        },
                         fields: [{
                                 label: '登录名',
                                 name: 'account',
@@ -233,6 +257,15 @@
                                 validate: {
                                     required: true
                                 }
+                            }, {
+                                label: '区域',
+                                name: 'region',
+                                widget: 'cascader',
+                                type: 'region',
+                                data: () => {
+                                    return generateCascaderData();
+                                },
+                                disabled: false
                             },
                             {
                                 label: '富文本',

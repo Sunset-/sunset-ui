@@ -16,7 +16,7 @@
 </style>
 <template>
 	<Modal :class-name="'sunset-form-modal '+(options.toolbar===false?'nofoot':'')" :visible.sync="visible" :title="options.title"
-	    :width="width">
+	    :width="width" @on-cancel="afterCancel">
 		<div :style="options.style">
 			<sunset-form v-ref:form :options="options.formOptions" @signal="operateSignal"></sunset-form>
 		</div>
@@ -81,6 +81,9 @@
 			cancel() {
 				this.visible = false;
 				this.modal_loading = false;
+				this.$emit('cancel');
+			},
+			afterCancel(){
 				this.$emit('cancel');
 			},
 			operateSignal(signal, res, model) {

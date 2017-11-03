@@ -48,7 +48,7 @@
 </style>
 <template>
     <Modal :class-name="'sunset-table-modal '+(!this.multi&&!options.toolbar?'nofoot':'')" :visible.sync="visible" :title="options.title"
-        :width="width">
+        :width="width" @on-cancel="afterCancel">
         <div :style="options.style">
             <!-- 多选标签 -->
             <div v-show="checked.multi&&checkeds.length" class="table-modal-selected-wrap">
@@ -62,6 +62,7 @@
             </div>
             <div>
                 <sunset-filter v-ref:filter v-if="filterOptions" :options="filterOptions" @filter="filterData"></sunset-filter>
+                <slot name="filter"></slot>
             </div>
             <sunset-table v-ref:table :options="tableOptions" :checkeds.sync="checkeds" :store="options.store"></sunset-table>
         </div>
@@ -208,7 +209,10 @@
                 this.visible = false;
                 this.modal_loading = false;
                 this.$emit('cancel');
-            }
+            },
+			afterCancel(){
+				this.$emit('cancel');
+			}
         }
     };
 </script>

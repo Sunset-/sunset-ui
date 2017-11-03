@@ -71,6 +71,15 @@ exports.install = function install(Vue, options) {
             Vue.prototype.$Modal.remove();
         }
     };
+    Sunset.alert = function (content,type) {
+        type = ['info','success','warning','error'].indexOf(type)>=0?type:'info';
+        Vue.prototype.$Modal[type]({
+            content : content
+        });
+        return () => {
+            Vue.prototype.$Modal.remove();
+        }
+    };
     require('./common/prompt')(Sunset, Vue);
 }
 

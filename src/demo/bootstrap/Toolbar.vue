@@ -21,7 +21,7 @@
     <h2>批量上传测试</h2>
     <div class="component-wrap">
         <sunset-file :options="testUploadImageOptions" @finish="testUploadFinish">
-            <i-button style="vertical-align: top;" type="success" :size="options.size||size" icon="ios-home" >批量上传</i-button>
+            <i-button style="vertical-align: top;" type="success" :size="options.size||size" icon="ios-home">批量上传</i-button>
         </sunset-file>
     </div>
     <h2>Dropdown</h2>
@@ -54,21 +54,21 @@
 <script>
     export default {
         methods: {
-            getTaskToken(){
+            getTaskToken() {
                 $.ajax({
-                    url : '/test-upload/screeningOm/receiveTaskToken'
-                }).then(res=>{
+                    url: '/test-upload/screeningOm/receiveTaskToken'
+                }).then(res => {
                     this.testUploadUploadToken = res;
                 });
             },
-            testUploadFinish(){
+            testUploadFinish() {
                 $.ajax({
-                    url : '/test-upload/screeningOm/receiveEnd',
-                    type : 'POST',
-                    data : {
-                        taskToken : this.testUploadUploadToken
+                    url: '/test-upload/screeningOm/receiveEnd',
+                    type: 'POST',
+                    data: {
+                        taskToken: this.testUploadUploadToken
                     }
-                }).then(res=>{
+                }).then(res => {
                     this.getTaskToken();
                 });
             },
@@ -84,7 +84,7 @@
         },
         data() {
             return {
-                testUploadUploadToken : null,
+                testUploadUploadToken: null,
                 testUploadImageOptions: {
                     label: '文件选择',
                     icon: 'ios-cloud-upload',
@@ -96,7 +96,7 @@
                     filter(f) {
                         return ~f.type.indexOf('image');
                     },
-                    formData :(record)=> {
+                    formData: (record) => {
                         return {
                             taskToken: this.testUploadUploadToken
                         }
@@ -140,6 +140,29 @@
                                 placeholder: '123'
                             })
                             // this.echartsOptions = op;
+                        }
+                    }, {
+                        label: '下载按钮',
+                        type: 'download',
+                        icon: 'refresh',
+                        color: 'primary',
+                        name: () => {
+                            return 'v.txt';
+                        },
+                        data: () => {
+                            return 'data:text/plain,12312321';
+                        },
+                        operate: () => {
+                            // var op = Sunset.clone(this.echartsOptions)
+                            // this.echartsOptions.series[0].data[0] = 15;
+                            // this.$refs.chart.refresh();
+                            // Sunset.prompt({
+                            //     title: '处方名称',
+                            //     maxlength: 5,
+                            //     placeholder: '123'
+                            // })
+                            // this.echartsOptions = op;
+                            return '1234567';
                         }
                     }, {
                         label: '图标按钮',

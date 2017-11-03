@@ -671,6 +671,9 @@
                             toolbar: 'bold,italic,superscript,subscript,spechars',
                             readonly: false,
                             monopolize: true,
+                            focus: () => {
+                                debugger;
+                            },
                             validate: {
                                 required: true
                             }

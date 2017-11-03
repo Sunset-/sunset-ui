@@ -6,7 +6,8 @@
 <template>
 	<div class="sunset-field editor-container">
 		<div>
-			<sunset-editor v-ref:editor :height="options.height" :value.sync="value" :readonly="options.readonly" :toolbar="options.toolbar"></sunset-editor>
+			<sunset-editor v-ref:editor :height="options.height" :value.sync="value" :readonly="options.readonly" :toolbar="options.toolbar"
+			    @focus="focus" @blur="blur"></sunset-editor>
 		</div>
 	</div>
 </template>
@@ -16,13 +17,28 @@
 			options: {
 				type: Object
 			},
-			value: {}
+			value: {},
+			model: {
+
+			}
 		},
 		data() {
 			return {
 				width: 0,
 				inited: false
 			};
+		},
+		methods: {
+			focus() {
+				if (Sunset.isFunction(this.options.focus)) {
+					this.options.focus.call(this.options, this.value, this.model);
+				}
+			},
+			blur() {
+				if (Sunset.isFunction(this.options.blur)) {
+					this.options.blur.call(this.options, this.value, this.model);
+				}
+			}
 		},
 		events: {
 			REFRESH_WIDGET_VALUE() {
