@@ -343,14 +343,16 @@ store : 存储
 				this.pageNumber = pageNumber;
 				//过滤条件
 				var filter = $.extend(true, {}, this.filter);
-				filter[this.format['currentPage'] || 'currentPage'] = (this.options.pageNumberStart === 0) ? pageNumber - 1 :
+				var currentPagePlace = this.format['currentPage'] || 'currentPage';
+				var pageStart = this.options.pageNumberStart === 0?0:1;
+				filter[currentPagePlace] = (this.options.pageNumberStart === 0) ? pageNumber - 1 :
 					pageNumber;
 				filter[this.format['pageSize'] || 'pageSize'] = this.pageSize;
 				filter = this.formatFilter && this.formatFilter(filter) || filter;
 				if (force || !this.isLocalPage || !this.data) {
 					//服务器分页
+					var datasource = this.datasource || this.store && this.store[this.options.method || 'list'].bind(this.store);
 					Promise.resolve((() => {
-						var datasource = this.datasource || this.store && this.store[this.options.method || 'list'].bind(this.store);
 						if (datasource) {
 							this.refreshLoader(true);
 							return Sunset.isFunction(datasource) ? datasource(filter) : datasource;
@@ -358,8 +360,18 @@ store : 存储
 							throw new Error('table load data need datasource or store');
 						}
 					})()).then(res => {
-						this.refreshLoader(false);
-						this.setData(res);
+						//判断是否回退到前一页
+						var list = res && Sunset.getAttribute(res, this.format['list'] || 'list', [])||[];
+						var count = res && Sunset.getAttribute(res, this.format['count'] || 'count', 0)||0;
+						if(list.length==0&&count>0&&filter[currentPagePlace]>pageStart){
+							filter[currentPagePlace] = filter[currentPagePlace]-1;
+							return Sunset.isFunction(datasource) ? datasource(filter) : datasource;
+						}else{
+							return res;
+						}
+					}).then(res=>{
+							this.refreshLoader(false);
+							this.setData(res);
 					}).catch(e => {
 						console.error(e);
 						this.$emit('load-error', e);

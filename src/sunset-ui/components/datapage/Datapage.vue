@@ -74,10 +74,12 @@
                 pageNumber = pageNumber == void 0 ? this.pageNumber : pageNumber;
                 this.pageNumber = pageNumber;
                 var filter;
+				var currentPagePlace = this.format['currentPage'] || 'currentPage';
+				var pageStart = this.options.pageNumberStart === 0?0:1;
                 if (!this.isLocalPage) {
                     filter = Sunset.clone(this.filter);
                     //分页参数
-                    filter[this.format['currentPage'] || 'currentPage'] = (this.options.pageNumberStart === 0) ?
+                    filter[currentPagePlace] = (this.options.pageNumberStart === 0) ?
                         pageNumber - 1 :
                         pageNumber;
                     filter[this.format['pageSize'] || 'pageSize'] = this.pageSize;
@@ -93,6 +95,16 @@
                     } else {
                         this.refreshLoader(true);
                         return this.datasource(filter);
+                    }
+                }).then(res => {
+                    //判断是否回退到前一页
+                    var list = res && Sunset.getAttribute(res, this.format['list'] || 'list', []) || [];
+                    var count = res && Sunset.getAttribute(res, this.format['count'] || 'count', 0) || 0;
+                    if (list.length == 0 && count > 0 && filter[currentPagePlace] > pageStart) {
+                        filter[currentPagePlace] = filter[currentPagePlace] - 1;
+                        return Sunset.isFunction(datasource) ? datasource(filter) : datasource;
+                    } else {
+                        return res;
                     }
                 }).then(res => {
                     this.data = res;

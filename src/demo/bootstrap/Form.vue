@@ -264,6 +264,7 @@
                             type: 'text',
                             placeholder: "不能为空",
                             append: '<span style="color:red;">aaa</span>',
+                            style : 'width:300px;',
                             click(a, v) {
                                 alert(v)
                             },
@@ -658,7 +659,6 @@
                                 tools: [{
                                     label: '转移',
                                     operate: (v) => {
-                                        debugger;
                                         v.file = '1;2;3';
                                     }
                                 }]
@@ -672,7 +672,6 @@
                             readonly: false,
                             monopolize: true,
                             focus: () => {
-                                debugger;
                             },
                             validate: {
                                 required: true
