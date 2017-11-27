@@ -3,7 +3,7 @@
         <i-button type="info" @click="test">表单Modal</i-button>
         <i-button type="success" @click="test2">表格Modal</i-button>
         <i-button type="warning" @click="test3">树Modal</i-button>
-        <sunset-form-modal v-ref:formmodal :options="{title : '表单modal', style : 'max-height:400px',formOptions : options.formOptions}" @cancel="cancel"></sunset-form-modal>
+        <sunset-form-modal v-ref:formmodal :options="{title : '表单modal', maskClosable : false, style : 'max-height:400px',formOptions : options.formOptions}" @cancel="cancel"></sunset-form-modal>
         <sunset-table-modal @submit="tableSelected" v-ref:tablemodal :options="{title : '表格modal',width:1000,validate:tableValidate,checked:checkedOptions,tableOptions : options.tableOptions}">
             <span slot="filter">123123213</span>
         </sunset-table-modal>

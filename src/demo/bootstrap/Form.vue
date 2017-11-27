@@ -264,7 +264,7 @@
                             type: 'text',
                             placeholder: "不能为空",
                             append: '<span style="color:red;">aaa</span>',
-                            style : 'width:300px;',
+                            style: 'width:300px;',
                             click(a, v) {
                                 alert(v)
                             },
@@ -404,6 +404,7 @@
                             name: 'sex1',
                             widget: 'checkbox',
                             default: '2',
+                            single: true,
                             watch: ['sex', (deps) => {}],
                             enum: 'SEX'
                         }, {
@@ -671,8 +672,7 @@
                             toolbar: 'bold,italic,superscript,subscript,spechars',
                             readonly: false,
                             monopolize: true,
-                            focus: () => {
-                            },
+                            focus: () => {},
                             validate: {
                                 required: true
                             }

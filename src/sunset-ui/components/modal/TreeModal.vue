@@ -18,7 +18,7 @@
 </style>
 <template>
 	<Modal :class-name="'sunset-tree-modal '+(options.toolbar===false?'nofoot':'')" :visible.sync="visible" :title="options.title"
-					:width="width" @on-cancel="afterCancel">
+					:width="width" :mask-closable="options.maskClosable!==false" @on-cancel="afterCancel">
 		<div :style="options.style">
 			<sunset-tree v-ref:tree :options="options.treeOptions" :nodes="options.treeNodes" @inited="treeInited" @checked="treeChecked"></sunset-tree>
 		</div>

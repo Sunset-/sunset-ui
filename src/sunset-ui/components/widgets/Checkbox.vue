@@ -7,7 +7,7 @@
 <template>
     <div class="sunset-field checkbox-group-wrap">
         <Checkbox-group :model.sync="widgetValue">
-            <Checkbox v-for="item in items" :value="item.value" :disabled="item.disabled">
+            <Checkbox v-for="item in items" :value="item.value" :disabled="item.disabled" @mousedown.stop="handleClick(item.value)">
                 <span>{{item.text}}</span>
             </Checkbox>
         </Checkbox-group>
@@ -51,6 +51,13 @@
                     this.widgetValue = v;
                 } else {
                     this.widgetValue = !!v ? v.split(this.spliter) : [];
+                }
+            },
+            handleClick(v) {
+                if (this.options.single) {
+                    if (!~this.widgetValue.indexOf(v)) {
+                        while (this.widgetValue.pop()) {}
+                    }
                 }
             }
         },

@@ -48,7 +48,7 @@
 </style>
 <template>
     <Modal :class-name="'sunset-table-modal '+(!this.multi&&!options.toolbar?'nofoot':'')" :visible.sync="visible" :title="options.title"
-        :width="width" @on-cancel="afterCancel">
+        :width="width" :mask-closable="options.maskClosable!==false" @on-cancel="afterCancel">
         <div :style="options.style">
             <!-- 多选标签 -->
             <div v-show="checked.multi&&checkeds.length" class="table-modal-selected-wrap">

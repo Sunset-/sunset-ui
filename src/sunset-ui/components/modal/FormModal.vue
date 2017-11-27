@@ -15,7 +15,7 @@
 	}
 </style>
 <template>
-	<Modal :class-name="'sunset-form-modal '+(options.toolbar===false?'nofoot':'')" :visible.sync="visible" :title="options.title"
+	<Modal :class-name="'sunset-form-modal '+(options.toolbar===false?'nofoot':'')" :visible.sync="visible" :mask-closable="options.maskClosable!==false" :title="options.title"
 	    :width="width" @on-cancel="afterCancel">
 		<div :style="options.style">
 			<sunset-form v-ref:form :options="options.formOptions" @signal="operateSignal"></sunset-form>
