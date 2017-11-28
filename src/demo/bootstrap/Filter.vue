@@ -5,6 +5,7 @@
     <h2>Filter</h2>
     <div class="component-wrap">
         <sunset-filter v-ref:filter :options="options" @filter="filter"></sunset-filter>
+        <button type="button" @click="refresh">refresh</button>
     </div>
 </template>
 <script>
@@ -19,6 +20,12 @@
             // },3000)
         },
         methods: {
+            refresh(){
+                this.options.fields[5].data = {
+                            '3': '花',
+                            '4': '鸟'
+                        }
+            },
             filter(a, b) {
                 console.warn(JSON.stringify(a));
             }
@@ -41,6 +48,7 @@
                         changeFilter: true,
                         // defaultFirst:true,
                         default: '2',
+                        enum:'',
                         data: {
                             '1': '男',
                             '2': '女'

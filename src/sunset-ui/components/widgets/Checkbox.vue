@@ -89,6 +89,12 @@
         },
         ready() {
             this.init();
+			this.$watch('options.data',function(){
+				this.init();
+			});
+			this.$watch('options.enum',function(){
+				this.init();
+			});
         }
     };
 </script>
