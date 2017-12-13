@@ -7,7 +7,7 @@
 	<div class="sunset-field editor-container">
 		<div>
 			<sunset-editor v-ref:editor :height="options.height" :value.sync="value" :readonly="options.readonly" :toolbar="options.toolbar"
-			    @focus="focus" @blur="blur"></sunset-editor>
+			     :options="options.editorOptions" @focus="focus" @blur="blur"></sunset-editor>
 		</div>
 	</div>
 </template>

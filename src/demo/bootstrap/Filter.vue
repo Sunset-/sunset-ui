@@ -27,6 +27,7 @@
                         }
             },
             filter(a, b) {
+                alert(JSON.stringify(a))
                 console.warn(JSON.stringify(a));
             }
         },

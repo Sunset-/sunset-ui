@@ -37,6 +37,9 @@
 			},
 			readonly: {
 
+			},
+			options : {
+
 			}
 		},
 		data() {
@@ -61,10 +64,10 @@
 				this.id = `sunset-editor-${++uid}`;
 				this.$nextTick(() => {
 					//挂载插件
-					var opts = {
+					var opts = Object.assign({
 						initialContent: '',
 						saveInterval: 9999999999
-					};
+					},this.options||{});
 					if (this.toolbar) {
 						opts.toolbars = [this.toolbar.split(',').map((item) => item.trim())];
 					}

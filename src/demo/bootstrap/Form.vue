@@ -673,6 +673,10 @@
                             readonly: false,
                             monopolize: true,
                             focus: () => {},
+                            height:500,
+                            editorOptions : {
+						        initialFrameHeight:200
+                            },
                             validate: {
                                 required: true
                             }
