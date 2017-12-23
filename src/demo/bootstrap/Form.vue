@@ -483,6 +483,14 @@
                             type: 'date',
                             format: 'yyyy/MM/dd',
                             disabled: false
+                        },  {
+                            label: '时间',
+                            name: 'time',
+                            widget: 'time',
+                            type: 'time',
+                            disabledHours : [1,2,3],
+                            format: 'HH:mm:ss',
+                            disabled: false
                         }, {
                             label: '开关',
                             name: 'switch',

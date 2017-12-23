@@ -7,6 +7,7 @@ const widgets = {
 	'Select': 'Select',
 	'Switch': 'Switch',
 	'Date': 'Date',
+	'Time': 'Time',
 	// 'Number': 'Number',
 	'Cascader': 'Cascader',
 	'Textarea': 'Textarea',

@@ -172,7 +172,8 @@ store : 存储
 		</div>
 		<!--分页-->
 		<div v-show="showPager" class="sunset-crud-table-footer">
-			<sunset-page @change="refresh" right="true" :page-number.sync="pageNumber" :show-total="true" :page-size="pageSize" :total.sync="count"></sunset-page>
+			<sunset-page @change="refreshFromPagination" right="true" :page-number.sync="pageNumber" :show-total="true" :page-size="pageSize"
+			    :total.sync="count"></sunset-page>
 		</div>
 	</div>
 </template>
@@ -338,18 +339,21 @@ store : 存储
 				this.localFilter = localFilter;
 				this.refresh(1, true);
 			},
-			refresh(pageNumber, force) {
+			refreshFromPagination(pageNumber) {
+				this.refresh(pageNumber, null, true);
+			},
+			refresh(pageNumber, slient, fromPage) {
 				pageNumber = pageNumber == void 0 ? this.pageNumber : pageNumber;
 				this.pageNumber = pageNumber;
 				//过滤条件
 				var filter = $.extend(true, {}, this.filter);
 				var currentPagePlace = this.format['currentPage'] || 'currentPage';
-				var pageStart = this.options.pageNumberStart === 0?0:1;
+				var pageStart = this.options.pageNumberStart === 0 ? 0 : 1;
 				filter[currentPagePlace] = (this.options.pageNumberStart === 0) ? pageNumber - 1 :
 					pageNumber;
 				filter[this.format['pageSize'] || 'pageSize'] = this.pageSize;
 				filter = this.formatFilter && this.formatFilter(filter) || filter;
-				if (force || !this.isLocalPage || !this.data) {
+				if (!fromPage || !this.isLocalPage || !this.data) {
 					//服务器分页
 					var datasource = this.datasource || this.store && this.store[this.options.method || 'list'].bind(this.store);
 					Promise.resolve((() => {
@@ -361,17 +365,17 @@ store : 存储
 						}
 					})()).then(res => {
 						//判断是否回退到前一页
-						var list = res && Sunset.getAttribute(res, this.format['list'] || 'list', [])||[];
-						var count = res && Sunset.getAttribute(res, this.format['count'] || 'count', 0)||0;
-						if(list.length==0&&count>0&&filter[currentPagePlace]>pageStart){
-							filter[currentPagePlace] = filter[currentPagePlace]-1;
+						var list = res && Sunset.getAttribute(res, this.format['list'] || 'list', []) || [];
+						var count = res && Sunset.getAttribute(res, this.format['count'] || 'count', 0) || 0;
+						if (list.length == 0 && count > 0 && filter[currentPagePlace] > pageStart) {
+							filter[currentPagePlace] = filter[currentPagePlace] - 1;
 							return Sunset.isFunction(datasource) ? datasource(filter) : datasource;
-						}else{
+						} else {
 							return res;
 						}
-					}).then(res=>{
-							this.refreshLoader(false);
-							this.setData(res);
+					}).then(res => {
+						this.refreshLoader(false);
+						this.setData(res);
 					}).catch(e => {
 						console.error(e);
 						this.$emit('load-error', e);
@@ -417,9 +421,9 @@ store : 存储
 			},
 			refreshAfterRemove() {
 				if (this.pageNumber > 1 && (this.count - 1 == (this.pageNumber - 1) * this.pageSize)) {
-					this.refresh(this.pageNumber - 1, true);
+					this.refresh(this.pageNumber - 1);
 				} else {
-					this.refresh(void 0, true);
+					this.refresh(void 0);
 				}
 			},
 			//设置行操作栏

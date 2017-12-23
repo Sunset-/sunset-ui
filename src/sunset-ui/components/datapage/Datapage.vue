@@ -12,7 +12,7 @@
         </sunset-loading>
         <!--分页-->
         <div v-show="showPager" class="sunset-crud-datapage-footer">
-            <sunset-page @change="refresh" right="true" :page-number.sync="pageNumber" :show-total="true" :page-size="pageSize" :total.sync="count"></sunset-page>
+            <sunset-page @change="refreshFromPagination" right="true" :page-number.sync="pageNumber" :show-total="true" :page-size="pageSize" :total.sync="count"></sunset-page>
         </div>
     </div>
 </template>
@@ -66,16 +66,19 @@
             search(filter, localFilter) {
                 this.setFilter(filter, localFilter);
             },
+            refreshFromPagination(pageNumber) {
+                this.refresh(pageNumber, null, true);
+            },
             //刷新数据
-            refresh(pageNumber, force) {
+            refresh(pageNumber, force, fromPage) {
                 if (!this.format) {
                     return;
                 }
                 pageNumber = pageNumber == void 0 ? this.pageNumber : pageNumber;
                 this.pageNumber = pageNumber;
                 var filter;
-				var currentPagePlace = this.format['currentPage'] || 'currentPage';
-				var pageStart = this.options.pageNumberStart === 0?0:1;
+                var currentPagePlace = this.format['currentPage'] || 'currentPage';
+                var pageStart = this.options.pageNumberStart === 0 ? 0 : 1;
                 if (!this.isLocalPage) {
                     filter = Sunset.clone(this.filter);
                     //分页参数
@@ -90,7 +93,7 @@
                 filter = this.formatFilter && this.formatFilter(filter) || filter;
                 Promise.resolve().then(() => {
                     this.$emit('load-start');
-                    if (this.isLocalPage && this.data && !force) {
+                    if (this.isLocalPage && this.data && fromPage) {
                         return this.data;
                     } else {
                         this.refreshLoader(true);
@@ -102,7 +105,7 @@
                     var count = res && Sunset.getAttribute(res, this.format['count'] || 'count', 0) || 0;
                     if (list.length == 0 && count > 0 && filter[currentPagePlace] > pageStart) {
                         filter[currentPagePlace] = filter[currentPagePlace] - 1;
-                        return Sunset.isFunction(datasource) ? datasource(filter) : datasource;
+                        return Sunset.isFunction(this.datasource) ? this.datasource(filter) : this.datasource;
                     } else {
                         return res;
                     }
