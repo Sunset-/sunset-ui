@@ -517,6 +517,7 @@
                             name: 'region',
                             widget: 'cascader',
                             type: 'region',
+                            changeOnSelect : true,
                             data: () => {
                                 return generateCascaderData();
                             },

@@ -94,7 +94,9 @@
 				Promise.resolve().then(() => {
 					return rebuild.call(this.options, this.generateWatchDependent(watchs), this.options, this.filter);
 				}).then(res => {
-					this.$children[0].init && this.$children[0].init();
+					if(res!==false){
+						this.$children[0].init && this.$children[0].init();
+					}
 				});
 			}
 		},

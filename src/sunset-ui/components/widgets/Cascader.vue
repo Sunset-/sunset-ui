@@ -1,6 +1,6 @@
 <template>
     <div class="sunset-field">
-        <Cascader v-ref:cascader :data="data" :value.sync="widgetValue"></Cascader>
+        <Cascader v-ref:cascader :data="data" :value.sync="widgetValue" :size="options.size" :trigger="options.trigger" :change-on-select="options.changeOnSelect"></Cascader>
     </div>
 </template>
 <script>
