@@ -2,23 +2,23 @@
     <div>
         <div style="border:1px solid #09c;padding:5px;margin:5px;">
             <h3>编辑</h3>
-            <sunset-form v-ref:configform :options="options"></sunset-form>
+            <sunset-form ref="configform" :options="options"></sunset-form>
             <div style="background:#FFF;">
-                <sunset-table v-ref:configtable :options="filedsOptions"></sunset-table>
+                <sunset-table ref="configtable" :options="filedsOptions"></sunset-table>
                 <sunset-toolbar :options="toolbarOptions"></sunset-toolbar>
             </div>
         </div>
         <div style="border:1px solid yellowgreen;padding:5px;margin:5px;">
             <h3>渲染</h3>
-            <sunset-form v-if="renderFormOptions" v-ref:renderform :options="renderFormOptions"></sunset-form>
+            <sunset-form v-if="renderFormOptions" ref="renderform" :options="renderFormOptions"></sunset-form>
             {{renderFormResult}}
         </div>
-        <sunset-form-modal v-ref:fieldmodal :options="fieldmodalOptions"></sunset-form-modal>
+        <sunset-form-modal ref="fieldmodal" :options="fieldmodalOptions"></sunset-form-modal>
     </div>
 </template>
 <script>
     export default {
-        ready() {
+        mounted(){
             this.init();
         },
         methods: {

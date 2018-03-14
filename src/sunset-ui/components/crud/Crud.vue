@@ -1,4 +1,4 @@
-<style lang="sass">
+<style lang="scss">
 	@import '../../style/index.scss';
 	.sunset-crud-container {
 		background: #FFF;
@@ -17,7 +17,7 @@
 <template>
 	<div class="sunset-crud-container">
 		<div v-show="options.title!==false" class="sunset-crud-breadcrumb">
-			<sunset-breadcrumb v-ref:breadcrumb :options="pathOptions" @route="routePath"></sunset-breadcrumb>
+			<sunset-breadcrumb ref="breadcrumb" :options="pathOptions" @route="routePath"></sunset-breadcrumb>
 		</div>
 		<!-- 数据表格 -->
 		<div v-show="PAGE=='CRUD_TABLE'">
@@ -25,13 +25,13 @@
 				<sunset-toolbar v-if="toolbarOptions" :options="toolbarOptions" @signal="operateSignal"></sunset-toolbar>
 				<sunset-filter v-if="filterOptions" :options="filterOptions" @filter="filterData"></sunset-filter>
 			</div>
-			<sunset-table v-ref:table :options="tableOptions" @signal="operateSignal"></sunset-table>
+			<sunset-table ref="table" :options="tableOptions" @signal="operateSignal"></sunset-table>
 		</div>
 		<!-- 编辑表单 -->
 		<div v-show="PAGE=='CRUD_FORM'">
 			<div class="panel-body">
 				<slot name="CRUD_FORM">
-					<sunset-form v-ref:form :options="options.formOptions" @signal="operateSignal"></sunset-form>
+					<sunset-form ref="form" :options="options.formOptions" @signal="operateSignal"></sunset-form>
 				</slot>
 			</div>
 		</div>
@@ -159,7 +159,7 @@
 				});
 			}
 		},
-		ready() {
+		mounted(){
 			this.$refs.breadcrumb.append({
 				key: 'HOME',
 				title: this.options.title + '列表'

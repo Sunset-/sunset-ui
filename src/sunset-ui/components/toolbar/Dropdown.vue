@@ -5,7 +5,7 @@
             <Icon type="arrow-down-b"></Icon>
         </i-button>
         <Dropdown-menu slot="list" style="text-align:left;">
-            <Dropdown-item v-for="item in items" :disabled="checkDisabled(item)" :divided="item.divided" @click="operate(item)">
+            <Dropdown-item v-for="(item,index) in items" :key="index" :disabled="checkDisabled(item)" :divided="item.divided" @click="operate(item)">
                 <Icon v-if="item.icon" :type="item.icon"></Icon>
                 {{item.label}}
             </Dropdown-item>

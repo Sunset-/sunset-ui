@@ -1,4 +1,4 @@
-<style lang="sass">
+<style lang="scss">
     .superview-container {
         position: relative;
         .test-1 {
@@ -9,20 +9,20 @@
 
 <template>
     <div class="superview-container">
-        <sunset-video v-ref:player style="width:300px;" src="rtmp://live.hkstv.hk.lxdns.com/live/hks" poster="//vjs.zencdn.net/v/oceans.png"
+        <sunset-video ref="player" style="width:300px;" src="rtmp://live.hkstv.hk.lxdns.com/live/hks" poster="//vjs.zencdn.net/v/oceans.png"
             type="rtmp/flv" :autoplay="false"></sunset-video>
-        <sunset-video v-ref:player2 style="width:300px;" src="http://vjs.zencdn.net/v/oceans.mp4" poster="//vjs.zencdn.net/v/oceans.png"
+        <sunset-video ref="player2" style="width:300px;" src="http://vjs.zencdn.net/v/oceans.mp4" poster="//vjs.zencdn.net/v/oceans.png"
             type="video/mp4" :autoplay="true"></sunset-video>
-        <sunset-superview v-ref:superview :options="options" style="border:1px solid red;"></sunset-superview>
-        <button type="button" @click="viewVideo">查看视频</button>
+        <sunset-superview ref="superview" :options="options" style="border:1px solid red;"></sunset-superview>
+        <button type="button" @click="viewVideo">查看视频123</button>
     </div>
 </template>
 
 <script>
+    import Vue from 'vue';
     import ViewOne from './ViewOne.vue';
     import ViewTwo from './ViewTwo.vue';
 
-    import Vue from 'vue';
     Vue.component('ViewOne', ViewOne);
     Vue.component('ViewTwo', ViewTwo);
 
@@ -61,7 +61,8 @@
                         }
                     }],
                     watchs: {
-                        'aaa:save': function (vv) {}
+                        'aaa:save': function (vv) {
+                        }
                     }
                 }
             }
@@ -85,7 +86,7 @@
                 // }, 5000)
             }
         },
-        ready() {
+        mounted(){
             var dd = this.$refs.superview.getComponent('aaa');
             dd.setValue('abcd12313');
 

@@ -3,11 +3,11 @@
         <i-button type="info" @click="test">表单Modal</i-button>
         <i-button type="success" @click="test2">表格Modal</i-button>
         <i-button type="warning" @click="test3">树Modal</i-button>
-        <sunset-form-modal v-ref:formmodal :options="{title : '表单modal', maskClosable : false, style : 'max-height:400px',formOptions : options.formOptions}" @cancel="cancel"></sunset-form-modal>
-        <sunset-table-modal @submit="tableSelected" v-ref:tablemodal :options="{title : '表格modal',width:1000,validate:tableValidate,checked:checkedOptions,tableOptions : options.tableOptions}">
+        <sunset-form-modal ref="formmodal" :options="{title : '表单modal', maskClosable : true, style : 'max-height:400px',formOptions : options.formOptions}" @cancel="cancel"></sunset-form-modal>
+        <sunset-table-modal @submit="tableSelected" ref="tablemodal" :options="{title : '表格modal',width:1000,validate:tableValidate,checked:checkedOptions,tableOptions : options.tableOptions}">
             <span slot="filter">123123213</span>
         </sunset-table-modal>
-        <sunset-tree-modal @submit="treeSelected" v-ref:treemodal :options="options.treeModalOptions"></sunset-tree-modal>
+        <sunset-tree-modal @submit="treeSelected" ref="treemodal" :options="options.treeModalOptions"></sunset-tree-modal>
     </div>
 </template>
 <script>
@@ -23,7 +23,7 @@
             return {
                 label: item.name,
                 value: item.name,
-                children: children
+                children: children||[]
             };
         })
     }
@@ -67,9 +67,9 @@
             return {
                 formModalVisible: false,
                 checkedOptions: {
-                    multi: false,
-                    premise: function (r) {
-                        return r.type != '1';
+                    label : 'nickname',
+                    multi: function (r) {
+                        return true;//r.type != '1';
                     }
                 },
                 options: {
@@ -227,7 +227,7 @@
                                 widget: 'input',
                                 validate: {
                                     required: true,
-                                    maxlength: 32
+                                    maxlength: 10
                                 }
                             }, {
                                 label: '密码',

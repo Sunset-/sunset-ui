@@ -24,7 +24,7 @@
 			return {
 				label: item.name,
 				value: item.name,
-				children: children
+				children: children||[]
 			};
 		})
 	}

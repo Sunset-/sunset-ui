@@ -1,4 +1,4 @@
-<style lang="sass">
+<style lang="scss">
 	@import '../sunset-ui/style/index.scss';
 	$HEADER_HEIGHT :50px;
 	$SIDEBAR_WIDTH: 180px;
@@ -106,7 +106,7 @@
 				Router.go(menu.path);
 			}
 		},
-		ready() {
+		mounted(){
 
 		}
 	}

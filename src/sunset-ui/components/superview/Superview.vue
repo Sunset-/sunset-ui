@@ -1,6 +1,6 @@
 <template>
     <div>
-        <sunset-component v-for="cpt in cpts" v-ref:components :component="cpt"></sunset-component>
+        <sunset-component v-for="(cpt,index) in cpts" :key="index" ref="components" :component="cpt"></sunset-component>
     </div>
 </template>
 
@@ -109,7 +109,7 @@
                 return cs.length == 1 ? cs[0] : cs;
             }
         },
-        ready() {
+        mounted(){
             this.init();
         }
     }

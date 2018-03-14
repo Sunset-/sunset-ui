@@ -1,13 +1,11 @@
 const widgets = {
 	'Input': ['Input', 'Password'],
 	'Searchinput': ['Searchinput'],
-	'Inputgroup': 'Inputgroup',
 	'Radio': 'Radio',
 	'Checkbox': 'Checkbox',
 	'Select': 'Select',
 	'Switch': 'Switch',
 	'Date': 'Date',
-	'Number': 'Number',
 	'Cascader': 'Cascader',
 	'Textarea': 'Textarea',
 	'File': ['File', 'Image'],
@@ -17,6 +15,7 @@ const widgets = {
 	'Icon': 'Icon',
 	'Button': 'Button',
 	'Coder': 'Coder',
+	'Widgetgroup': 'Widgetgroup'
 }
 
 

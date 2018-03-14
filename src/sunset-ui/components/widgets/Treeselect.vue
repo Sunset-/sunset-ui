@@ -1,13 +1,17 @@
 <template>
 	<div class="sunset-field">
-		<i-input :value="text" @click="select" :placeholder="options.placeholder" :readonly="true">
+		<i-input v-model="text" @click.native="select" :placeholder="options.placeholder" :readonly="true">
 			<i-button @click.stop="select" slot="append">选择</i-button>
 		</i-input>
-		<sunset-tree-modal v-if="inited" @submit="selected" v-ref:treemodal :options="options.modalOptions"></sunset-tree-modal>
+		<sunset-tree-modal v-if="inited" @submit="selected" ref="treemodal" :options="options.modalOptions"></sunset-tree-modal>
 	</div>
 </template>
 <script>
 	export default {
+		model : {
+			prop : 'value',
+			event : 'input'
+		},
 		props: {
 			options: {
 				type: Object
@@ -54,7 +58,7 @@
 					ids.push(Sunset.getAttribute(item, this.idKey));
 					names.push(Sunset.getAttribute(item, this.nameKey));
 				});
-				this.value = ids.join(this.spliter);
+				this.$emit('input',ids.join(this.spliter));
 				this.text = names.join(',');
 				this.$refs.treemodal.cancel();
 				this.$nextTick(() => {
@@ -83,7 +87,7 @@
 				this.watchedValue(v);
 			}
 		},
-		ready() {
+		mounted(){
 			this.init();
 		}
 	};

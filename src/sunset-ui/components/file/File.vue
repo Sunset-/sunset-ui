@@ -1,4 +1,4 @@
-<style lang="sass">
+<style lang="scss">
 	.sunset-file-wrap {
 		position: relative !important;
 		display: inline-block;
@@ -84,6 +84,7 @@
 </template>
 <script>
 	import WebUploader from '../../vendor/webuploader/webuploader.min';
+
 	var uid = 0;
 
 	export default {
@@ -103,9 +104,6 @@
 				}
 			},
 			ctx: {}
-		},
-		attached() {
-			this.init();
 		},
 		data() {
 			return {
@@ -296,6 +294,8 @@
 				this.$emit('queue', queue, this.ctx);
 			}
 		},
-		ready() {}
+		mounted(){
+			this.init();
+		}
 	}
 </script>

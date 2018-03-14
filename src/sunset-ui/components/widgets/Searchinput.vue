@@ -1,54 +1,69 @@
 <template>
     <div class="sunset-field">
-        <sunset-search-input :value.sync="inputValue" :options="options" :size="options.size"></sunset-search-input>
+        <sunset-search-input v-model="inputValue" :options="options" :size="options.size"></sunset-search-input>
     </div>
 </template>
 <script>
-    export default {
-        props: {
-            options: {
-                type: Object
-            },
-            value: {},
-            invalid: {}
+export default {
+    model: {
+        prop: "value",
+        event: "input"
+    },
+    props: {
+        options: {
+            type: Object
         },
-        data() {
-            return {
-                inputValue: ''
-            };
+        value: {},
+        invalid: {}
+    },
+    data() {
+        return {
+            inputValue: this.value
+        };
+    },
+    methods: {
+        init() {
+            this.valueToInputValue(this.value);
         },
-        methods: {
-            init() {
-                this.valueToInputValue(this.value);
-            },
-            slientRefreshValue() {
+        slientRefreshValue() {
+            this.$nextTick(() => {
+                this.lock = true;
+                var value =
+                    this.inputValue && this.inputValue.length
+                        ? `${
+                              this.prependSelect
+                                  ? `${this.prependValue + this.prependSpliter}`
+                                  : ""
+                          }${this.inputValue}${
+                              this.appendSelect
+                                  ? `${this.appendSpliter + this.appendValue}`
+                                  : ""
+                          }`
+                        : this.inputValue;
+
+                this.$emit("input", value);
                 this.$nextTick(() => {
-                    this.lock = true;
-                    this.value = this.inputValue && this.inputValue.length ?
-                        `${this.prependSelect?`${this.prependValue+this.prependSpliter}`:''}${this.inputValue}${this.appendSelect?`${this.appendSpliter+this.appendValue}`:''}` :
-                        this.inputValue;
-                    this.$nextTick(() => {
-                        this.lock = false;
-                    });
+                    this.lock = false;
                 });
-            },
-            valueToInputValue(v) {
-                v = (v === void 0 || v === null) ? '' : (v + '');
-                if (!this.lock) {
-                    this.inputValue = v;
-                }
-            }
+            });
         },
-        watch: {
-            inputValue(v) {
-                this.slientRefreshValue();
-            },
-            value(v) {
-                this.valueToInputValue(v);
+        valueToInputValue(v) {
+            v = v === void 0 || v === null ? "" : v + "";
+            if (!this.lock) {
+                this.inputValue = v;
             }
-        },
-        ready() {
-            this.init();
         }
-    };
+    },
+    watch: {
+        inputValue(v) {
+            this.slientRefreshValue();
+        },
+        value(v) {
+            this.valueToInputValue(v);
+        }
+    },
+    mounted() {
+        this.init();
+    }
+};
 </script>

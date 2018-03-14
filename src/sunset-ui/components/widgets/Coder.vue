@@ -1,4 +1,4 @@
-<style lang="sass">
+<style lang="scss">
 	.editor-container {
 		position: relative;
 	}
@@ -6,7 +6,7 @@
 <template>
 	<div class="sunset-field editor-container">
 		<div>
-			<sunset-coder v-ref:editor :height="options.height" :value.sync="inputValue" :readonly="options.readonly" :options="options"></sunset-coder>
+			<sunset-coder ref="editor" :height="options.height" :value.sync="inputValue" :readonly="options.readonly" :options="options"></sunset-coder>
 		</div>
 	</div>
 </template>
@@ -51,7 +51,7 @@
 				this.valueToInputValue(v);
 			}
 		},
-		ready() {
+		mounted(){
 			this.init();
 		}
 	};

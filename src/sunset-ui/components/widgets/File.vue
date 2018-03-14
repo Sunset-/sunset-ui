@@ -1,4 +1,4 @@
-<style lang="sass">
+<style lang="scss">
     @import '../../style/index.scss';
     .widget-upload-btn {
         position: relative;
@@ -97,17 +97,15 @@
         <!-- thumbnail start -->
         <div v-for="item in queue" :class="['sunset-upload-item-wrap',options.readonly?'readonly':'']">
             <Icon class="sunset-upload-item-remove" type="close-round" @click="remove(item)"></Icon>
-            <div class="upload-thumbnail-wrap" :style="thumbnailStyle">
-                {{{thumbnail(item)}}}
+            <div class="upload-thumbnail-wrap" :style="thumbnailStyle" v-html="thumbnail(item)">
             </div>
             <div v-show="!item.src" class="sunset-upload-item-shim" :style="{height:((100-(item.progress||0)*100)+'%')}"></div>
         </div>
         <!-- thumbnail end -->
-        <sunset-file v-if="!options.readonly" v-ref:file :options="options" :queue="queue" :disabled="options.readonly" @queue="refreshQueue"
+        <sunset-file v-if="!options.readonly" ref="file" :options="options" :queue="queue" :disabled="options.readonly" @queue="refreshQueue"
             @success="success">
-            <template v-if="options.dom">
-                {{{options.dom}}}
-            </template>
+            <div v-if="options.dom" v-html="options.dom">
+            </div>
         </sunset-file>
         <sunset-toolbar v-if="options.toolbar" :options="options.toolbar" :ctx="model"></sunset-toolbar>
     </div>
@@ -120,6 +118,10 @@
         components: {
             UploadImage
         },
+		model : {
+			prop : 'value',
+			event : 'input'
+		},
         props: {
             options: {
                 type: Object
@@ -177,7 +179,8 @@
                 this.refreshValue();
             },
             refreshValue() {
-                this.value = this.queue.map(item => item.value).join(this.options.spliter || ',');
+                var value = this.queue.map(item => item.value).join(this.options.spliter || ',');
+                this.$emit('input',value);
             },
             watchedValue(value) {
                 if (!this.pending) {
@@ -205,7 +208,7 @@
                 this.watchedValue(value);
             }
         },
-        ready() {
+        mounted(){
             this.init();
         }
     }

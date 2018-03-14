@@ -1,4 +1,4 @@
-<style lang="sass">
+<style lang="scss">
     .sunset-video-wrap {
         &>div {
             max-width: 90%;
@@ -15,7 +15,7 @@
 
 <template>
     <div class="sunset-video-wrap" :style="style" @click="wrapClick($event)">
-        <video controls preload="auto" :id="id" class="video-js" controls preload="auto" :autoplay="autoplay" :poster="poster" data-setup='{}'>
+        <video controls preload="auto" :id="id" class="video-js" controls :autoplay="autoplay" :poster="poster" data-setup='{}'>
             <source :src="src" :type="type"></source>
             <p class="vjs-no-js">
                 To view this video please enable JavaScript, and consider upgrading to a web browser that
@@ -64,7 +64,7 @@
                 }
                 var options = this.options || {};
                 var self = this;
-                var player = videojs(this.id, options, function onPlayerReady() {
+                var player = videojs(this.id, options, function onPlayermounted(){
                     self.player = this;
                     if (self.src && this.autoplay) {
                         this.play();
@@ -95,7 +95,7 @@
                 }
             }
         },
-        ready() {
+        mounted(){
             this.init();
         }
     }

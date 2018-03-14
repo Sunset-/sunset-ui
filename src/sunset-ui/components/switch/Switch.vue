@@ -1,34 +1,42 @@
 <template>
-    <Switch :checked.sync="value" :disabled="disabled" :size="options.size" @on-change="change">
+    <Switch v-model="widgetValue" :disabled="disabled" :size="options.size">
         <span v-if="options.open" slot="open">{{options.open}}</span>
         <span v-if="options.close" slot="close">{{options.close}}</span>
     </Switch>
 </template>
 <script>
-    export default {
-        props: {
-            options: {
-                type: Object
-            },
-            value: {
-                type: Boolean
-            },
-            disabled: {
-
-            }
+export default {
+    model: {
+        prop: "value",
+        event: "input"
+    },
+    props: {
+        options: {
+            type: Object
         },
-        data() {
-            return {
-                resetValue: false
-            };
+        value: {
+            type: Boolean
         },
-        methods: {
-            change() {
-                this.$emit('change', this.value, this.options, this);
-            },
-            reset(v) {
-                this.value = !!v;
-            }
+        disabled: {}
+    },
+    data() {
+        return {
+            widgetValue: this.value
+        };
+    },
+    methods: {
+        reset(v) {
+            this.widgetValue = !!v;
         }
-    };
+    },
+    watch: {
+        widgetValue(v) {
+            this.$emit("input", v, this.options, this);
+            this.$emit("change", v, this.options, this);
+        },
+        value(v) {
+            this.widgetValue = v;
+        }
+    }
+};
 </script>

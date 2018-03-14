@@ -14,7 +14,7 @@
         </div>
         <h2>Tree</h2>
         <div class="component-wrap">
-            <sunset-tree v-ref:tree :options="options.treeOptions" :nodes="options.treeNodes" @inited="inited" @selected="selected" @checked="checked"></sunset-tree>
+            <sunset-tree ref="tree" :options="options.treeOptions" :nodes="options.treeNodes" @inited="inited" @selected="selected" @checked="checked"></sunset-tree>
         </div>
     </div>
 </template>

@@ -28,7 +28,7 @@
                 this.v2 = v;
             }
         },
-        ready() {
+        mounted(){
             this.v = this.data;
         }
     }

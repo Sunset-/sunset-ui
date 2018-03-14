@@ -1,4 +1,4 @@
-<style lang="sass">
+<style lang="scss">
 	.sunset-tree-modal {
 		.ivu-modal-body {
 			padding: 0px;
@@ -17,10 +17,10 @@
 	}
 </style>
 <template>
-	<Modal :class-name="'sunset-tree-modal '+(options.toolbar===false?'nofoot':'')" :visible.sync="visible" :title="options.title"
+	<Modal :class-name="'sunset-tree-modal '+(options.toolbar===false?'nofoot':'')" v-model="visible" :title="options.title"
 					:width="width" :mask-closable="options.maskClosable!==false" @on-cancel="afterCancel">
 		<div :style="options.style">
-			<sunset-tree v-ref:tree :options="options.treeOptions" :nodes="options.treeNodes" @inited="treeInited" @checked="treeChecked"></sunset-tree>
+			<sunset-tree ref="tree" :options="options.treeOptions" :nodes="options.treeNodes" @inited="treeInited" @checked="treeChecked"></sunset-tree>
 		</div>
 		<div slot="footer">
 			<sunset-toolbar v-if="toolbar" :options="toolbar"></sunset-toolbar>

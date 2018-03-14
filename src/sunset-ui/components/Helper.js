@@ -36,7 +36,8 @@ module.exports = {
             data.forEach(item => {
                 items.push({
                     value: item[valuePlace],
-                    text: item[textPlace]
+                    text: item[textPlace],
+                    group : item.group
                 });
             });
         } else if (Sunset.isObject(data)) {

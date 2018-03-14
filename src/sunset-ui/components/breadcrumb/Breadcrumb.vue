@@ -1,6 +1,6 @@
 <template>
     <Breadcrumb>
-        <Breadcrumb-item v-for="path in paths" href="javascript:;" @click="goPath(path,$index)">{{path.title}}</Breadcrumb-item>
+        <BreadcrumbItem v-for="path in paths" :key="path" href="javascript:;" @click="goPath(path,$index)">{{path.title}}</BreadcrumbItem>
     </Breadcrumb>
 </template>
 <script>

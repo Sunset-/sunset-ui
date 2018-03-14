@@ -1,4 +1,4 @@
-<style lang="sass">
+<style lang="scss">
     .sunset-view-modal {
         &.hide-footer {
             .ivu-modal-footer {
@@ -8,7 +8,7 @@
     }
 </style>
 <template>
-    <Modal :class-name="'sunset-view-modal ' +(options.toolbar===false?'hide-footer':'')" :visible.sync="visible" :title="options.title"
+    <Modal :class-name="'sunset-view-modal ' +(options.toolbar===false?'hide-footer':'')" v-model="visible" :title="options.title"
         :width="options.width||700" :mask-closable="options.maskClosable!==false" @on-cancel="afterCancel">
         <slot></slot>
         <div slot="footer">

@@ -1,4 +1,4 @@
-<style lang="sass">
+<style lang="scss">
     @import '../../style/index.scss';
     .sunset-icon-modal {
         .ivu-icon {
@@ -28,8 +28,8 @@
         <i-input :value="value" @click="select" :placeholder="options.placeholder" :readonly="true">
             <i-button @click="select" slot="append">选择</i-button>
         </i-input>
-        <Modal v-if="inited" class-name="sunset-icon-modal" :visible.sync="visible" :title="options.title" :width="options.width||700">
-            <Icon v-for="icon in icons" :type="icon" @click="selected(icon)"></Icon>
+        <Modal v-if="inited" class-name="sunset-icon-modal" v-model="visible" :title="options.title" :width="options.width||700">
+            <Icon v-for="icon in icons" :key="icon" :type="icon" @click="selected(icon)"></Icon>
             <div slot="footer">
             </div>
         </Modal>
@@ -769,6 +769,10 @@
     ];
 
     export default {
+		model : {
+			prop : 'value',
+			event : 'input'
+		},
         props: {
             options: {
                 type: Object
@@ -777,6 +781,7 @@
         },
         data() {
             return {
+                widgetValue : this.value,
                 icons: ICONS,
                 visible: false,
                 inited: false
@@ -798,8 +803,13 @@
                 this.visible = false;
             }
         },
-        events: {
-            REFRESH_WIDGET_VALUE() {}
-        }
+		watch : {
+			widgetValue(v) {
+				this.$emit('input',v);
+			},
+			value(v) {
+				this.widgetValue = v;
+			}
+		}
     };
 </script>

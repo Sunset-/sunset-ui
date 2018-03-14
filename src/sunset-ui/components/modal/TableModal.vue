@@ -1,4 +1,4 @@
-<style lang="sass">
+<style lang="scss">
     .sunset-table-modal {
         .ivu-modal-body {
             padding: 0px;
@@ -47,7 +47,7 @@
     }
 </style>
 <template>
-    <Modal :class-name="'sunset-table-modal '+(!this.multi&&!options.toolbar?'nofoot':'')" :visible.sync="visible" :title="options.title"
+    <Modal :class-name="'sunset-table-modal '+(!this.multi&&!options.toolbar?'nofoot':'')" v-model="visible" :title="options.title"
         :width="width" :mask-closable="options.maskClosable!==false" @on-cancel="afterCancel">
         <div :style="options.style">
             <!-- 多选标签 -->
@@ -61,10 +61,10 @@
                 </div>
             </div>
             <div>
-                <sunset-filter v-ref:filter v-if="filterOptions" :options="filterOptions" @filter="filterData"></sunset-filter>
+                <sunset-filter ref="filter" v-if="filterOptions" :options="filterOptions" @filter="filterData"></sunset-filter>
                 <slot name="filter"></slot>
             </div>
-            <sunset-table v-ref:table :options="tableOptions" :checkeds.sync="checkeds" :store="options.store"></sunset-table>
+            <sunset-table ref="table" :options="tableOptions" :checkeds.sync="checkeds" :store="options.store"></sunset-table>
         </div>
         <div slot="footer">
             <sunset-toolbar v-if="toolbar" :options="toolbar"></sunset-toolbar>

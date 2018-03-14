@@ -1,4 +1,4 @@
-<style lang="sass">
+<style lang="scss">
 	.sunset-editor-container {
 		width: 100%;
 		.edui-editor {
@@ -25,6 +25,10 @@
 	var uid = 0;
 
 	export default {
+		model : {
+			prop : 'value',
+			event : 'input'
+		},
 		props: {
 			toolbar: {
 
@@ -84,7 +88,7 @@
 							this.pending || this.setValueSilent(editor.getContent());
 						});
 						editor.addListener('blur', () => {
-							this.value = editor.getContent();
+							this.$emit('input',editor.getContent());
 							this.$emit('blur');
 						});
 						editor.addListener('focus', () => {
@@ -112,7 +116,7 @@
 			},
 			setValueSilent(value) {
 				this.pending = true;
-				this.value = value;
+				this.$emit('input',value);
 				this.$nextTick(() => {
 					this.pending = false;
 				})
@@ -124,7 +128,7 @@
 				return this.editor;
 			}
 		},
-		ready() {
+		mounted(){
 			this.init();
 		},
 		watch: {

@@ -206,4 +206,5 @@
 </style>
 <script>
     import commonImageViewer from './commonImageViewer.js';
+    import './commonImageViewer.css';
 </script>

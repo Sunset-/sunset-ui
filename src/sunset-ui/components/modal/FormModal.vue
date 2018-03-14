@@ -1,4 +1,4 @@
-<style lang="sass">
+<style lang="scss">
 	.sunset-form-modal {
 		.ivu-modal-body {
 			padding: 0px;
@@ -15,10 +15,10 @@
 	}
 </style>
 <template>
-	<Modal :class-name="'sunset-form-modal '+(options.toolbar===false?'nofoot':'')" :visible.sync="visible" :mask-closable="options.maskClosable!==false" :title="options.title"
+	<Modal :class-name="'sunset-form-modal '+(options.toolbar===false?'nofoot':'')" v-model="visible" :mask-closable="options.maskClosable!==false" :title="options.title"
 	    :width="width" @on-cancel="afterCancel">
 		<div :style="options.style">
-			<sunset-form v-ref:form :options="options.formOptions" @signal="operateSignal"></sunset-form>
+			<sunset-form ref="form" :options="options.formOptions" @signal="operateSignal"></sunset-form>
 		</div>
 		<div slot="footer">
 			<sunset-toolbar v-if="toolbar" :options="toolbar"></sunset-toolbar>
