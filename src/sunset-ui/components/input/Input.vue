@@ -9,7 +9,7 @@
 </style>
 <template>
     <div :class="['sunset-input',options.className||'',!options.icon?'sunset-input-noicon':'']">
-        <i-input @on-blur="blur" :type="type" :value.sync="inputValue" :maxlength="maxlength" :disabled="options.disabled" :readonly="options.readonly"
+        <i-input @on-blur="blur" :type="type" :value.sync="inputValue" :maxlength="maxlength" :disabled="options.disabled" :clearable="options.clearable" :readonly="options.readonly"
             :placeholder="options.placeholder" :icon="options.icon" :size="options.size" :style="options.style">
             <!-- prepend -->
             <span v-if="prependText" slot="prepend">{{{prependText}}}</span>

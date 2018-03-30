@@ -258,13 +258,14 @@
                                     operate(v) {}
                                 }]
                             },
-                            label: '用户名',
+                            label: '用户名123',
                             name: 'account',
                             widget: 'input',
                             type: 'text',
                             placeholder: "不能为空",
-                            append: '<span style="color:red;">aaa</span>',
+                            // append: '<span style="color:red;">aaa</span>',
                             style: 'width:300px;',
+                            clearable : true,
                             click(a, v) {
                                 alert(v)
                             },

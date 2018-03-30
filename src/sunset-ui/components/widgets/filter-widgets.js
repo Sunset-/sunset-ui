@@ -4,6 +4,7 @@ import WidgetSelect from './Select';
 import WidgetRadio from './Radio';
 import WidgetCheckbox from './Checkbox';
 import WidgetDate from './Date';
+import WidgetSearchinput from './Searchinput';
 
 
 var widgets = {
@@ -13,7 +14,8 @@ var widgets = {
 	WidgetRadio,
 	WidgetCheckbox,
 	WidgetDate,
-	WidgetInput
+	WidgetInput,
+	WidgetSearchinput
 };
 
 export default widgets;
